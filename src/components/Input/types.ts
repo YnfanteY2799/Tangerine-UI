@@ -228,7 +228,7 @@ export type InputAction =
  * @property {Function} [onLongPress] - Callback when input is long-pressed
  * @property {number} [longPressMs=500] - Duration in ms to trigger long press
  */
-export interface AnimatedInputProps extends Omit<ComponentProps<"input" | "textarea">, "size" | "onChange" | "ref"> {
+export interface InputProps extends Omit<ComponentProps<"input" | "textarea">, "size" | "onChange" | "ref"> {
 	ref?: Ref<HTMLInputElement | HTMLTextAreaElement>;
 	variant?: InputVariant;
 	size?: InputSize;

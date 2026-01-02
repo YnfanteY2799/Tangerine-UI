@@ -10,7 +10,6 @@ import type {
 	IHistoryButtonsProps,
 	IValidationIconProps,
 	ICommonClipboardEvent,
-	ISuggestionsDropdownProps,
 	IPasswordToggleButtonProps,
 	IClipboardErrorMessageProps,
 } from "./types";
