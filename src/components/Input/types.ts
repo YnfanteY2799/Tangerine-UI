@@ -151,7 +151,7 @@ export type InputAction =
  * Props for the AnimatedInput component.
  * Extends native input props while providing extensive customization options.
  *
- * @interface AnimatedInputProps
+ * @interface InputProps
  * @extends {Omit<ComponentProps<"input">, "size" | "onChange">}
  *
  * @property {InputVariant} [variant="default"] - Visual style variant of the input

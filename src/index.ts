@@ -4,6 +4,7 @@ export { default as Input } from "./components/Input/index";
 // Type exports
 export type {
 	InputSize,
+	InputProps,
 	Suggestion,
 	FormatType,
 	InputShadow,
@@ -11,7 +12,6 @@ export type {
 	InputRadius,
 	InputVariant,
 	LabelPosition,
-	AnimatedInputProps,
 	PasswordRequirement,
 } from "./components/Input/types";
 
@@ -23,3 +23,6 @@ export { formatDate, formatPhone, formatCurrency, detectAndFormat, formatCreditC
 
 export { cn } from "./utils/functions";
 export { useHistory, useTimeoutManager } from "./utils/hooks";
+
+export { default as Button } from "./components/Button/index";
+export { default as ButtonGroup } from "./components/Button/button-group";

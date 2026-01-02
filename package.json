@@ -46,6 +46,8 @@
     "tailwind-merge": "^3.4.0"
   },
   "peerDependencies": {
+    "@radix-ui/react-slot": "^1.2.4",
+    "class-variance-authority": "^0.7.1",
     "lucide-react": "^0.562.0",
     "motion": "^12.23.26",
     "react": "^19.2.3",

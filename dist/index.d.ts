@@ -1,6 +1,7 @@
 import * as react from 'react';
 import { ComponentProps, Ref, ClipboardEventHandler, ReactNode, ChangeEvent, Component, InputHTMLAttributes, ErrorInfo, ComponentType, FC } from 'react';
 import { ClassValue } from 'clsx';
+import { HTMLMotionProps } from 'motion/react';
 
 /**
  * Defines the position of the input label relative to the input field.
@@ -65,7 +66,7 @@ interface Suggestion {
  * Props for the AnimatedInput component.
  * Extends native input props while providing extensive customization options.
  *
- * @interface AnimatedInputProps
+ * @interface InputProps
  * @extends {Omit<ComponentProps<"input">, "size" | "onChange">}
  *
  * @property {InputVariant} [variant="default"] - Visual style variant of the input
@@ -142,7 +143,7 @@ interface Suggestion {
  * @property {Function} [onLongPress] - Callback when input is long-pressed
  * @property {number} [longPressMs=500] - Duration in ms to trigger long press
  */
-interface AnimatedInputProps extends Omit<ComponentProps<"input" | "textarea">, "size" | "onChange" | "ref"> {
+interface InputProps extends Omit<ComponentProps<"input" | "textarea">, "size" | "onChange" | "ref"> {
     ref?: Ref<HTMLInputElement | HTMLTextAreaElement>;
     variant?: InputVariant;
     size?: InputSize;
@@ -256,7 +257,7 @@ interface AnimatedInputProps extends Omit<ComponentProps<"input" | "textarea">, 
     animationBundle?: "minimal" | "full";
 }
 
-declare const _default: react.NamedExoticComponent<AnimatedInputProps>;
+declare const _default$1: react.NamedExoticComponent<InputProps>;
 
 /**
  * State interface for the AnimatedInputErrorBoundary component.
@@ -586,4 +587,89 @@ interface UseHistoryReturn<T> {
  */
 declare function useHistory<T>(initialValue: T, maxHistory?: number): UseHistoryReturn<T>;
 
-export { AnimatedInputErrorBoundary, type AnimatedInputProps, type FormatType, _default as Input, type InputRadius, type InputShadow, type InputSize, type InputVariant, type LabelPosition, type PasswordRequirement, type PhoneFormat, type Suggestion, calculatePasswordStrength, cn, detectAndFormat, formatCreditCard, formatCurrency, formatDate, formatPhone, useHistory, useTimeoutManager, withErrorBoundary };
+type ButtonVariant = "destructive" | "hoverable" | "bordered" | "gradient" | "spatial" | "subtle" | "peeled" | "shadow" | "solid" | "light" | "faded" | "ghost" | "muted" | "flat" | "link" | "soft";
+type ButtonColor = "default" | "primary" | "secondary" | "success" | "warning" | "danger";
+type ButtonRadius = "none" | "xs" | "sm" | "md" | "lg" | "full";
+type ButtonSize = "icon" | "xs" | "sm" | "md" | "lg";
+type HoverAnimation = "scale" | "lift" | "glow" | "colorShift";
+type PressAnimation = "squeeze" | "bounce" | "rotate";
+type EntranceExitAnimation = "slideRight" | "slideDown" | "slideLeft" | "slideUp" | "elastic" | "rotate" | "bounce" | "scale" | "slide" | "fade" | "flip" | "blur" | "none";
+type ProgressPlacement = "inline" | "overlay" | "label";
+type SpinnerPlacement = "start" | "end";
+
+interface ButtonProps extends Omit<HTMLMotionProps<"button">, "color">, InternalButtonProps {
+    variant?: ButtonVariant;
+    radius?: ButtonRadius;
+    color?: ButtonColor;
+    size?: ButtonSize;
+    isDisabled?: boolean;
+    isLoading?: boolean;
+    startContent?: ReactNode;
+    endContent?: ReactNode;
+    isIconOnly?: boolean;
+    spinnerPlacement?: SpinnerPlacement;
+    spinner?: ReactNode;
+    progressPlacement?: ProgressPlacement;
+    showProgressText?: boolean;
+    progress?: number;
+    disableAnimation?: boolean;
+    disableRipple?: boolean;
+    hoverAnimation?: HoverAnimation;
+    pressAnimation?: PressAnimation;
+    entranceAnimation?: EntranceExitAnimation;
+    exitAnimation?: EntranceExitAnimation;
+    animateOnUnmount?: boolean;
+    animateOnMount?: boolean;
+    showLongPressIndicator?: boolean;
+    onDoubleClick?: () => void;
+    onLongPress?: () => void;
+    longPressDelay?: number;
+    enableHaptic?: boolean;
+    showCooldownIndicator?: boolean;
+    clicksBeforeCooldown?: number;
+    cooldownMs?: number;
+    loadingText?: string;
+    asChild?: boolean;
+}
+interface InternalButtonProps {
+    /** @internal Stagger index from ButtonGroup */
+    _staggerIndex?: number;
+    /** @internal Stagger delay from ButtonGroup */
+    _staggerDelay?: number;
+}
+
+/**
+ * A highly customizable animated button component with advanced interaction features.
+ *
+ * This component provides a comprehensive button solution with:
+ * - **Composition**: `asChild` pattern for rendering as any element (Link, a, etc.) WITH animations preserved
+ * - **Animations**: Entrance, exit, hover, and press animations
+ * - **Loading states**: Built-in spinner with customizable placement
+ * - **Progress tracking**: Visual progress indicators (inline, overlay, or label)
+ * - **Ripple effects**: Material Design-inspired touch feedback
+ * - **Long press**: Configurable long-press detection with visual indicator
+ * - **Cooldown**: Prevent spam clicks with cooldown timer
+ * - **Haptic feedback**: Optional vibration on interactions
+ * - **Accessibility**: Comprehensive ARIA attributes and screen reader support
+ * - **Variants**: Multiple visual styles (solid, ghost, peeled, etc.)
+ *
+ * @component
+ * @example
+ * ```tsx
+ * // Basic button
+ * <Button>Click me</Button>
+ *
+ * // As Next.js Link WITH animations preserved
+ * <Button asChild entranceAnimation="slide" hoverAnimation="lift">
+ *   <Link href="/dashboard">Dashboard</Link>
+ * </Button>
+ *
+ * // As download link with features and animations
+ * <Button asChild variant="bordered" isLoading={downloading} hoverAnimation="glow">
+ *   <a href="/file.pdf" download>Download PDF</a>
+ * </Button>
+ * ```
+ */
+declare const _default: react.NamedExoticComponent<ButtonProps>;
+
+export { AnimatedInputErrorBoundary, _default as Button, type FormatType, _default$1 as Input, type InputProps, type InputRadius, type InputShadow, type InputSize, type InputVariant, type LabelPosition, type PasswordRequirement, type PhoneFormat, type Suggestion, calculatePasswordStrength, cn, detectAndFormat, formatCreditCard, formatCurrency, formatDate, formatPhone, useHistory, useTimeoutManager, withErrorBoundary };
