@@ -3,7 +3,6 @@ import { formatPhone, formatCreditCard, formatDate, formatCurrency, calculatePas
 import { useRef, useId, useReducer, useCallback, useEffect, useMemo, useImperativeHandle, memo, lazy, Suspense } from "react";
 import { m, LazyMotion, domAnimation, domMin, MotionConfig, useReducedMotion } from "motion/react";
 import { useShakeAnimation, useAsyncValidation, useLongPress, useRipple } from "./hooks";
-import { StackedLabel, LeftAnimatedLabel } from "./label-components";
 import { inputReducer, createInitialState } from "./reducers";
 import { AnimatedInputErrorBoundary } from "./error-boundary";
 import { useTimeoutManager } from "../../utils/hooks/index";
@@ -46,9 +45,11 @@ import type {
 
 // Labels
 const InsideLabel = lazy(() => import("./sub-components/Labels/InsideLabel"));
+const StackedLabel = lazy(() => import("./sub-components/Labels/StackedLabel"));
 const OutsideLabel = lazy(() => import("./sub-components/Labels/OutsideLabel"));
 const OutsideTopLabel = lazy(() => import("./sub-components/Labels/OutsideTopLabel"));
 const OutsideLeftLabel = lazy(() => import("./sub-components/Labels/OutsideLeftLabel"));
+const LeftAnimatedLabel = lazy(() => import("./sub-components/Labels/LeftAnimatedLabel"));
 
 // Sub Components
 const RippleContainer = lazy(() => import("./sub-components/RippleContainer"));

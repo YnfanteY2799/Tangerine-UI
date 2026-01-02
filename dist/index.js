@@ -118,16 +118,16 @@ var InsideLabel_exports = {};
 __export(InsideLabel_exports, {
   default: () => InsideLabel_default
 });
-var import_react11, import_react12, import_jsx_runtime4, InsideLabel_default;
+var import_react9, import_react10, import_jsx_runtime3, InsideLabel_default;
 var init_InsideLabel = __esm({
   "src/components/Input/sub-components/Labels/InsideLabel.tsx"() {
     "use strict";
-    import_react11 = require("react");
-    import_react12 = require("motion/react");
+    import_react9 = require("react");
+    import_react10 = require("motion/react");
     init_functions();
     init_constants();
-    import_jsx_runtime4 = require("react/jsx-runtime");
-    InsideLabel_default = (0, import_react11.memo)(function InsideLabel({
+    import_jsx_runtime3 = require("react/jsx-runtime");
+    InsideLabel_default = (0, import_react9.memo)(function InsideLabel({
       label,
       htmlFor,
       hasPrefix,
@@ -137,8 +137,8 @@ var init_InsideLabel = __esm({
       shouldReduceMotion
     }) {
       const leftPosition = hasLeadingIcon ? "left-10" : hasPrefix ? "left-[4.5rem]" : "left-3";
-      return /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
-        import_react12.m.label,
+      return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+        import_react10.m.label,
         {
           initial: false,
           htmlFor,
@@ -152,6 +152,49 @@ var init_InsideLabel = __esm({
           style: { backfaceVisibility: "hidden" },
           transition: shouldReduceMotion ? { duration: 0 } : PREMIUM_SPRING,
           className: cn("absolute pointer-events-none select-none origin-left font-medium", "will-change-transform", leftPosition, colorClass),
+          children: label
+        }
+      );
+    });
+  }
+});
+
+// src/components/Input/sub-components/Labels/StackedLabel.tsx
+var StackedLabel_exports = {};
+__export(StackedLabel_exports, {
+  default: () => StackedLabel_default
+});
+var import_react11, import_react12, import_jsx_runtime4, StackedLabel_default;
+var init_StackedLabel = __esm({
+  "src/components/Input/sub-components/Labels/StackedLabel.tsx"() {
+    "use strict";
+    import_react11 = require("react");
+    import_react12 = require("motion/react");
+    init_constants();
+    init_functions();
+    import_jsx_runtime4 = require("react/jsx-runtime");
+    StackedLabel_default = (0, import_react11.memo)(function StackedLabel({
+      label,
+      htmlFor,
+      isFloating,
+      colorClass,
+      shouldReduceMotion
+    }) {
+      return /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
+        import_react12.m.label,
+        {
+          animate: {
+            fontSize: isFloating ? "0.7rem" : "0.875rem",
+            marginBottom: isFloating ? 2 : 0,
+            opacity: isFloating ? 0.85 : 0.7,
+            y: isFloating ? 0 : 6
+          },
+          initial: false,
+          htmlFor,
+          id: `${htmlFor}-label`,
+          style: { backfaceVisibility: "hidden" },
+          transition: shouldReduceMotion ? { duration: 0 } : PREMIUM_SPRING,
+          className: cn("origin-left font-medium pointer-events-none select-none will-change-transform", colorClass),
           children: label
         }
       );
@@ -281,22 +324,83 @@ var init_OutsideLeftLabel = __esm({
   }
 });
 
+// src/components/Input/sub-components/Labels/LeftAnimatedLabel.tsx
+var LeftAnimatedLabel_exports = {};
+__export(LeftAnimatedLabel_exports, {
+  default: () => LeftAnimatedLabel_default
+});
+var import_react19, import_react20, import_jsx_runtime8, LeftAnimatedLabel_default;
+var init_LeftAnimatedLabel = __esm({
+  "src/components/Input/sub-components/Labels/LeftAnimatedLabel.tsx"() {
+    "use strict";
+    "use client";
+    import_react19 = require("motion/react");
+    init_functions();
+    import_react20 = require("react");
+    init_constants();
+    import_jsx_runtime8 = require("react/jsx-runtime");
+    LeftAnimatedLabel_default = (0, import_react20.memo)(function LeftAnimatedLabel({
+      label,
+      htmlFor,
+      isFloating,
+      colorClass,
+      showPlaceholder,
+      shouldReduceMotion
+    }) {
+      const transition = shouldReduceMotion ? { duration: 0 } : FAST_SPRING;
+      return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(import_jsx_runtime8.Fragment, { children: [
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+          import_react19.m.div,
+          {
+            initial: false,
+            transition,
+            className: "overflow-hidden shrink-0",
+            animate: { width: isFloating ? "auto" : 0, marginRight: isFloating ? 12 : 0, opacity: isFloating ? 1 : 0 },
+            children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+              import_react19.m.label,
+              {
+                initial: false,
+                htmlFor,
+                id: `${htmlFor}-label`,
+                transition,
+                animate: { x: isFloating ? 0 : 8 },
+                className: cn("font-medium whitespace-nowrap block text-sm", colorClass),
+                children: label
+              }
+            )
+          }
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(import_react19.AnimatePresence, { children: showPlaceholder && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+          import_react19.m.span,
+          {
+            initial: { opacity: 0 },
+            animate: { opacity: 1 },
+            exit: { opacity: 0, x: -6, transition: { duration: 0.12 } },
+            className: "absolute inset-0 flex items-center text-muted-foreground/60 pointer-events-none select-none pl-3 text-sm",
+            children: label
+          }
+        ) })
+      ] });
+    });
+  }
+});
+
 // src/components/Input/sub-components/RippleContainer.tsx
 var RippleContainer_exports = {};
 __export(RippleContainer_exports, {
   default: () => RippleContainer_default
 });
-var import_react19, import_react20, import_jsx_runtime8, RippleContainer_default;
+var import_react21, import_react22, import_jsx_runtime9, RippleContainer_default;
 var init_RippleContainer = __esm({
   "src/components/Input/sub-components/RippleContainer.tsx"() {
     "use strict";
-    import_react19 = require("motion/react");
+    import_react21 = require("motion/react");
     init_constants();
-    import_react20 = require("react");
-    import_jsx_runtime8 = require("react/jsx-runtime");
-    RippleContainer_default = (0, import_react20.memo)(function RippleContainer({ ripples, onComplete }) {
-      return /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { className: "absolute inset-0 overflow-hidden rounded-[inherit] pointer-events-none", children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(import_react19.AnimatePresence, { mode: "popLayout", children: ripples.map(({ id, y, x, size }) => /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
-        import_react19.m.span,
+    import_react22 = require("react");
+    import_jsx_runtime9 = require("react/jsx-runtime");
+    RippleContainer_default = (0, import_react22.memo)(function RippleContainer({ ripples, onComplete }) {
+      return /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { className: "absolute inset-0 overflow-hidden rounded-[inherit] pointer-events-none", children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(import_react21.AnimatePresence, { mode: "popLayout", children: ripples.map(({ id, y, x, size }) => /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+        import_react21.m.span,
         {
           exit: "exit",
           animate: "animate",
@@ -317,19 +421,19 @@ var CharacterCounter_exports = {};
 __export(CharacterCounter_exports, {
   default: () => CharacterCounter_default
 });
-var import_react21, import_react22, import_jsx_runtime9, CharacterCounter_default;
+var import_react23, import_react24, import_jsx_runtime10, CharacterCounter_default;
 var init_CharacterCounter = __esm({
   "src/components/Input/sub-components/CharacterCounter.tsx"() {
     "use strict";
     init_functions();
-    import_react21 = require("react");
-    import_react22 = require("motion/react");
-    import_jsx_runtime9 = require("react/jsx-runtime");
-    CharacterCounter_default = (0, import_react21.memo)(function CharacterCounter({ current, max, limit }) {
+    import_react23 = require("react");
+    import_react24 = require("motion/react");
+    import_jsx_runtime10 = require("react/jsx-runtime");
+    CharacterCounter_default = (0, import_react23.memo)(function CharacterCounter({ current, max, limit }) {
       const isOverLimit = current > max;
       const isNearLimit = current > max * 0.8;
-      return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(
-        import_react22.m.span,
+      return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
+        import_react24.m.span,
         {
           className: cn(
             "text-xs tabular-nums transition-colors",
@@ -354,19 +458,19 @@ var RequirementsList_exports = {};
 __export(RequirementsList_exports, {
   default: () => RequirementsList_default
 });
-var import_react23, import_react24, import_jsx_runtime10, RequirementsList_default;
+var import_react25, import_react26, import_jsx_runtime11, RequirementsList_default;
 var init_RequirementsList = __esm({
   "src/components/Input/sub-components/RequirementsList.tsx"() {
     "use strict";
     init_functions();
-    import_react23 = require("react");
-    import_react24 = require("motion/react");
-    import_jsx_runtime10 = require("react/jsx-runtime");
-    RequirementsList_default = (0, import_react23.memo)(function RequirementsList({ requirements, value }) {
-      return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("ul", { className: "mt-2 space-y-1", role: "list", "aria-label": "Password requirements", children: requirements.map(({ validator, label }, i) => {
+    import_react25 = require("react");
+    import_react26 = require("motion/react");
+    import_jsx_runtime11 = require("react/jsx-runtime");
+    RequirementsList_default = (0, import_react25.memo)(function RequirementsList({ requirements, value }) {
+      return /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("ul", { className: "mt-2 space-y-1", role: "list", "aria-label": "Password requirements", children: requirements.map(({ validator, label }, i) => {
         const met = validator(value);
-        return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
-          import_react24.m.li,
+        return /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)(
+          import_react26.m.li,
           {
             animate: { opacity: 1, x: 0 },
             initial: { opacity: 0, x: -8 },
@@ -374,8 +478,8 @@ var init_RequirementsList = __esm({
             "aria-label": `${label}: ${met ? "met" : "not met"}`,
             className: cn("text-xs flex items-center gap-2 transition-colors", met ? "text-green-500" : "text-muted-foreground"),
             children: [
-              /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                import_react24.m.span,
+              /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
+                import_react26.m.span,
                 {
                   className: cn("w-1.5 h-1.5 rounded-full", met ? "bg-green-500" : "bg-muted-foreground/50"),
                   animate: { scale: met ? [1, 1.3, 1] : 1 },
@@ -398,18 +502,18 @@ var SuggestionsDropdown_exports = {};
 __export(SuggestionsDropdown_exports, {
   default: () => SuggestionsDropdown_default
 });
-var import_react25, import_react26, import_jsx_runtime11, SuggestionsDropdown_default;
+var import_react27, import_react28, import_jsx_runtime12, SuggestionsDropdown_default;
 var init_SuggestionsDropdown = __esm({
   "src/components/Input/sub-components/SuggestionsDropdown.tsx"() {
     "use strict";
     init_functions();
-    import_react25 = require("react");
-    import_react26 = require("motion/react");
-    import_jsx_runtime11 = require("react/jsx-runtime");
-    SuggestionsDropdown_default = (0, import_react25.memo)(function SuggestionsDropdown({ suggestions, activeIndex, onSelect, inputId, isOpen }) {
+    import_react27 = require("react");
+    import_react28 = require("motion/react");
+    import_jsx_runtime12 = require("react/jsx-runtime");
+    SuggestionsDropdown_default = (0, import_react27.memo)(function SuggestionsDropdown({ suggestions, activeIndex, onSelect, inputId, isOpen }) {
       if (!isOpen || suggestions.length === 0) return null;
-      return /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
-        import_react26.m.ul,
+      return /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(
+        import_react28.m.ul,
         {
           role: "listbox",
           style: { originY: 0 },
@@ -420,8 +524,8 @@ var init_SuggestionsDropdown = __esm({
           id: inputId ? `${inputId}-listbox` : void 0,
           transition: { duration: 0.12, ease: [0.32, 0.72, 0, 1] },
           className: "absolute z-50 w-full mt-1 bg-popover border rounded-lg shadow-lg overflow-hidden",
-          children: suggestions.map((suggestion, i) => /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)(
-            import_react26.m.li,
+          children: suggestions.map((suggestion, i) => /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)(
+            import_react28.m.li,
             {
               role: "option",
               className: cn(
@@ -439,7 +543,7 @@ var init_SuggestionsDropdown = __esm({
               id: inputId ? `${inputId}-option-${i}` : void 0,
               children: [
                 suggestion.icon,
-                /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("span", { children: suggestion.label || suggestion.value })
+                /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { children: suggestion.label || suggestion.value })
               ]
             },
             suggestion.value
@@ -455,20 +559,20 @@ var PasswordStrengthMeter_exports = {};
 __export(PasswordStrengthMeter_exports, {
   default: () => PasswordStrengthMeter_default
 });
-var import_react27, import_react28, import_jsx_runtime12, PasswordStrengthMeter_default;
+var import_react29, import_react30, import_jsx_runtime13, PasswordStrengthMeter_default;
 var init_PasswordStrengthMeter = __esm({
   "src/components/Input/sub-components/PasswordStrengthMeter.tsx"() {
     "use strict";
     init_functions();
-    import_react27 = require("react");
-    import_react28 = require("motion/react");
-    import_jsx_runtime12 = require("react/jsx-runtime");
-    PasswordStrengthMeter_default = (0, import_react27.memo)(function PasswordStrengthMeter({ strength }) {
+    import_react29 = require("react");
+    import_react30 = require("motion/react");
+    import_jsx_runtime13 = require("react/jsx-runtime");
+    PasswordStrengthMeter_default = (0, import_react29.memo)(function PasswordStrengthMeter({ strength }) {
       const colors = ["bg-red-500", "bg-orange-500", "bg-amber-500", "bg-lime-500", "bg-green-500"];
       const labels = ["Very weak", "Weak", "Fair", "Strong", "Very strong"];
-      return /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { className: "mt-2 space-y-1.5", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { className: "flex gap-1 h-1.5", children: [0, 1, 2, 3].map((i) => /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(
-          import_react28.m.div,
+      return /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { className: "mt-2 space-y-1.5", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { className: "flex gap-1 h-1.5", children: [0, 1, 2, 3].map((i) => /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+          import_react30.m.div,
           {
             className: cn("flex-1 rounded-full", i <= strength ? colors[strength] : "bg-muted"),
             transition: { duration: 0.2, delay: i * 0.03, ease: [0.32, 0.72, 0, 1] },
@@ -478,8 +582,8 @@ var init_PasswordStrengthMeter = __esm({
           },
           i
         )) }),
-        /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(
-          import_react28.m.p,
+        /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+          import_react30.m.p,
           {
             className: cn("text-xs font-medium", colors[strength].replace("bg-", "text-")),
             initial: { opacity: 0 },
@@ -638,8 +742,8 @@ function detectAndFormat(value) {
 }
 
 // src/components/Input/index.tsx
-var import_react29 = require("react");
-var import_react30 = require("motion/react");
+var import_react31 = require("react");
+var import_react32 = require("motion/react");
 
 // src/components/Input/hooks.ts
 var import_react = require("react");
@@ -842,82 +946,6 @@ function useRipple(enableRipple, enableHaptics) {
   return { ripples, addRipple, removeRipple };
 }
 
-// src/components/Input/label-components.tsx
-init_constants();
-var import_react3 = require("motion/react");
-var import_react4 = require("react");
-init_functions();
-var import_jsx_runtime = require("react/jsx-runtime");
-var StackedLabel = (0, import_react4.memo)(function StackedLabel2({
-  label,
-  htmlFor,
-  isFloating,
-  colorClass,
-  shouldReduceMotion
-}) {
-  return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-    import_react3.m.label,
-    {
-      animate: {
-        fontSize: isFloating ? "0.7rem" : "0.875rem",
-        marginBottom: isFloating ? 2 : 0,
-        opacity: isFloating ? 0.85 : 0.7,
-        y: isFloating ? 0 : 6
-      },
-      initial: false,
-      htmlFor,
-      id: `${htmlFor}-label`,
-      style: { backfaceVisibility: "hidden" },
-      transition: shouldReduceMotion ? { duration: 0 } : PREMIUM_SPRING,
-      className: cn("origin-left font-medium pointer-events-none select-none will-change-transform", colorClass),
-      children: label
-    }
-  );
-});
-var LeftAnimatedLabel = (0, import_react4.memo)(function LeftAnimatedLabel2({
-  label,
-  htmlFor,
-  isFloating,
-  colorClass,
-  showPlaceholder,
-  shouldReduceMotion
-}) {
-  const transition = shouldReduceMotion ? { duration: 0 } : FAST_SPRING;
-  return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
-    /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-      import_react3.m.div,
-      {
-        initial: false,
-        transition,
-        className: "overflow-hidden shrink-0",
-        animate: { width: isFloating ? "auto" : 0, marginRight: isFloating ? 12 : 0, opacity: isFloating ? 1 : 0 },
-        children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-          import_react3.m.label,
-          {
-            initial: false,
-            htmlFor,
-            id: `${htmlFor}-label`,
-            transition,
-            animate: { x: isFloating ? 0 : 8 },
-            className: cn("font-medium whitespace-nowrap block text-sm", colorClass),
-            children: label
-          }
-        )
-      }
-    ),
-    /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_react3.AnimatePresence, { children: showPlaceholder && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-      import_react3.m.span,
-      {
-        initial: { opacity: 0 },
-        animate: { opacity: 1 },
-        exit: { opacity: 0, x: -6, transition: { duration: 0.12 } },
-        className: "absolute inset-0 flex items-center text-muted-foreground/60 pointer-events-none select-none pl-3 text-sm",
-        children: label
-      }
-    ) })
-  ] });
-});
-
 // src/components/Input/reducers.ts
 var initialInputState = {
   value: "",
@@ -970,9 +998,9 @@ function inputReducer(state, action) {
 }
 
 // src/components/Input/error-boundary.tsx
-var import_react5 = require("react");
-var import_jsx_runtime2 = require("react/jsx-runtime");
-var AnimatedInputErrorBoundary = class extends import_react5.Component {
+var import_react3 = require("react");
+var import_jsx_runtime = require("react/jsx-runtime");
+var AnimatedInputErrorBoundary = class extends import_react3.Component {
   /**
    * Creates an instance of AnimatedInputErrorBoundary.
    *
@@ -1020,17 +1048,17 @@ var AnimatedInputErrorBoundary = class extends import_react5.Component {
     if (this.state.hasError) {
       if (this.props.fallback) return this.props.fallback;
       const { fallbackInputProps } = this.props;
-      return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "w-full space-y-2", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { className: "relative", children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+      return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "w-full space-y-2", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "relative", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
           "input",
           {
             ...fallbackInputProps,
             className: "flex h-10 w-full rounded-md border border-destructive/50 bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
           }
         ) }),
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "flex items-center justify-between text-xs", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { className: "text-destructive", children: "Input component error. Using fallback." }),
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "flex items-center justify-between text-xs", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "text-destructive", children: "Input component error. Using fallback." }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
             "button",
             {
               type: "button",
@@ -1047,17 +1075,17 @@ var AnimatedInputErrorBoundary = class extends import_react5.Component {
 };
 function withErrorBoundary(WrappedComponent, errorBoundaryProps) {
   const WithErrorBoundary = (props) => {
-    return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(AnimatedInputErrorBoundary, { ...errorBoundaryProps, children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(WrappedComponent, { ...props }) });
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AnimatedInputErrorBoundary, { ...errorBoundaryProps, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(WrappedComponent, { ...props }) });
   };
   WithErrorBoundary.displayName = `WithErrorBoundary(${WrappedComponent.displayName || WrappedComponent.name || "Component"})`;
   return WithErrorBoundary;
 }
 
 // src/utils/hooks/use-timeout-manager.ts
-var import_react6 = require("react");
+var import_react4 = require("react");
 function useTimeoutManager() {
-  const timersRef = (0, import_react6.useRef)(/* @__PURE__ */ new Map());
-  const set = (0, import_react6.useCallback)((key, callback, delay) => {
+  const timersRef = (0, import_react4.useRef)(/* @__PURE__ */ new Map());
+  const set = (0, import_react4.useCallback)((key, callback, delay) => {
     if (delay < 0) {
       throw new Error(`Timeout delay must be non-negative, received: ${delay}`);
     }
@@ -1071,26 +1099,26 @@ function useTimeoutManager() {
     }, delay);
     timersRef.current.set(key, timer);
   }, []);
-  const clear = (0, import_react6.useCallback)((key) => {
+  const clear = (0, import_react4.useCallback)((key) => {
     const timer = timersRef.current.get(key);
     if (timer !== void 0) {
       clearTimeout(timer);
       timersRef.current.delete(key);
     }
   }, []);
-  const clearAll = (0, import_react6.useCallback)(() => {
+  const clearAll = (0, import_react4.useCallback)(() => {
     timersRef.current.forEach((timer) => {
       clearTimeout(timer);
     });
     timersRef.current.clear();
   }, []);
-  const has = (0, import_react6.useCallback)(
+  const has = (0, import_react4.useCallback)(
     (key) => {
       return timersRef.current.has(key);
     },
     []
   );
-  const setBatch = (0, import_react6.useCallback)(
+  const setBatch = (0, import_react4.useCallback)(
     (configs) => {
       configs.forEach((config) => {
         clear(config.key);
@@ -1101,7 +1129,7 @@ function useTimeoutManager() {
     },
     [clear, set]
   );
-  const clearBatch = (0, import_react6.useCallback)(
+  const clearBatch = (0, import_react4.useCallback)(
     (keys) => {
       keys.forEach((key) => {
         clear(key);
@@ -1109,7 +1137,7 @@ function useTimeoutManager() {
     },
     [clear]
   );
-  (0, import_react6.useEffect)(() => {
+  (0, import_react4.useEffect)(() => {
     return () => {
       clearAll();
     };
@@ -1118,18 +1146,18 @@ function useTimeoutManager() {
 }
 
 // src/utils/hooks/use-touch-gestures.ts
-var import_react7 = require("react");
+var import_react5 = require("react");
 
 // src/utils/hooks/use-history.ts
-var import_react8 = require("react");
+var import_react6 = require("react");
 function useHistory(initialValue, maxHistory = 50) {
-  const [history, setHistory] = (0, import_react8.useState)({
+  const [history, setHistory] = (0, import_react6.useState)({
     past: [],
     present: initialValue,
     future: []
   });
-  const isUndoRedoRef = (0, import_react8.useRef)(false);
-  const setState = (0, import_react8.useCallback)(
+  const isUndoRedoRef = (0, import_react6.useRef)(false);
+  const setState = (0, import_react6.useCallback)(
     (value) => {
       if (isUndoRedoRef.current) {
         isUndoRedoRef.current = false;
@@ -1143,7 +1171,7 @@ function useHistory(initialValue, maxHistory = 50) {
     },
     [maxHistory]
   );
-  const undo = (0, import_react8.useCallback)(() => {
+  const undo = (0, import_react6.useCallback)(() => {
     setHistory((prev) => {
       if (prev.past.length === 0) return prev;
       const newPast = [...prev.past];
@@ -1156,7 +1184,7 @@ function useHistory(initialValue, maxHistory = 50) {
       };
     });
   }, []);
-  const redo = (0, import_react8.useCallback)(() => {
+  const redo = (0, import_react6.useCallback)(() => {
     setHistory((prev) => {
       if (prev.future.length === 0) return prev;
       const newFuture = [...prev.future];
@@ -1169,7 +1197,7 @@ function useHistory(initialValue, maxHistory = 50) {
       };
     });
   }, []);
-  const clear = (0, import_react8.useCallback)(() => {
+  const clear = (0, import_react6.useCallback)(() => {
     setHistory({
       past: [],
       present: history.present,
@@ -1193,13 +1221,13 @@ init_constants();
 
 // src/components/Input/sub-components.tsx
 init_constants();
-var import_react9 = require("motion/react");
-var import_react10 = require("react");
+var import_react7 = require("motion/react");
+var import_react8 = require("react");
 init_functions();
-var import_jsx_runtime3 = require("react/jsx-runtime");
-var PasteFlash = (0, import_react10.memo)(function PasteFlash2({ show }) {
-  return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(import_react9.AnimatePresence, { children: show && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
-    import_react9.m.span,
+var import_jsx_runtime2 = require("react/jsx-runtime");
+var PasteFlash = (0, import_react8.memo)(function PasteFlash2({ show }) {
+  return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_react7.AnimatePresence, { children: show && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+    import_react7.m.span,
     {
       className: "absolute inset-0 bg-primary rounded-[inherit] pointer-events-none",
       variants: PASTE_FLASH_VARIANTS,
@@ -1209,14 +1237,14 @@ var PasteFlash = (0, import_react10.memo)(function PasteFlash2({ show }) {
     }
   ) });
 });
-var LoadingIndicator = (0, import_react10.memo)(function LoadingIndicator2({ progress, iconSize }) {
+var LoadingIndicator = (0, import_react8.memo)(function LoadingIndicator2({ progress, iconSize }) {
   const hasProgress = typeof progress === "number";
   const clampedProgress = hasProgress ? Math.min(100, Math.max(0, progress)) : 0;
   const radius = 10;
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset = circumference - clampedProgress / 100 * circumference;
-  return /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(
-    import_react9.m.span,
+  return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(
+    import_react7.m.span,
     {
       className: "relative flex items-center justify-center",
       initial: { opacity: 0, scale: 0.8 },
@@ -1228,10 +1256,10 @@ var LoadingIndicator = (0, import_react10.memo)(function LoadingIndicator2({ pro
       "aria-valuemax": 100,
       "aria-label": hasProgress ? `Loading ${Math.round(clampedProgress)}%` : "Loading",
       children: [
-        hasProgress ? /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("svg", { className: cn(iconSize, "text-primary -rotate-90"), viewBox: "0 0 24 24", fill: "none", "aria-hidden": "true", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("circle", { cx: "12", cy: "12", r: radius, stroke: "currentColor", strokeOpacity: "0.15", strokeWidth: "2.5" }),
-          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
-            import_react9.m.circle,
+        hasProgress ? /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("svg", { className: cn(iconSize, "text-primary -rotate-90"), viewBox: "0 0 24 24", fill: "none", "aria-hidden": "true", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("circle", { cx: "12", cy: "12", r: radius, stroke: "currentColor", strokeOpacity: "0.15", strokeWidth: "2.5" }),
+          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+            import_react7.m.circle,
             {
               cx: "12",
               cy: "12",
@@ -1246,8 +1274,8 @@ var LoadingIndicator = (0, import_react10.memo)(function LoadingIndicator2({ pro
               transition: { type: "spring", stiffness: 100, damping: 20 }
             }
           )
-        ] }) : /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(
-          import_react9.m.svg,
+        ] }) : /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(
+          import_react7.m.svg,
           {
             fill: "none",
             "aria-hidden": "true",
@@ -1256,13 +1284,13 @@ var LoadingIndicator = (0, import_react10.memo)(function LoadingIndicator2({ pro
             className: cn(iconSize, "text-primary"),
             transition: { repeat: Number.POSITIVE_INFINITY, duration: 1, ease: "linear" },
             children: [
-              /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("circle", { cx: "12", cy: "12", r: "10", stroke: "currentColor", strokeOpacity: "0.15", strokeWidth: "2.5" }),
-              /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("path", { d: "M12 2C6.47715 2 2 6.47715 2 12", stroke: "currentColor", strokeWidth: "2.5", strokeLinecap: "round" })
+              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("circle", { cx: "12", cy: "12", r: "10", stroke: "currentColor", strokeOpacity: "0.15", strokeWidth: "2.5" }),
+              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("path", { d: "M12 2C6.47715 2 2 6.47715 2 12", stroke: "currentColor", strokeWidth: "2.5", strokeLinecap: "round" })
             ]
           }
         ),
-        hasProgress && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
-          import_react9.m.span,
+        hasProgress && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+          import_react7.m.span,
           {
             "aria-hidden": "true",
             initial: { opacity: 0 },
@@ -1276,25 +1304,25 @@ var LoadingIndicator = (0, import_react10.memo)(function LoadingIndicator2({ pro
     }
   );
 });
-var ValidationIcon = (0, import_react10.memo)(function ValidationIcon2({ state, iconSize }) {
+var ValidationIcon = (0, import_react8.memo)(function ValidationIcon2({ state, iconSize }) {
   const icons = {
-    success: /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("svg", { className: cn(iconSize, "text-green-500"), viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", "aria-hidden": "true", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("path", { d: "M22 11.08V12a10 10 0 1 1-5.93-9.14", strokeLinecap: "round", strokeLinejoin: "round" }),
-      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("path", { d: "m9 11 3 3L22 4", strokeLinecap: "round", strokeLinejoin: "round" })
+    success: /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("svg", { className: cn(iconSize, "text-green-500"), viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", "aria-hidden": "true", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("path", { d: "M22 11.08V12a10 10 0 1 1-5.93-9.14", strokeLinecap: "round", strokeLinejoin: "round" }),
+      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("path", { d: "m9 11 3 3L22 4", strokeLinecap: "round", strokeLinejoin: "round" })
     ] }),
-    warning: /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("svg", { className: cn(iconSize, "text-amber-500"), viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", "aria-hidden": "true", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("path", { d: "m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z", strokeLinecap: "round", strokeLinejoin: "round" }),
-      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("path", { d: "M12 9v4", strokeLinecap: "round", strokeLinejoin: "round" }),
-      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("path", { d: "M12 17h.01", strokeLinecap: "round", strokeLinejoin: "round" })
+    warning: /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("svg", { className: cn(iconSize, "text-amber-500"), viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", "aria-hidden": "true", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("path", { d: "m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z", strokeLinecap: "round", strokeLinejoin: "round" }),
+      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("path", { d: "M12 9v4", strokeLinecap: "round", strokeLinejoin: "round" }),
+      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("path", { d: "M12 17h.01", strokeLinecap: "round", strokeLinejoin: "round" })
     ] }),
-    error: /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("svg", { className: cn(iconSize, "text-red-500"), viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", "aria-hidden": "true", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("circle", { cx: "12", cy: "12", r: "10" }),
-      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("path", { d: "m15 9-6 6", strokeLinecap: "round", strokeLinejoin: "round" }),
-      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("path", { d: "m9 9 6 6", strokeLinecap: "round", strokeLinejoin: "round" })
+    error: /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("svg", { className: cn(iconSize, "text-red-500"), viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", "aria-hidden": "true", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("circle", { cx: "12", cy: "12", r: "10" }),
+      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("path", { d: "m15 9-6 6", strokeLinecap: "round", strokeLinejoin: "round" }),
+      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("path", { d: "m9 9 6 6", strokeLinecap: "round", strokeLinejoin: "round" })
     ] })
   };
-  return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
-    import_react9.m.span,
+  return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+    import_react7.m.span,
     {
       exit: "exit",
       initial: "initial",
@@ -1305,7 +1333,7 @@ var ValidationIcon = (0, import_react10.memo)(function ValidationIcon2({ state, 
     }
   );
 });
-var ActionButton = (0, import_react10.memo)(function ActionButton2({
+var ActionButton = (0, import_react8.memo)(function ActionButton2({
   label,
   onClick,
   disabled,
@@ -1313,8 +1341,8 @@ var ActionButton = (0, import_react10.memo)(function ActionButton2({
   children,
   isSuccess
 }) {
-  return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
-    import_react9.m.button,
+  return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+    import_react7.m.button,
     {
       type: "button",
       onClick,
@@ -1335,10 +1363,10 @@ var ActionButton = (0, import_react10.memo)(function ActionButton2({
     }
   );
 });
-var ValidationProgressBar = (0, import_react10.memo)(function ValidationProgressBar2({ progress }) {
+var ValidationProgressBar = (0, import_react8.memo)(function ValidationProgressBar2({ progress }) {
   const clampedProgress = Math.min(100, Math.max(0, progress));
-  return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
-    import_react9.m.div,
+  return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+    import_react7.m.div,
     {
       role: "progressbar",
       "aria-valuemin": 0,
@@ -1348,8 +1376,8 @@ var ValidationProgressBar = (0, import_react10.memo)(function ValidationProgress
       animate: { opacity: 1 },
       "aria-valuenow": clampedProgress,
       className: "absolute bottom-0 left-0 right-0 h-0.5 bg-primary/10 overflow-hidden rounded-b-[inherit]",
-      children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
-        import_react9.m.div,
+      children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+        import_react7.m.div,
         {
           initial: { width: 0 },
           className: "h-full bg-primary",
@@ -1360,12 +1388,12 @@ var ValidationProgressBar = (0, import_react10.memo)(function ValidationProgress
     }
   );
 });
-var LoadingProgressBar = (0, import_react10.memo)(function LoadingProgressBar2({ progress }) {
+var LoadingProgressBar = (0, import_react8.memo)(function LoadingProgressBar2({ progress }) {
   const hasProgress = typeof progress === "number";
   const clampedProgress = hasProgress ? Math.min(100, Math.max(0, progress)) : 0;
   if (!hasProgress) {
-    return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
-      import_react9.m.div,
+    return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+      import_react7.m.div,
       {
         role: "progressbar",
         "aria-label": "Loading",
@@ -1373,8 +1401,8 @@ var LoadingProgressBar = (0, import_react10.memo)(function LoadingProgressBar2({
         initial: { opacity: 0 },
         animate: { opacity: 1 },
         className: "absolute bottom-0 left-0 right-0 h-0.5 bg-primary/10 overflow-hidden rounded-b-[inherit]",
-        children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
-          import_react9.m.div,
+        children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+          import_react7.m.div,
           {
             animate: { x: ["-100%", "400%"] },
             className: "h-full w-1/3 bg-primary",
@@ -1384,8 +1412,8 @@ var LoadingProgressBar = (0, import_react10.memo)(function LoadingProgressBar2({
       }
     );
   }
-  return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
-    import_react9.m.div,
+  return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+    import_react7.m.div,
     {
       role: "progressbar",
       "aria-valuemin": 0,
@@ -1395,8 +1423,8 @@ var LoadingProgressBar = (0, import_react10.memo)(function LoadingProgressBar2({
       animate: { opacity: 1 },
       "aria-valuenow": clampedProgress,
       className: "absolute bottom-0 left-0 right-0 h-0.5 bg-primary/10 overflow-hidden rounded-b-[inherit]",
-      children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
-        import_react9.m.div,
+      children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+        import_react7.m.div,
         {
           className: "h-full bg-primary",
           initial: { width: 0 },
@@ -1407,10 +1435,10 @@ var LoadingProgressBar = (0, import_react10.memo)(function LoadingProgressBar2({
     }
   );
 });
-var HistoryButtons = (0, import_react10.memo)(function HistoryButtons2({ canUndo, canRedo, onUndo, onRedo, iconSize }) {
-  return /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { className: "flex items-center gap-0.5", role: "group", "aria-label": "History controls", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
-      import_react9.m.button,
+var HistoryButtons = (0, import_react8.memo)(function HistoryButtons2({ canUndo, canRedo, onUndo, onRedo, iconSize }) {
+  return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "flex items-center gap-0.5", role: "group", "aria-label": "History controls", children: [
+    /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+      import_react7.m.button,
       {
         type: "button",
         onClick: onUndo,
@@ -1426,14 +1454,14 @@ var HistoryButtons = (0, import_react10.memo)(function HistoryButtons2({ canUndo
         whileHover: canUndo ? "hover" : void 0,
         whileTap: canUndo ? "tap" : void 0,
         "aria-label": "Undo",
-        children: /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("svg", { viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", className: "w-full h-full", "aria-hidden": "true", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("path", { d: "M3 7v6h6", strokeLinecap: "round", strokeLinejoin: "round" }),
-          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("path", { d: "M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13", strokeLinecap: "round", strokeLinejoin: "round" })
+        children: /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("svg", { viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", className: "w-full h-full", "aria-hidden": "true", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("path", { d: "M3 7v6h6", strokeLinecap: "round", strokeLinejoin: "round" }),
+          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("path", { d: "M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13", strokeLinecap: "round", strokeLinejoin: "round" })
         ] })
       }
     ),
-    /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
-      import_react9.m.button,
+    /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+      import_react7.m.button,
       {
         type: "button",
         onClick: onRedo,
@@ -1449,20 +1477,20 @@ var HistoryButtons = (0, import_react10.memo)(function HistoryButtons2({ canUndo
         variants: ACTION_BUTTON_VARIANTS,
         initial: "initial",
         "aria-label": "Redo",
-        children: /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("svg", { viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", className: "w-full h-full", "aria-hidden": "true", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("path", { d: "M21 7v6h-6", strokeLinecap: "round", strokeLinejoin: "round" }),
-          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("path", { d: "M3 17a9 9 0 0 1 9-9 9 9 0 0 1 6 2.3l3 2.7", strokeLinecap: "round", strokeLinejoin: "round" })
+        children: /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("svg", { viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", className: "w-full h-full", "aria-hidden": "true", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("path", { d: "M21 7v6h-6", strokeLinecap: "round", strokeLinejoin: "round" }),
+          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("path", { d: "M3 17a9 9 0 0 1 9-9 9 9 0 0 1 6 2.3l3 2.7", strokeLinecap: "round", strokeLinejoin: "round" })
         ] })
       }
     )
   ] });
 });
-var ClearButton = (0, import_react10.memo)(function ClearButton2({ onClick, iconSize }) {
-  return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(ActionButton, { onClick, label: "Clear", iconSize, children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("svg", { viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", className: "w-full h-full", "aria-hidden": "true", children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("path", { d: "M18 6L6 18M6 6l12 12", strokeLinecap: "round", strokeLinejoin: "round" }) }) });
+var ClearButton = (0, import_react8.memo)(function ClearButton2({ onClick, iconSize }) {
+  return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(ActionButton, { onClick, label: "Clear", iconSize, children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("svg", { viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", className: "w-full h-full", "aria-hidden": "true", children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("path", { d: "M18 6L6 18M6 6l12 12", strokeLinecap: "round", strokeLinejoin: "round" }) }) });
 });
-var CopyButton = (0, import_react10.memo)(function CopyButton2({ onClick, iconSize, copied }) {
-  return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(ActionButton, { onClick, label: "Copy", iconSize, isSuccess: copied, children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(import_react9.AnimatePresence, { mode: "wait", children: copied ? /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
-    import_react9.m.svg,
+var CopyButton = (0, import_react8.memo)(function CopyButton2({ onClick, iconSize, copied }) {
+  return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(ActionButton, { onClick, label: "Copy", iconSize, isSuccess: copied, children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_react7.AnimatePresence, { mode: "wait", children: copied ? /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+    import_react7.m.svg,
     {
       viewBox: "0 0 24 24",
       fill: "none",
@@ -1473,11 +1501,11 @@ var CopyButton = (0, import_react10.memo)(function CopyButton2({ onClick, iconSi
       animate: { scale: 1, opacity: 1 },
       exit: { scale: 0, opacity: 0 },
       "aria-hidden": "true",
-      children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("path", { d: "M20 6L9 17l-5-5", strokeLinecap: "round", strokeLinejoin: "round" })
+      children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("path", { d: "M20 6L9 17l-5-5", strokeLinecap: "round", strokeLinejoin: "round" })
     },
     "check"
-  ) : /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(
-    import_react9.m.svg,
+  ) : /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(
+    import_react7.m.svg,
     {
       viewBox: "0 0 24 24",
       fill: "none",
@@ -1489,16 +1517,16 @@ var CopyButton = (0, import_react10.memo)(function CopyButton2({ onClick, iconSi
       exit: { scale: 0, opacity: 0 },
       "aria-hidden": "true",
       children: [
-        /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("rect", { x: "9", y: "9", width: "13", height: "13", rx: "2", ry: "2" }),
-        /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("path", { d: "M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" })
+        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("rect", { x: "9", y: "9", width: "13", height: "13", rx: "2", ry: "2" }),
+        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("path", { d: "M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" })
       ]
     },
     "copy"
   ) }) });
 });
-var PasteButton = (0, import_react10.memo)(function PasteButton2({ onClick, iconSize, pasted }) {
-  return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(ActionButton, { onClick, label: "Paste", iconSize, isSuccess: pasted, children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(import_react9.AnimatePresence, { mode: "wait", children: pasted ? /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
-    import_react9.m.svg,
+var PasteButton = (0, import_react8.memo)(function PasteButton2({ onClick, iconSize, pasted }) {
+  return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(ActionButton, { onClick, label: "Paste", iconSize, isSuccess: pasted, children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_react7.AnimatePresence, { mode: "wait", children: pasted ? /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+    import_react7.m.svg,
     {
       fill: "none",
       strokeWidth: "2",
@@ -1509,11 +1537,11 @@ var PasteButton = (0, import_react10.memo)(function PasteButton2({ onClick, icon
       animate: { scale: 1, opacity: 1 },
       initial: { scale: 0, opacity: 0 },
       className: "w-full h-full text-green-500",
-      children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("path", { d: "M20 6L9 17l-5-5", strokeLinecap: "round", strokeLinejoin: "round" })
+      children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("path", { d: "M20 6L9 17l-5-5", strokeLinecap: "round", strokeLinejoin: "round" })
     },
     "check"
-  ) : /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(
-    import_react9.m.svg,
+  ) : /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(
+    import_react7.m.svg,
     {
       fill: "none",
       strokeWidth: "2",
@@ -1525,29 +1553,29 @@ var PasteButton = (0, import_react10.memo)(function PasteButton2({ onClick, icon
       initial: { scale: 0, opacity: 0 },
       animate: { scale: 1, opacity: 1 },
       children: [
-        /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("path", { d: "M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" }),
-        /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("rect", { x: "8", y: "2", width: "8", height: "4", rx: "1", ry: "1" })
+        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("path", { d: "M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" }),
+        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("rect", { x: "8", y: "2", width: "8", height: "4", rx: "1", ry: "1" })
       ]
     },
     "paste"
   ) }) });
 });
-var PasswordToggleButton = (0, import_react10.memo)(function PasswordToggleButton2({
+var PasswordToggleButton = (0, import_react8.memo)(function PasswordToggleButton2({
   onClick,
   iconSize,
   showPassword
 }) {
-  return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(ActionButton, { onClick, label: showPassword ? "Hide password" : "Show password", iconSize, children: showPassword ? /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("svg", { viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", className: "w-full h-full", "aria-hidden": "true", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("path", { d: "M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" }),
-    /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("line", { x1: "1", y1: "1", x2: "23", y2: "23" })
-  ] }) : /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("svg", { viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", className: "w-full h-full", "aria-hidden": "true", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("path", { d: "M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" }),
-    /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("circle", { cx: "12", cy: "12", r: "3" })
+  return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(ActionButton, { onClick, label: showPassword ? "Hide password" : "Show password", iconSize, children: showPassword ? /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("svg", { viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", className: "w-full h-full", "aria-hidden": "true", children: [
+    /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("path", { d: "M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" }),
+    /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("line", { x1: "1", y1: "1", x2: "23", y2: "23" })
+  ] }) : /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("svg", { viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", className: "w-full h-full", "aria-hidden": "true", children: [
+    /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("path", { d: "M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" }),
+    /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("circle", { cx: "12", cy: "12", r: "3" })
   ] }) });
 });
-var ClipboardErrorMessage = (0, import_react10.memo)(function ClipboardErrorMessage2({ message, onDismiss }) {
-  return /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(
-    import_react9.m.div,
+var ClipboardErrorMessage = (0, import_react8.memo)(function ClipboardErrorMessage2({ message, onDismiss }) {
+  return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(
+    import_react7.m.div,
     {
       className: "flex items-center justify-between gap-2 mt-1.5 px-2 py-1.5 bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 rounded-md",
       initial: { opacity: 0, y: -4, height: 0 },
@@ -1556,22 +1584,22 @@ var ClipboardErrorMessage = (0, import_react10.memo)(function ClipboardErrorMess
       transition: { duration: 0.2 },
       role: "alert",
       children: [
-        /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { className: "flex items-center gap-2", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("svg", { className: "w-4 h-4 text-red-500 shrink-0", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", "aria-hidden": "true", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("circle", { cx: "12", cy: "12", r: "10" }),
-            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("path", { d: "M12 8v4", strokeLinecap: "round" }),
-            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("path", { d: "M12 16h.01", strokeLinecap: "round" })
+        /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "flex items-center gap-2", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("svg", { className: "w-4 h-4 text-red-500 shrink-0", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", "aria-hidden": "true", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("circle", { cx: "12", cy: "12", r: "10" }),
+            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("path", { d: "M12 8v4", strokeLinecap: "round" }),
+            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("path", { d: "M12 16h.01", strokeLinecap: "round" })
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { className: "text-xs text-red-600 dark:text-red-400", children: message })
+          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { className: "text-xs text-red-600 dark:text-red-400", children: message })
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
           "button",
           {
             type: "button",
             onClick: onDismiss,
             className: "p-0.5 text-red-400 hover:text-red-600 dark:hover:text-red-300 transition-colors rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500/50",
             "aria-label": "Dismiss error",
-            children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("svg", { className: "w-3.5 h-3.5", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("path", { d: "M18 6L6 18M6 6l12 12", strokeLinecap: "round", strokeLinejoin: "round" }) })
+            children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("svg", { className: "w-3.5 h-3.5", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("path", { d: "M18 6L6 18M6 6l12 12", strokeLinecap: "round", strokeLinejoin: "round" }) })
           }
         )
       ]
@@ -1580,16 +1608,18 @@ var ClipboardErrorMessage = (0, import_react10.memo)(function ClipboardErrorMess
 });
 
 // src/components/Input/index.tsx
-var import_jsx_runtime13 = require("react/jsx-runtime");
-var InsideLabel2 = (0, import_react29.lazy)(() => Promise.resolve().then(() => (init_InsideLabel(), InsideLabel_exports)));
-var OutsideLabel2 = (0, import_react29.lazy)(() => Promise.resolve().then(() => (init_OutsideLabel(), OutsideLabel_exports)));
-var OutsideTopLabel2 = (0, import_react29.lazy)(() => Promise.resolve().then(() => (init_OutsideTopLabel(), OutsideTopLabel_exports)));
-var OutsideLeftLabel2 = (0, import_react29.lazy)(() => Promise.resolve().then(() => (init_OutsideLeftLabel(), OutsideLeftLabel_exports)));
-var RippleContainer2 = (0, import_react29.lazy)(() => Promise.resolve().then(() => (init_RippleContainer(), RippleContainer_exports)));
-var CharacterCounter2 = (0, import_react29.lazy)(() => Promise.resolve().then(() => (init_CharacterCounter(), CharacterCounter_exports)));
-var RequirementsList2 = (0, import_react29.lazy)(() => Promise.resolve().then(() => (init_RequirementsList(), RequirementsList_exports)));
-var SuggestionsDropdown2 = (0, import_react29.lazy)(() => Promise.resolve().then(() => (init_SuggestionsDropdown(), SuggestionsDropdown_exports)));
-var PasswordStrengthMeter2 = (0, import_react29.lazy)(() => Promise.resolve().then(() => (init_PasswordStrengthMeter(), PasswordStrengthMeter_exports)));
+var import_jsx_runtime14 = require("react/jsx-runtime");
+var InsideLabel2 = (0, import_react31.lazy)(() => Promise.resolve().then(() => (init_InsideLabel(), InsideLabel_exports)));
+var StackedLabel2 = (0, import_react31.lazy)(() => Promise.resolve().then(() => (init_StackedLabel(), StackedLabel_exports)));
+var OutsideLabel2 = (0, import_react31.lazy)(() => Promise.resolve().then(() => (init_OutsideLabel(), OutsideLabel_exports)));
+var OutsideTopLabel2 = (0, import_react31.lazy)(() => Promise.resolve().then(() => (init_OutsideTopLabel(), OutsideTopLabel_exports)));
+var OutsideLeftLabel2 = (0, import_react31.lazy)(() => Promise.resolve().then(() => (init_OutsideLeftLabel(), OutsideLeftLabel_exports)));
+var LeftAnimatedLabel2 = (0, import_react31.lazy)(() => Promise.resolve().then(() => (init_LeftAnimatedLabel(), LeftAnimatedLabel_exports)));
+var RippleContainer2 = (0, import_react31.lazy)(() => Promise.resolve().then(() => (init_RippleContainer(), RippleContainer_exports)));
+var CharacterCounter2 = (0, import_react31.lazy)(() => Promise.resolve().then(() => (init_CharacterCounter(), CharacterCounter_exports)));
+var RequirementsList2 = (0, import_react31.lazy)(() => Promise.resolve().then(() => (init_RequirementsList(), RequirementsList_exports)));
+var SuggestionsDropdown2 = (0, import_react31.lazy)(() => Promise.resolve().then(() => (init_SuggestionsDropdown(), SuggestionsDropdown_exports)));
+var PasswordStrengthMeter2 = (0, import_react31.lazy)(() => Promise.resolve().then(() => (init_PasswordStrengthMeter(), PasswordStrengthMeter_exports)));
 function InputInner(InnerProps) {
   const {
     variant = "default",
@@ -1676,29 +1706,29 @@ function InputInner(InnerProps) {
     ref,
     ...props
   } = InnerProps;
-  const inputRef = (0, import_react29.useRef)(null);
-  const textareaRef = (0, import_react29.useRef)(null);
-  const generatedId = (0, import_react29.useId)();
+  const inputRef = (0, import_react31.useRef)(null);
+  const textareaRef = (0, import_react31.useRef)(null);
+  const generatedId = (0, import_react31.useId)();
   const timeouts = useTimeoutManager();
   const inputId = id || generatedId;
   const messageId = `${inputId}-message`;
   const listboxId = `${inputId}-listbox`;
-  const [state, dispatch] = (0, import_react29.useReducer)(inputReducer, defaultValue || "", createInitialState);
-  const shouldReduceMotion = (0, import_react30.useReducedMotion)();
+  const [state, dispatch] = (0, import_react31.useReducer)(inputReducer, defaultValue || "", createInitialState);
+  const shouldReduceMotion = (0, import_react32.useReducedMotion)();
   const activeRef = multiline ? textareaRef : inputRef;
-  (0, import_react29.useImperativeHandle)(ref, () => activeRef.current, [multiline]);
-  const setInputRef = (0, import_react29.useCallback)((element) => {
+  (0, import_react31.useImperativeHandle)(ref, () => activeRef.current, [multiline]);
+  const setInputRef = (0, import_react31.useCallback)((element) => {
     inputRef.current = element;
   }, []);
-  const setTextareaRef = (0, import_react29.useCallback)((element) => {
+  const setTextareaRef = (0, import_react31.useCallback)((element) => {
     textareaRef.current = element;
   }, []);
-  (0, import_react29.useEffect)(() => {
+  (0, import_react31.useEffect)(() => {
     if (controlledValueProp !== void 0) {
       dispatch({ type: "SET_VALUE", payload: controlledValueProp });
     }
   }, [controlledValueProp]);
-  (0, import_react29.useEffect)(() => {
+  (0, import_react31.useEffect)(() => {
     if (isObscuredControlled !== void 0) {
       dispatch({ type: "SET_OBSCURED", payload: isObscuredControlled });
     }
@@ -1706,9 +1736,9 @@ function InputInner(InnerProps) {
   const controlledValue = controlledValueProp !== void 0 ? controlledValueProp : state.value;
   const isDisabledOrLoading = disabled || isLoading;
   const hasValue = controlledValue.length > 0;
-  const isFloating = (0, import_react29.useMemo)(() => state.isFocused || hasValue, [state.isFocused, hasValue]);
-  const shouldFloat = (0, import_react29.useMemo)(() => isFloating || !!prefix, [isFloating, prefix]);
-  const requiredAnimationBundle = (0, import_react29.useMemo)(() => {
+  const isFloating = (0, import_react31.useMemo)(() => state.isFocused || hasValue, [state.isFocused, hasValue]);
+  const shouldFloat = (0, import_react31.useMemo)(() => isFloating || !!prefix, [isFloating, prefix]);
+  const requiredAnimationBundle = (0, import_react31.useMemo)(() => {
     if (animationBundle === "minimal") {
       const hasActionButtons = showClearButton || showCopyButton || showPasteButton || showHistoryButtons;
       const hasLayoutAnimations = labelPosition === "left" || showRequirements;
@@ -1733,12 +1763,12 @@ function InputInner(InnerProps) {
     loadingProgress,
     isLoading
   ]);
-  const animationFeatures = requiredAnimationBundle === "minimal" ? import_react30.domMin : import_react30.domAnimation;
+  const animationFeatures = requiredAnimationBundle === "minimal" ? import_react32.domMin : import_react32.domAnimation;
   const isObscured = isObscuredControlled !== void 0 ? isObscuredControlled : state.isObscured;
   const historyHook = useHistory(defaultValue || "");
-  const pushHistory = (0, import_react29.useCallback)((value) => historyHook.setState(value), [historyHook]);
+  const pushHistory = (0, import_react31.useCallback)((value) => historyHook.setState(value), [historyHook]);
   const { undo, redo, canUndo, canRedo } = historyHook;
-  (0, import_react29.useEffect)(() => {
+  (0, import_react31.useEffect)(() => {
     if (enableHistory && controlledValueProp === void 0) {
       if (historyHook.state !== controlledValue) {
         dispatch({ type: "SET_VALUE", payload: historyHook.state });
@@ -1751,7 +1781,7 @@ function InputInner(InnerProps) {
     asyncDebounceMs,
     asyncValidateTimeout
   );
-  const validationState = (0, import_react29.useMemo)(() => {
+  const validationState = (0, import_react31.useMemo)(() => {
     if (error || asyncError) return "error";
     if (warning) return "warning";
     if (success) return "success";
@@ -1767,20 +1797,20 @@ function InputInner(InnerProps) {
     () => controlledValue,
     longPressMs
   );
-  const sizeStyles = (0, import_react29.useMemo)(() => SIZE_STYLES[size], [size]);
-  const radiusStyle = (0, import_react29.useMemo)(() => RADIUS_STYLES[radius], [radius]);
-  const shadowStyle = (0, import_react29.useMemo)(() => SHADOW_STYLES[shadow], [shadow]);
-  const passwordStrength = (0, import_react29.useMemo)(() => type === "password" ? calculatePasswordStrength(controlledValue) : 0, [type, controlledValue]);
-  const filteredSuggestions = (0, import_react29.useMemo)(() => {
+  const sizeStyles = (0, import_react31.useMemo)(() => SIZE_STYLES[size], [size]);
+  const radiusStyle = (0, import_react31.useMemo)(() => RADIUS_STYLES[radius], [radius]);
+  const shadowStyle = (0, import_react31.useMemo)(() => SHADOW_STYLES[shadow], [shadow]);
+  const passwordStrength = (0, import_react31.useMemo)(() => type === "password" ? calculatePasswordStrength(controlledValue) : 0, [type, controlledValue]);
+  const filteredSuggestions = (0, import_react31.useMemo)(() => {
     if (!suggestions || !controlledValue) return suggestions || [];
     return suggestions.filter((s) => s.value.toLowerCase().includes(controlledValue.toLowerCase()));
   }, [suggestions, controlledValue]);
   const inputType = type === "password" && state.showPassword ? "text" : type;
-  const displayValue = (0, import_react29.useMemo)(() => {
+  const displayValue = (0, import_react31.useMemo)(() => {
     if (isObscured) return "\xE2\u20AC\xA2".repeat(controlledValue.length);
     return controlledValue;
   }, [controlledValue, isObscured]);
-  const getVariantStyles = (0, import_react29.useCallback)(() => {
+  const getVariantStyles = (0, import_react31.useCallback)(() => {
     const focusRing = "focus-within:ring-2 focus-within:ring-ring/20";
     const stateStyles = validationState === "error" ? "border-red-500 focus-within:ring-red-500/20" : validationState === "warning" ? "border-amber-500 focus-within:ring-amber-500/20" : validationState === "success" ? "border-green-500 focus-within:ring-green-500/20" : "";
     switch (variant) {
@@ -1804,20 +1834,20 @@ function InputInner(InnerProps) {
         return cn("bg-background border border-border/60 hover:border-border", focusRing, stateStyles || "focus-within:border-primary/60");
     }
   }, [variant, validationState]);
-  const getInputTextColor = (0, import_react29.useCallback)(() => {
+  const getInputTextColor = (0, import_react31.useCallback)(() => {
     if (validationState === "error") return "text-red-600";
     if (validationState === "warning") return "text-amber-600";
     if (validationState === "success") return "text-green-600";
     return "text-foreground";
   }, [validationState]);
-  const getLabelColor = (0, import_react29.useCallback)(() => {
+  const getLabelColor = (0, import_react31.useCallback)(() => {
     if (validationState === "error") return "text-red-500";
     if (validationState === "warning") return "text-amber-500";
     if (validationState === "success") return "text-green-500";
     if (state.isFocused) return "text-primary";
     return "text-muted-foreground";
   }, [validationState, state.isFocused]);
-  const containerClasses = (0, import_react29.useMemo)(
+  const containerClasses = (0, import_react31.useMemo)(
     () => cn(
       "group/input relative flex items-center w-full transition-all duration-200",
       sizeStyles.height,
@@ -1831,7 +1861,7 @@ function InputInner(InnerProps) {
     ),
     [sizeStyles, radiusStyle, shadowStyle, getVariantStyles, isDisabledOrLoading, state.isFocused]
   );
-  const inputClasses = (0, import_react29.useMemo)(
+  const inputClasses = (0, import_react31.useMemo)(
     () => cn(
       "flex-1 min-w-0 bg-transparent outline-none",
       sizeStyles.text,
@@ -1841,7 +1871,7 @@ function InputInner(InnerProps) {
     ),
     [sizeStyles.text, getInputTextColor]
   );
-  const formatValue = (0, import_react29.useCallback)(
+  const formatValue = (0, import_react31.useCallback)(
     (val) => {
       if (formatAs === "none") return val;
       switch (formatAs) {
@@ -1859,10 +1889,10 @@ function InputInner(InnerProps) {
     },
     [formatAs, phoneFormat, customPhoneFormat, currencySymbol]
   );
-  const trimValue = (0, import_react29.useCallback)((val) => {
+  const trimValue = (0, import_react31.useCallback)((val) => {
     return val.trim().replace(/\s+/g, " ");
   }, []);
-  const updateValue = (0, import_react29.useCallback)(
+  const updateValue = (0, import_react31.useCallback)(
     (newValue, triggerEvents = true) => {
       if (characterRestrictions && !characterRestrictions.test(newValue) && newValue !== "") return;
       const effectiveMaxLength = maxCharacters || (multiline ? void 0 : props.maxLength);
@@ -1910,7 +1940,7 @@ function InputInner(InnerProps) {
       activeRef
     ]
   );
-  const handleChange = (0, import_react29.useCallback)(
+  const handleChange = (0, import_react31.useCallback)(
     (e) => {
       const newValue = e.target.value;
       updateValue(newValue);
@@ -1922,7 +1952,7 @@ function InputInner(InnerProps) {
     },
     [updateValue, onChange, suggestions]
   );
-  const handleFocus = (0, import_react29.useCallback)(
+  const handleFocus = (0, import_react31.useCallback)(
     (e) => {
       dispatch({ type: "FOCUS_INPUT" });
       timeouts.clear("obscure");
@@ -1931,7 +1961,7 @@ function InputInner(InnerProps) {
     },
     [props.onFocus, isObscured, onObscureChange, timeouts]
   );
-  const handleBlur = (0, import_react29.useCallback)(
+  const handleBlur = (0, import_react31.useCallback)(
     (e) => {
       timeouts.set(
         "blur",
@@ -1983,7 +2013,7 @@ function InputInner(InnerProps) {
       props.onBlur
     ]
   );
-  const handlePaste = (0, import_react29.useCallback)(
+  const handlePaste = (0, import_react31.useCallback)(
     (e) => {
       if (!allowPaste) {
         e.preventDefault();
@@ -2004,7 +2034,7 @@ function InputInner(InnerProps) {
     },
     [allowPaste, smartPaste, updateValue, timeouts, enableHaptics, onPaste]
   );
-  const handleCopyPrevention = (0, import_react29.useCallback)(
+  const handleCopyPrevention = (0, import_react31.useCallback)(
     (e) => {
       if (!allowCopy) {
         e.preventDefault();
@@ -2020,16 +2050,16 @@ ${watermarkOnCopy}`;
     },
     [allowCopy, watermarkOnCopy, controlledValue]
   );
-  const handleDoubleClick = (0, import_react29.useCallback)(() => {
+  const handleDoubleClick = (0, import_react31.useCallback)(() => {
     if (selectAllOnDoubleClick && activeRef.current) activeRef.current.select();
   }, [selectAllOnDoubleClick, activeRef]);
-  const handleUndo = (0, import_react29.useCallback)(() => {
+  const handleUndo = (0, import_react31.useCallback)(() => {
     if (canUndo) undo();
   }, [undo, canUndo]);
-  const handleRedo = (0, import_react29.useCallback)(() => {
+  const handleRedo = (0, import_react31.useCallback)(() => {
     if (canRedo) redo();
   }, [redo, canRedo]);
-  const handleSuggestionSelect = (0, import_react29.useCallback)(
+  const handleSuggestionSelect = (0, import_react31.useCallback)(
     (suggestion) => {
       updateValue(suggestion.value);
       timeouts.set(
@@ -2044,7 +2074,7 @@ ${watermarkOnCopy}`;
     },
     [updateValue, onSuggestionSelect, activeRef, timeouts]
   );
-  const handleKeyDown = (0, import_react29.useCallback)(
+  const handleKeyDown = (0, import_react31.useCallback)(
     (e) => {
       if (enableHistory) {
         if ((e.ctrlKey || e.metaKey) && e.key === "z" && !e.shiftKey) {
@@ -2087,14 +2117,14 @@ ${watermarkOnCopy}`;
       props.onKeyDown
     ]
   );
-  const handleClear = (0, import_react29.useCallback)(() => {
+  const handleClear = (0, import_react31.useCallback)(() => {
     updateValue("");
     clearError();
     dispatch({ type: "CLEAR_CLIPBOARD_ERROR" });
     activeRef.current?.focus();
     if (enableHaptics && typeof navigator !== "undefined" && navigator.vibrate) navigator.vibrate(5);
   }, [updateValue, clearError, enableHaptics, activeRef]);
-  const handleCopy = (0, import_react29.useCallback)(async () => {
+  const handleCopy = (0, import_react31.useCallback)(async () => {
     dispatch({ type: "CLEAR_CLIPBOARD_ERROR" });
     try {
       const textToCopy = watermarkOnCopy ? `${controlledValue}
@@ -2114,7 +2144,7 @@ ${watermarkOnCopy}` : controlledValue;
       triggerShake();
     }
   }, [controlledValue, watermarkOnCopy, enableHaptics, onCopy, onClipboardError, activeRef, triggerShake]);
-  const handlePasteButton = (0, import_react29.useCallback)(async () => {
+  const handlePasteButton = (0, import_react31.useCallback)(async () => {
     dispatch({ type: "CLEAR_CLIPBOARD_ERROR" });
     try {
       const text = await navigator.clipboard.readText();
@@ -2134,50 +2164,50 @@ ${watermarkOnCopy}` : controlledValue;
       triggerShake();
     }
   }, [smartPaste, updateValue, timeouts, enableHaptics, onPaste, onClipboardError, triggerShake]);
-  const handleDismissClipboardError = (0, import_react29.useCallback)(() => {
+  const handleDismissClipboardError = (0, import_react31.useCallback)(() => {
     dispatch({ type: "CLEAR_CLIPBOARD_ERROR" });
     timeouts.clear("clipboardError");
   }, [timeouts]);
-  const togglePassword = (0, import_react29.useCallback)(() => {
+  const togglePassword = (0, import_react31.useCallback)(() => {
     dispatch({ type: "TOGGLE_PASSWORD" });
     if (enableHaptics && typeof navigator !== "undefined" && navigator.vibrate) navigator.vibrate(3);
   }, [enableHaptics]);
-  const handleContainerClick = (0, import_react29.useCallback)(
+  const handleContainerClick = (0, import_react31.useCallback)(
     (e) => {
       addRipple(e);
       if (!isDisabledOrLoading && activeRef.current) activeRef.current.focus();
     },
     [addRipple, isDisabledOrLoading, activeRef]
   );
-  const actionButtons = (0, import_react29.useMemo)(() => {
+  const actionButtons = (0, import_react31.useMemo)(() => {
     const buttons = [];
     const iconSize = sizeStyles.iconSize;
     if (enableHistory && showHistoryButtons) {
       buttons.push(
-        /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(HistoryButtons, { canUndo, canRedo, onUndo: handleUndo, onRedo: handleRedo, iconSize }, "history")
+        /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(HistoryButtons, { canUndo, canRedo, onUndo: handleUndo, onRedo: handleRedo, iconSize }, "history")
       );
     }
     if (isLoading || isValidating) {
-      buttons.push(/* @__PURE__ */ (0, import_jsx_runtime13.jsx)(LoadingIndicator, { progress: loadingProgress, iconSize }, "loading"));
+      buttons.push(/* @__PURE__ */ (0, import_jsx_runtime14.jsx)(LoadingIndicator, { progress: loadingProgress, iconSize }, "loading"));
     } else if (validationState && !showClearButton) {
-      buttons.push(/* @__PURE__ */ (0, import_jsx_runtime13.jsx)(ValidationIcon, { state: validationState, iconSize }, "validation"));
+      buttons.push(/* @__PURE__ */ (0, import_jsx_runtime14.jsx)(ValidationIcon, { state: validationState, iconSize }, "validation"));
     }
     if (showClearButton && hasValue && !isDisabledOrLoading) {
-      buttons.push(/* @__PURE__ */ (0, import_jsx_runtime13.jsx)(ClearButton, { onClick: handleClear, iconSize }, "clear"));
+      buttons.push(/* @__PURE__ */ (0, import_jsx_runtime14.jsx)(ClearButton, { onClick: handleClear, iconSize }, "clear"));
     }
     if (showCopyButton && !isDisabledOrLoading) {
-      buttons.push(/* @__PURE__ */ (0, import_jsx_runtime13.jsx)(CopyButton, { onClick: handleCopy, iconSize, copied: state.copied }, "copy"));
+      buttons.push(/* @__PURE__ */ (0, import_jsx_runtime14.jsx)(CopyButton, { onClick: handleCopy, iconSize, copied: state.copied }, "copy"));
     }
     if (showPasteButton && !isDisabledOrLoading) {
-      buttons.push(/* @__PURE__ */ (0, import_jsx_runtime13.jsx)(PasteButton, { onClick: handlePasteButton, iconSize, pasted: state.pasted }, "paste"));
+      buttons.push(/* @__PURE__ */ (0, import_jsx_runtime14.jsx)(PasteButton, { onClick: handlePasteButton, iconSize, pasted: state.pasted }, "paste"));
     }
     if (showPasswordToggle && type === "password") {
-      buttons.push(/* @__PURE__ */ (0, import_jsx_runtime13.jsx)(PasswordToggleButton, { onClick: togglePassword, iconSize, showPassword: state.showPassword }, "password"));
+      buttons.push(/* @__PURE__ */ (0, import_jsx_runtime14.jsx)(PasswordToggleButton, { onClick: togglePassword, iconSize, showPassword: state.showPassword }, "password"));
     }
     if (trailingIcon) {
       buttons.push(
-        /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
-          import_react30.m.span,
+        /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+          import_react32.m.span,
           {
             className: "text-muted-foreground shrink-0",
             animate: { scale: state.isFocused ? 1.05 : 1 },
@@ -2218,12 +2248,12 @@ ${watermarkOnCopy}` : controlledValue;
     trailingIcon,
     state.isFocused
   ]);
-  const progressBar = (0, import_react29.useMemo)(() => {
-    if (typeof validationProgress === "number") return /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(ValidationProgressBar, { progress: validationProgress });
-    if (isLoading) return /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(LoadingProgressBar, { progress: loadingProgress });
+  const progressBar = (0, import_react31.useMemo)(() => {
+    if (typeof validationProgress === "number") return /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(ValidationProgressBar, { progress: validationProgress });
+    if (isLoading) return /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(LoadingProgressBar, { progress: loadingProgress });
     return null;
   }, [validationProgress, isLoading, loadingProgress]);
-  const messagesArea = (0, import_react29.useMemo)(() => {
+  const messagesArea = (0, import_react31.useMemo)(() => {
     const errorMsg = typeof error === "string" ? error : asyncError;
     const warningMsg = typeof warning === "string" ? warning : null;
     const successMsg = typeof success === "string" ? success : null;
@@ -2239,8 +2269,8 @@ ${watermarkOnCopy}` : controlledValue;
     if (!message) return null;
     const color = errorMsg ? "text-red-500" : warningMsg ? "text-amber-500" : successMsg ? "text-green-500" : "text-muted-foreground";
     const isError = !!errorMsg;
-    return /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
-      import_react30.m.p,
+    return /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+      import_react32.m.p,
       {
         id: messageId,
         exit: { opacity: 0, y: -4 },
@@ -2255,14 +2285,14 @@ ${watermarkOnCopy}` : controlledValue;
       message
     );
   }, [error, asyncError, warning, success, helperText, renderMessages, messageId]);
-  const bottomSection = (0, import_react29.useMemo)(() => {
-    return /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)(import_jsx_runtime13.Fragment, { children: [
-      state.clipboardError && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(ClipboardErrorMessage, { message: state.clipboardError, onDismiss: handleDismissClipboardError }),
-      showCharacterCount && maxCharacters && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(import_react29.Suspense, { fallback: null, children: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { className: "flex justify-end mt-1.5", children: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(CharacterCounter2, { current: controlledValue.length, max: maxCharacters, limit }) }) }),
+  const bottomSection = (0, import_react31.useMemo)(() => {
+    return /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)(import_jsx_runtime14.Fragment, { children: [
+      state.clipboardError && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(ClipboardErrorMessage, { message: state.clipboardError, onDismiss: handleDismissClipboardError }),
+      showCharacterCount && maxCharacters && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(import_react31.Suspense, { fallback: null, children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { className: "flex justify-end mt-1.5", children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(CharacterCounter2, { current: controlledValue.length, max: maxCharacters, limit }) }) }),
       messagesArea,
-      showPasswordStrength && type === "password" && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(import_react29.Suspense, { fallback: null, children: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(PasswordStrengthMeter2, { strength: passwordStrength }) }),
-      showRequirements && passwordRequirements && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(import_react29.Suspense, { fallback: null, children: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(RequirementsList2, { requirements: passwordRequirements, value: controlledValue }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { className: "relative", children: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(import_react29.Suspense, { fallback: null, children: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+      showPasswordStrength && type === "password" && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(import_react31.Suspense, { fallback: null, children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(PasswordStrengthMeter2, { strength: passwordStrength }) }),
+      showRequirements && passwordRequirements && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(import_react31.Suspense, { fallback: null, children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(RequirementsList2, { requirements: passwordRequirements, value: controlledValue }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { className: "relative", children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(import_react31.Suspense, { fallback: null, children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
         SuggestionsDropdown2,
         {
           inputId,
@@ -2292,7 +2322,7 @@ ${watermarkOnCopy}` : controlledValue;
     handleSuggestionSelect,
     inputId
   ]);
-  const commonAriaProps = (0, import_react29.useMemo)(
+  const commonAriaProps = (0, import_react31.useMemo)(
     () => ({
       "aria-describedby": messageId,
       "aria-busy": isLoading || isValidating,
@@ -2313,13 +2343,13 @@ ${watermarkOnCopy}` : controlledValue;
       inputId
     ]
   );
-  const inputContent = (0, import_react29.useMemo)(
-    () => /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)(import_jsx_runtime13.Fragment, { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(RippleContainer2, { ripples, onComplete: removeRipple }),
-      /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(PasteFlash, { show: state.showPasteFlash }),
-      prefix && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { className: "text-muted-foreground text-sm shrink-0 select-none", children: prefix }),
-      leadingIcon && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
-        import_react30.m.span,
+  const inputContent = (0, import_react31.useMemo)(
+    () => /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)(import_jsx_runtime14.Fragment, { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(RippleContainer2, { ripples, onComplete: removeRipple }),
+      /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(PasteFlash, { show: state.showPasteFlash }),
+      prefix && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("span", { className: "text-muted-foreground text-sm shrink-0 select-none", children: prefix }),
+      leadingIcon && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+        import_react32.m.span,
         {
           className: cn("text-muted-foreground shrink-0 transition-colors", state.isFocused && "text-foreground"),
           animate: { scale: state.isFocused ? 1.05 : 1 },
@@ -2327,7 +2357,7 @@ ${watermarkOnCopy}` : controlledValue;
           children: leadingIcon
         }
       ),
-      /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+      /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
         "input",
         {
           name,
@@ -2351,7 +2381,7 @@ ${watermarkOnCopy}` : controlledValue;
           ...commonAriaProps
         }
       ),
-      suffix && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { className: "text-muted-foreground text-sm shrink-0 select-none", children: suffix }),
+      suffix && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("span", { className: "text-muted-foreground text-sm shrink-0 select-none", children: suffix }),
       actionButtons,
       progressBar
     ] }),
@@ -2388,8 +2418,8 @@ ${watermarkOnCopy}` : controlledValue;
     ]
   );
   if (multiline) {
-    return /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(import_react30.MotionConfig, { reducedMotion: "user", children: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(import_react30.LazyMotion, { features: animationFeatures, strict: true, children: /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { ref: containerRef, className: cn("w-full", className), children: [
-      label && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(import_react32.MotionConfig, { reducedMotion: "user", children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(import_react32.LazyMotion, { features: animationFeatures, strict: true, children: /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { ref: containerRef, className: cn("w-full", className), children: [
+      label && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
         OutsideTopLabel2,
         {
           label,
@@ -2399,17 +2429,17 @@ ${watermarkOnCopy}` : controlledValue;
           shouldReduceMotion: shouldReduceMotion ?? false
         }
       ),
-      /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)(
+      /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)(
         "div",
         {
           className: cn(containerClasses, "h-auto min-h-20 items-start py-3"),
           onClick: handleContainerClick,
           ...onLongPress ? longPressHandlers : {},
           children: [
-            /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(RippleContainer2, { ripples, onComplete: removeRipple }),
-            /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(PasteFlash, { show: state.showPasteFlash }),
-            leadingIcon && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
-              import_react30.m.span,
+            /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(RippleContainer2, { ripples, onComplete: removeRipple }),
+            /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(PasteFlash, { show: state.showPasteFlash }),
+            leadingIcon && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+              import_react32.m.span,
               {
                 className: cn("text-muted-foreground shrink-0 mt-0.5 transition-colors", state.isFocused && "text-foreground"),
                 animate: { scale: state.isFocused ? 1.05 : 1 },
@@ -2417,7 +2447,7 @@ ${watermarkOnCopy}` : controlledValue;
                 children: leadingIcon
               }
             ),
-            /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+            /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
               "textarea",
               {
                 ref: setTextareaRef,
@@ -2455,8 +2485,8 @@ ${watermarkOnCopy}` : controlledValue;
     ] }) }) });
   }
   if (labelPosition === "outside-top") {
-    return /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(import_react30.MotionConfig, { reducedMotion: "user", children: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(import_react30.LazyMotion, { features: animationFeatures, strict: true, children: /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { ref: containerRef, className: cn("w-full", className), children: [
-      label && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(import_react32.MotionConfig, { reducedMotion: "user", children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(import_react32.LazyMotion, { features: animationFeatures, strict: true, children: /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { ref: containerRef, className: cn("w-full", className), children: [
+      label && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
         OutsideTopLabel2,
         {
           label,
@@ -2466,16 +2496,16 @@ ${watermarkOnCopy}` : controlledValue;
           shouldReduceMotion: shouldReduceMotion ?? false
         }
       ),
-      /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { className: containerClasses, onClick: handleContainerClick, ...onLongPress ? longPressHandlers : {}, children: inputContent }),
+      /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { className: containerClasses, onClick: handleContainerClick, ...onLongPress ? longPressHandlers : {}, children: inputContent }),
       bottomSection
     ] }) }) });
   }
   if (labelPosition === "outside" || labelPosition === "outside-border") {
-    return /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(import_react30.MotionConfig, { reducedMotion: "user", children: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(import_react30.LazyMotion, { features: animationFeatures, strict: true, children: /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { ref: containerRef, className: cn("w-full", className), children: [
-      /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { className: cn(containerClasses, "relative mt-7"), onClick: handleContainerClick, ...onLongPress ? longPressHandlers : {}, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(RippleContainer2, { ripples, onComplete: removeRipple }),
-        /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(PasteFlash, { show: state.showPasteFlash }),
-        label && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(import_react32.MotionConfig, { reducedMotion: "user", children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(import_react32.LazyMotion, { features: animationFeatures, strict: true, children: /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { ref: containerRef, className: cn("w-full", className), children: [
+      /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { className: cn(containerClasses, "relative mt-7"), onClick: handleContainerClick, ...onLongPress ? longPressHandlers : {}, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(RippleContainer2, { ripples, onComplete: removeRipple }),
+        /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(PasteFlash, { show: state.showPasteFlash }),
+        label && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
           OutsideLabel2,
           {
             label,
@@ -2489,8 +2519,8 @@ ${watermarkOnCopy}` : controlledValue;
             sizeClass: sizeStyles.text
           }
         ),
-        leadingIcon && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
-          import_react30.m.span,
+        leadingIcon && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+          import_react32.m.span,
           {
             className: cn("text-muted-foreground shrink-0 transition-colors", state.isFocused && "text-foreground"),
             animate: { scale: state.isFocused ? 1.05 : 1 },
@@ -2498,8 +2528,8 @@ ${watermarkOnCopy}` : controlledValue;
             children: leadingIcon
           }
         ),
-        prefix && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { className: "text-muted-foreground text-sm shrink-0 select-none", children: prefix }),
-        /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+        prefix && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("span", { className: "text-muted-foreground text-sm shrink-0 select-none", children: prefix }),
+        /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
           "input",
           {
             ref: setInputRef,
@@ -2522,7 +2552,7 @@ ${watermarkOnCopy}` : controlledValue;
             ...commonAriaProps
           }
         ),
-        suffix && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { className: "text-muted-foreground text-sm shrink-0 select-none", children: suffix }),
+        suffix && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("span", { className: "text-muted-foreground text-sm shrink-0 select-none", children: suffix }),
         actionButtons,
         progressBar
       ] }),
@@ -2530,28 +2560,28 @@ ${watermarkOnCopy}` : controlledValue;
     ] }) }) });
   }
   if (labelPosition === "outside-left") {
-    return /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(import_react30.MotionConfig, { reducedMotion: "user", children: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(import_react30.LazyMotion, { features: animationFeatures, strict: true, children: /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { ref: containerRef, className: cn("w-full", className), children: [
-      /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { className: "flex items-center gap-3", children: [
-        label && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(OutsideLeftLabel2, { label, htmlFor: inputId, isFocused: state.isFocused, colorClass: getLabelColor() }),
-        /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { className: cn(containerClasses, "flex-1"), onClick: handleContainerClick, ...onLongPress ? longPressHandlers : {}, children: inputContent })
+    return /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(import_react32.MotionConfig, { reducedMotion: "user", children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(import_react32.LazyMotion, { features: animationFeatures, strict: true, children: /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { ref: containerRef, className: cn("w-full", className), children: [
+      /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { className: "flex items-center gap-3", children: [
+        label && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(OutsideLeftLabel2, { label, htmlFor: inputId, isFocused: state.isFocused, colorClass: getLabelColor() }),
+        /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { className: cn(containerClasses, "flex-1"), onClick: handleContainerClick, ...onLongPress ? longPressHandlers : {}, children: inputContent })
       ] }),
       bottomSection
     ] }) }) });
   }
   if (labelPosition === "stacked") {
-    return /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(import_react30.MotionConfig, { reducedMotion: "user", children: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(import_react30.LazyMotion, { features: animationFeatures, strict: true, children: /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { ref: containerRef, className: cn("w-full", className), children: [
-      /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)(
+    return /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(import_react32.MotionConfig, { reducedMotion: "user", children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(import_react32.LazyMotion, { features: animationFeatures, strict: true, children: /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { ref: containerRef, className: cn("w-full", className), children: [
+      /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)(
         "div",
         {
           className: cn(containerClasses, "h-auto py-2.5 flex-col items-stretch"),
           onClick: handleContainerClick,
           ...onLongPress ? longPressHandlers : {},
           children: [
-            /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(RippleContainer2, { ripples, onComplete: removeRipple }),
-            /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(PasteFlash, { show: state.showPasteFlash }),
-            /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { className: "flex items-center gap-2 w-full", children: [
-              leadingIcon && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
-                import_react30.m.span,
+            /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(RippleContainer2, { ripples, onComplete: removeRipple }),
+            /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(PasteFlash, { show: state.showPasteFlash }),
+            /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { className: "flex items-center gap-2 w-full", children: [
+              leadingIcon && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+                import_react32.m.span,
                 {
                   className: cn("text-muted-foreground shrink-0 transition-colors", state.isFocused && "text-foreground"),
                   animate: { scale: state.isFocused ? 1.05 : 1 },
@@ -2559,9 +2589,9 @@ ${watermarkOnCopy}` : controlledValue;
                   children: leadingIcon
                 }
               ),
-              /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { className: "flex-1 flex flex-col min-w-0", children: [
-                label && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
-                  StackedLabel,
+              /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { className: "flex-1 flex flex-col min-w-0", children: [
+                label && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+                  StackedLabel2,
                   {
                     label,
                     htmlFor: inputId,
@@ -2570,7 +2600,7 @@ ${watermarkOnCopy}` : controlledValue;
                     shouldReduceMotion: shouldReduceMotion ?? false
                   }
                 ),
-                /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+                /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
                   "input",
                   {
                     ref: setInputRef,
@@ -2594,7 +2624,7 @@ ${watermarkOnCopy}` : controlledValue;
                   }
                 )
               ] }),
-              suffix && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { className: "text-muted-foreground text-sm shrink-0 select-none", children: suffix }),
+              suffix && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("span", { className: "text-muted-foreground text-sm shrink-0 select-none", children: suffix }),
               actionButtons
             ] }),
             progressBar
@@ -2605,10 +2635,10 @@ ${watermarkOnCopy}` : controlledValue;
     ] }) }) });
   }
   if (labelPosition === "left") {
-    return /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(import_react30.MotionConfig, { reducedMotion: "user", children: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(import_react30.LazyMotion, { features: animationFeatures, strict: true, children: /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { ref: containerRef, className: cn("w-full", className), children: [
-      /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { className: "flex items-center", children: [
-        label && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
-          LeftAnimatedLabel,
+    return /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(import_react32.MotionConfig, { reducedMotion: "user", children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(import_react32.LazyMotion, { features: animationFeatures, strict: true, children: /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { ref: containerRef, className: cn("w-full", className), children: [
+      /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { className: "flex items-center", children: [
+        label && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+          LeftAnimatedLabel2,
           {
             label,
             htmlFor: inputId,
@@ -2619,12 +2649,12 @@ ${watermarkOnCopy}` : controlledValue;
             shouldReduceMotion: shouldReduceMotion ?? false
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { className: cn(containerClasses, "flex-1"), onClick: handleContainerClick, ...onLongPress ? longPressHandlers : {}, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(RippleContainer2, { ripples, onComplete: removeRipple }),
-          /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(PasteFlash, { show: state.showPasteFlash }),
-          prefix && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { className: "text-muted-foreground text-sm shrink-0 select-none", children: prefix }),
-          leadingIcon && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
-            import_react30.m.span,
+        /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { className: cn(containerClasses, "flex-1"), onClick: handleContainerClick, ...onLongPress ? longPressHandlers : {}, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(RippleContainer2, { ripples, onComplete: removeRipple }),
+          /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(PasteFlash, { show: state.showPasteFlash }),
+          prefix && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("span", { className: "text-muted-foreground text-sm shrink-0 select-none", children: prefix }),
+          leadingIcon && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+            import_react32.m.span,
             {
               className: cn("text-muted-foreground shrink-0 transition-colors", state.isFocused && "text-foreground"),
               animate: { scale: state.isFocused ? 1.05 : 1 },
@@ -2632,7 +2662,7 @@ ${watermarkOnCopy}` : controlledValue;
               children: leadingIcon
             }
           ),
-          /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { className: "relative flex-1 min-w-0", children: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+          /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { className: "relative flex-1 min-w-0", children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
             "input",
             {
               ref: setInputRef,
@@ -2655,7 +2685,7 @@ ${watermarkOnCopy}` : controlledValue;
               ...commonAriaProps
             }
           ) }),
-          suffix && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { className: "text-muted-foreground text-sm shrink-0 select-none", children: suffix }),
+          suffix && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("span", { className: "text-muted-foreground text-sm shrink-0 select-none", children: suffix }),
           actionButtons,
           progressBar
         ] })
@@ -2663,11 +2693,11 @@ ${watermarkOnCopy}` : controlledValue;
       bottomSection
     ] }) }) });
   }
-  return /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(import_react30.MotionConfig, { reducedMotion: "user", children: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(import_react30.LazyMotion, { features: animationFeatures, strict: true, children: /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { ref: containerRef, className: cn("w-full", className), children: [
-    /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { className: cn(containerClasses, label && "pt-7 pb-3"), onClick: handleContainerClick, ...onLongPress ? longPressHandlers : {}, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(RippleContainer2, { ripples, onComplete: removeRipple }),
-      /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(PasteFlash, { show: state.showPasteFlash }),
-      label && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(import_react32.MotionConfig, { reducedMotion: "user", children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(import_react32.LazyMotion, { features: animationFeatures, strict: true, children: /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { ref: containerRef, className: cn("w-full", className), children: [
+    /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { className: cn(containerClasses, label && "pt-7 pb-3"), onClick: handleContainerClick, ...onLongPress ? longPressHandlers : {}, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(RippleContainer2, { ripples, onComplete: removeRipple }),
+      /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(PasteFlash, { show: state.showPasteFlash }),
+      label && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
         InsideLabel2,
         {
           label,
@@ -2681,9 +2711,9 @@ ${watermarkOnCopy}` : controlledValue;
           sizeClass: sizeStyles.text
         }
       ),
-      prefix && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { className: "text-muted-foreground text-sm shrink-0 select-none", children: prefix }),
-      leadingIcon && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
-        import_react30.m.span,
+      prefix && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("span", { className: "text-muted-foreground text-sm shrink-0 select-none", children: prefix }),
+      leadingIcon && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+        import_react32.m.span,
         {
           className: cn("text-muted-foreground shrink-0 transition-colors", state.isFocused && "text-foreground"),
           animate: { scale: state.isFocused ? 1.05 : 1 },
@@ -2691,7 +2721,7 @@ ${watermarkOnCopy}` : controlledValue;
           children: leadingIcon
         }
       ),
-      /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+      /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
         "input",
         {
           ref: setInputRef,
@@ -2714,15 +2744,15 @@ ${watermarkOnCopy}` : controlledValue;
           ...commonAriaProps
         }
       ),
-      suffix && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { className: "text-muted-foreground text-sm shrink-0 select-none", children: suffix }),
+      suffix && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("span", { className: "text-muted-foreground text-sm shrink-0 select-none", children: suffix }),
       actionButtons,
       progressBar
     ] }),
     bottomSection
   ] }) }) });
 }
-var Input_default = (0, import_react29.memo)(function AnimatedInput(props) {
-  return /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+var Input_default = (0, import_react31.memo)(function AnimatedInput(props) {
+  return /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
     AnimatedInputErrorBoundary,
     {
       fallbackInputProps: {
@@ -2733,7 +2763,7 @@ var Input_default = (0, import_react29.memo)(function AnimatedInput(props) {
         name: props.name,
         id: props.id
       },
-      children: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(InputInner, { ...props })
+      children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(InputInner, { ...props })
     }
   );
 });

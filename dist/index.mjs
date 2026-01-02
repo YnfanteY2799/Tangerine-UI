@@ -105,16 +105,16 @@ var InsideLabel_exports = {};
 __export(InsideLabel_exports, {
   default: () => InsideLabel_default
 });
-import { memo as memo3 } from "react";
-import { m as m3 } from "motion/react";
-import { jsx as jsx4 } from "react/jsx-runtime";
+import { memo as memo2 } from "react";
+import { m as m2 } from "motion/react";
+import { jsx as jsx3 } from "react/jsx-runtime";
 var InsideLabel_default;
 var init_InsideLabel = __esm({
   "src/components/Input/sub-components/Labels/InsideLabel.tsx"() {
     "use strict";
     init_functions();
     init_constants();
-    InsideLabel_default = memo3(function InsideLabel({
+    InsideLabel_default = memo2(function InsideLabel({
       label,
       htmlFor,
       hasPrefix,
@@ -124,8 +124,8 @@ var init_InsideLabel = __esm({
       shouldReduceMotion
     }) {
       const leftPosition = hasLeadingIcon ? "left-10" : hasPrefix ? "left-[4.5rem]" : "left-3";
-      return /* @__PURE__ */ jsx4(
-        m3.label,
+      return /* @__PURE__ */ jsx3(
+        m2.label,
         {
           initial: false,
           htmlFor,
@@ -139,6 +139,49 @@ var init_InsideLabel = __esm({
           style: { backfaceVisibility: "hidden" },
           transition: shouldReduceMotion ? { duration: 0 } : PREMIUM_SPRING,
           className: cn("absolute pointer-events-none select-none origin-left font-medium", "will-change-transform", leftPosition, colorClass),
+          children: label
+        }
+      );
+    });
+  }
+});
+
+// src/components/Input/sub-components/Labels/StackedLabel.tsx
+var StackedLabel_exports = {};
+__export(StackedLabel_exports, {
+  default: () => StackedLabel_default
+});
+import { memo as memo3 } from "react";
+import { m as m3 } from "motion/react";
+import { jsx as jsx4 } from "react/jsx-runtime";
+var StackedLabel_default;
+var init_StackedLabel = __esm({
+  "src/components/Input/sub-components/Labels/StackedLabel.tsx"() {
+    "use strict";
+    init_constants();
+    init_functions();
+    StackedLabel_default = memo3(function StackedLabel({
+      label,
+      htmlFor,
+      isFloating,
+      colorClass,
+      shouldReduceMotion
+    }) {
+      return /* @__PURE__ */ jsx4(
+        m3.label,
+        {
+          animate: {
+            fontSize: isFloating ? "0.7rem" : "0.875rem",
+            marginBottom: isFloating ? 2 : 0,
+            opacity: isFloating ? 0.85 : 0.7,
+            y: isFloating ? 0 : 6
+          },
+          initial: false,
+          htmlFor,
+          id: `${htmlFor}-label`,
+          style: { backfaceVisibility: "hidden" },
+          transition: shouldReduceMotion ? { duration: 0 } : PREMIUM_SPRING,
+          className: cn("origin-left font-medium pointer-events-none select-none will-change-transform", colorClass),
           children: label
         }
       );
@@ -268,22 +311,83 @@ var init_OutsideLeftLabel = __esm({
   }
 });
 
+// src/components/Input/sub-components/Labels/LeftAnimatedLabel.tsx
+var LeftAnimatedLabel_exports = {};
+__export(LeftAnimatedLabel_exports, {
+  default: () => LeftAnimatedLabel_default
+});
+import { m as m7, AnimatePresence as AnimatePresence2 } from "motion/react";
+import { memo as memo7 } from "react";
+import { Fragment, jsx as jsx8, jsxs as jsxs3 } from "react/jsx-runtime";
+var LeftAnimatedLabel_default;
+var init_LeftAnimatedLabel = __esm({
+  "src/components/Input/sub-components/Labels/LeftAnimatedLabel.tsx"() {
+    "use strict";
+    "use client";
+    init_functions();
+    init_constants();
+    LeftAnimatedLabel_default = memo7(function LeftAnimatedLabel({
+      label,
+      htmlFor,
+      isFloating,
+      colorClass,
+      showPlaceholder,
+      shouldReduceMotion
+    }) {
+      const transition = shouldReduceMotion ? { duration: 0 } : FAST_SPRING;
+      return /* @__PURE__ */ jsxs3(Fragment, { children: [
+        /* @__PURE__ */ jsx8(
+          m7.div,
+          {
+            initial: false,
+            transition,
+            className: "overflow-hidden shrink-0",
+            animate: { width: isFloating ? "auto" : 0, marginRight: isFloating ? 12 : 0, opacity: isFloating ? 1 : 0 },
+            children: /* @__PURE__ */ jsx8(
+              m7.label,
+              {
+                initial: false,
+                htmlFor,
+                id: `${htmlFor}-label`,
+                transition,
+                animate: { x: isFloating ? 0 : 8 },
+                className: cn("font-medium whitespace-nowrap block text-sm", colorClass),
+                children: label
+              }
+            )
+          }
+        ),
+        /* @__PURE__ */ jsx8(AnimatePresence2, { children: showPlaceholder && /* @__PURE__ */ jsx8(
+          m7.span,
+          {
+            initial: { opacity: 0 },
+            animate: { opacity: 1 },
+            exit: { opacity: 0, x: -6, transition: { duration: 0.12 } },
+            className: "absolute inset-0 flex items-center text-muted-foreground/60 pointer-events-none select-none pl-3 text-sm",
+            children: label
+          }
+        ) })
+      ] });
+    });
+  }
+});
+
 // src/components/Input/sub-components/RippleContainer.tsx
 var RippleContainer_exports = {};
 __export(RippleContainer_exports, {
   default: () => RippleContainer_default
 });
-import { AnimatePresence as AnimatePresence3, m as m7 } from "motion/react";
-import { memo as memo7 } from "react";
-import { jsx as jsx8 } from "react/jsx-runtime";
+import { AnimatePresence as AnimatePresence3, m as m8 } from "motion/react";
+import { memo as memo8 } from "react";
+import { jsx as jsx9 } from "react/jsx-runtime";
 var RippleContainer_default;
 var init_RippleContainer = __esm({
   "src/components/Input/sub-components/RippleContainer.tsx"() {
     "use strict";
     init_constants();
-    RippleContainer_default = memo7(function RippleContainer({ ripples, onComplete }) {
-      return /* @__PURE__ */ jsx8("span", { className: "absolute inset-0 overflow-hidden rounded-[inherit] pointer-events-none", children: /* @__PURE__ */ jsx8(AnimatePresence3, { mode: "popLayout", children: ripples.map(({ id, y, x, size }) => /* @__PURE__ */ jsx8(
-        m7.span,
+    RippleContainer_default = memo8(function RippleContainer({ ripples, onComplete }) {
+      return /* @__PURE__ */ jsx9("span", { className: "absolute inset-0 overflow-hidden rounded-[inherit] pointer-events-none", children: /* @__PURE__ */ jsx9(AnimatePresence3, { mode: "popLayout", children: ripples.map(({ id, y, x, size }) => /* @__PURE__ */ jsx9(
+        m8.span,
         {
           exit: "exit",
           animate: "animate",
@@ -304,19 +408,19 @@ var CharacterCounter_exports = {};
 __export(CharacterCounter_exports, {
   default: () => CharacterCounter_default
 });
-import { memo as memo8 } from "react";
-import { m as m8 } from "motion/react";
+import { memo as memo9 } from "react";
+import { m as m9 } from "motion/react";
 import { jsxs as jsxs4 } from "react/jsx-runtime";
 var CharacterCounter_default;
 var init_CharacterCounter = __esm({
   "src/components/Input/sub-components/CharacterCounter.tsx"() {
     "use strict";
     init_functions();
-    CharacterCounter_default = memo8(function CharacterCounter({ current, max, limit }) {
+    CharacterCounter_default = memo9(function CharacterCounter({ current, max, limit }) {
       const isOverLimit = current > max;
       const isNearLimit = current > max * 0.8;
       return /* @__PURE__ */ jsxs4(
-        m8.span,
+        m9.span,
         {
           className: cn(
             "text-xs tabular-nums transition-colors",
@@ -341,19 +445,19 @@ var RequirementsList_exports = {};
 __export(RequirementsList_exports, {
   default: () => RequirementsList_default
 });
-import { memo as memo9 } from "react";
-import { m as m9 } from "motion/react";
-import { jsx as jsx9, jsxs as jsxs5 } from "react/jsx-runtime";
+import { memo as memo10 } from "react";
+import { m as m10 } from "motion/react";
+import { jsx as jsx10, jsxs as jsxs5 } from "react/jsx-runtime";
 var RequirementsList_default;
 var init_RequirementsList = __esm({
   "src/components/Input/sub-components/RequirementsList.tsx"() {
     "use strict";
     init_functions();
-    RequirementsList_default = memo9(function RequirementsList({ requirements, value }) {
-      return /* @__PURE__ */ jsx9("ul", { className: "mt-2 space-y-1", role: "list", "aria-label": "Password requirements", children: requirements.map(({ validator, label }, i) => {
+    RequirementsList_default = memo10(function RequirementsList({ requirements, value }) {
+      return /* @__PURE__ */ jsx10("ul", { className: "mt-2 space-y-1", role: "list", "aria-label": "Password requirements", children: requirements.map(({ validator, label }, i) => {
         const met = validator(value);
         return /* @__PURE__ */ jsxs5(
-          m9.li,
+          m10.li,
           {
             animate: { opacity: 1, x: 0 },
             initial: { opacity: 0, x: -8 },
@@ -361,8 +465,8 @@ var init_RequirementsList = __esm({
             "aria-label": `${label}: ${met ? "met" : "not met"}`,
             className: cn("text-xs flex items-center gap-2 transition-colors", met ? "text-green-500" : "text-muted-foreground"),
             children: [
-              /* @__PURE__ */ jsx9(
-                m9.span,
+              /* @__PURE__ */ jsx10(
+                m10.span,
                 {
                   className: cn("w-1.5 h-1.5 rounded-full", met ? "bg-green-500" : "bg-muted-foreground/50"),
                   animate: { scale: met ? [1, 1.3, 1] : 1 },
@@ -385,18 +489,18 @@ var SuggestionsDropdown_exports = {};
 __export(SuggestionsDropdown_exports, {
   default: () => SuggestionsDropdown_default
 });
-import { memo as memo10 } from "react";
-import { m as m10 } from "motion/react";
-import { jsx as jsx10, jsxs as jsxs6 } from "react/jsx-runtime";
+import { memo as memo11 } from "react";
+import { m as m11 } from "motion/react";
+import { jsx as jsx11, jsxs as jsxs6 } from "react/jsx-runtime";
 var SuggestionsDropdown_default;
 var init_SuggestionsDropdown = __esm({
   "src/components/Input/sub-components/SuggestionsDropdown.tsx"() {
     "use strict";
     init_functions();
-    SuggestionsDropdown_default = memo10(function SuggestionsDropdown({ suggestions, activeIndex, onSelect, inputId, isOpen }) {
+    SuggestionsDropdown_default = memo11(function SuggestionsDropdown({ suggestions, activeIndex, onSelect, inputId, isOpen }) {
       if (!isOpen || suggestions.length === 0) return null;
-      return /* @__PURE__ */ jsx10(
-        m10.ul,
+      return /* @__PURE__ */ jsx11(
+        m11.ul,
         {
           role: "listbox",
           style: { originY: 0 },
@@ -408,7 +512,7 @@ var init_SuggestionsDropdown = __esm({
           transition: { duration: 0.12, ease: [0.32, 0.72, 0, 1] },
           className: "absolute z-50 w-full mt-1 bg-popover border rounded-lg shadow-lg overflow-hidden",
           children: suggestions.map((suggestion, i) => /* @__PURE__ */ jsxs6(
-            m10.li,
+            m11.li,
             {
               role: "option",
               className: cn(
@@ -426,7 +530,7 @@ var init_SuggestionsDropdown = __esm({
               id: inputId ? `${inputId}-option-${i}` : void 0,
               children: [
                 suggestion.icon,
-                /* @__PURE__ */ jsx10("span", { children: suggestion.label || suggestion.value })
+                /* @__PURE__ */ jsx11("span", { children: suggestion.label || suggestion.value })
               ]
             },
             suggestion.value
@@ -442,20 +546,20 @@ var PasswordStrengthMeter_exports = {};
 __export(PasswordStrengthMeter_exports, {
   default: () => PasswordStrengthMeter_default
 });
-import { memo as memo11 } from "react";
-import { m as m11 } from "motion/react";
-import { jsx as jsx11, jsxs as jsxs7 } from "react/jsx-runtime";
+import { memo as memo12 } from "react";
+import { m as m12 } from "motion/react";
+import { jsx as jsx12, jsxs as jsxs7 } from "react/jsx-runtime";
 var PasswordStrengthMeter_default;
 var init_PasswordStrengthMeter = __esm({
   "src/components/Input/sub-components/PasswordStrengthMeter.tsx"() {
     "use strict";
     init_functions();
-    PasswordStrengthMeter_default = memo11(function PasswordStrengthMeter({ strength }) {
+    PasswordStrengthMeter_default = memo12(function PasswordStrengthMeter({ strength }) {
       const colors = ["bg-red-500", "bg-orange-500", "bg-amber-500", "bg-lime-500", "bg-green-500"];
       const labels = ["Very weak", "Weak", "Fair", "Strong", "Very strong"];
       return /* @__PURE__ */ jsxs7("div", { className: "mt-2 space-y-1.5", children: [
-        /* @__PURE__ */ jsx11("div", { className: "flex gap-1 h-1.5", children: [0, 1, 2, 3].map((i) => /* @__PURE__ */ jsx11(
-          m11.div,
+        /* @__PURE__ */ jsx12("div", { className: "flex gap-1 h-1.5", children: [0, 1, 2, 3].map((i) => /* @__PURE__ */ jsx12(
+          m12.div,
           {
             className: cn("flex-1 rounded-full", i <= strength ? colors[strength] : "bg-muted"),
             transition: { duration: 0.2, delay: i * 0.03, ease: [0.32, 0.72, 0, 1] },
@@ -465,8 +569,8 @@ var init_PasswordStrengthMeter = __esm({
           },
           i
         )) }),
-        /* @__PURE__ */ jsx11(
-          m11.p,
+        /* @__PURE__ */ jsx12(
+          m12.p,
           {
             className: cn("text-xs font-medium", colors[strength].replace("bg-", "text-")),
             initial: { opacity: 0 },
@@ -607,8 +711,8 @@ function detectAndFormat(value) {
 }
 
 // src/components/Input/index.tsx
-import { useRef as useRef5, useId, useReducer, useCallback as useCallback5, useEffect as useEffect4, useMemo, useImperativeHandle, memo as memo12, lazy, Suspense } from "react";
-import { m as m12, LazyMotion, domAnimation, domMin, MotionConfig, useReducedMotion } from "motion/react";
+import { useRef as useRef5, useId, useReducer, useCallback as useCallback5, useEffect as useEffect4, useMemo, useImperativeHandle, memo as memo13, lazy, Suspense } from "react";
+import { m as m13, LazyMotion, domAnimation, domMin, MotionConfig, useReducedMotion } from "motion/react";
 
 // src/components/Input/hooks.ts
 init_constants();
@@ -811,82 +915,6 @@ function useRipple(enableRipple, enableHaptics) {
   return { ripples, addRipple, removeRipple };
 }
 
-// src/components/Input/label-components.tsx
-init_constants();
-init_functions();
-import { m, AnimatePresence } from "motion/react";
-import { memo } from "react";
-import { Fragment, jsx, jsxs } from "react/jsx-runtime";
-var StackedLabel = memo(function StackedLabel2({
-  label,
-  htmlFor,
-  isFloating,
-  colorClass,
-  shouldReduceMotion
-}) {
-  return /* @__PURE__ */ jsx(
-    m.label,
-    {
-      animate: {
-        fontSize: isFloating ? "0.7rem" : "0.875rem",
-        marginBottom: isFloating ? 2 : 0,
-        opacity: isFloating ? 0.85 : 0.7,
-        y: isFloating ? 0 : 6
-      },
-      initial: false,
-      htmlFor,
-      id: `${htmlFor}-label`,
-      style: { backfaceVisibility: "hidden" },
-      transition: shouldReduceMotion ? { duration: 0 } : PREMIUM_SPRING,
-      className: cn("origin-left font-medium pointer-events-none select-none will-change-transform", colorClass),
-      children: label
-    }
-  );
-});
-var LeftAnimatedLabel = memo(function LeftAnimatedLabel2({
-  label,
-  htmlFor,
-  isFloating,
-  colorClass,
-  showPlaceholder,
-  shouldReduceMotion
-}) {
-  const transition = shouldReduceMotion ? { duration: 0 } : FAST_SPRING;
-  return /* @__PURE__ */ jsxs(Fragment, { children: [
-    /* @__PURE__ */ jsx(
-      m.div,
-      {
-        initial: false,
-        transition,
-        className: "overflow-hidden shrink-0",
-        animate: { width: isFloating ? "auto" : 0, marginRight: isFloating ? 12 : 0, opacity: isFloating ? 1 : 0 },
-        children: /* @__PURE__ */ jsx(
-          m.label,
-          {
-            initial: false,
-            htmlFor,
-            id: `${htmlFor}-label`,
-            transition,
-            animate: { x: isFloating ? 0 : 8 },
-            className: cn("font-medium whitespace-nowrap block text-sm", colorClass),
-            children: label
-          }
-        )
-      }
-    ),
-    /* @__PURE__ */ jsx(AnimatePresence, { children: showPlaceholder && /* @__PURE__ */ jsx(
-      m.span,
-      {
-        initial: { opacity: 0 },
-        animate: { opacity: 1 },
-        exit: { opacity: 0, x: -6, transition: { duration: 0.12 } },
-        className: "absolute inset-0 flex items-center text-muted-foreground/60 pointer-events-none select-none pl-3 text-sm",
-        children: label
-      }
-    ) })
-  ] });
-});
-
 // src/components/Input/reducers.ts
 var initialInputState = {
   value: "",
@@ -940,7 +968,7 @@ function inputReducer(state, action) {
 
 // src/components/Input/error-boundary.tsx
 import { Component } from "react";
-import { jsx as jsx2, jsxs as jsxs2 } from "react/jsx-runtime";
+import { jsx, jsxs } from "react/jsx-runtime";
 var AnimatedInputErrorBoundary = class extends Component {
   /**
    * Creates an instance of AnimatedInputErrorBoundary.
@@ -989,17 +1017,17 @@ var AnimatedInputErrorBoundary = class extends Component {
     if (this.state.hasError) {
       if (this.props.fallback) return this.props.fallback;
       const { fallbackInputProps } = this.props;
-      return /* @__PURE__ */ jsxs2("div", { className: "w-full space-y-2", children: [
-        /* @__PURE__ */ jsx2("div", { className: "relative", children: /* @__PURE__ */ jsx2(
+      return /* @__PURE__ */ jsxs("div", { className: "w-full space-y-2", children: [
+        /* @__PURE__ */ jsx("div", { className: "relative", children: /* @__PURE__ */ jsx(
           "input",
           {
             ...fallbackInputProps,
             className: "flex h-10 w-full rounded-md border border-destructive/50 bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
           }
         ) }),
-        /* @__PURE__ */ jsxs2("div", { className: "flex items-center justify-between text-xs", children: [
-          /* @__PURE__ */ jsx2("span", { className: "text-destructive", children: "Input component error. Using fallback." }),
-          /* @__PURE__ */ jsx2(
+        /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between text-xs", children: [
+          /* @__PURE__ */ jsx("span", { className: "text-destructive", children: "Input component error. Using fallback." }),
+          /* @__PURE__ */ jsx(
             "button",
             {
               type: "button",
@@ -1016,7 +1044,7 @@ var AnimatedInputErrorBoundary = class extends Component {
 };
 function withErrorBoundary(WrappedComponent, errorBoundaryProps) {
   const WithErrorBoundary = (props) => {
-    return /* @__PURE__ */ jsx2(AnimatedInputErrorBoundary, { ...errorBoundaryProps, children: /* @__PURE__ */ jsx2(WrappedComponent, { ...props }) });
+    return /* @__PURE__ */ jsx(AnimatedInputErrorBoundary, { ...errorBoundaryProps, children: /* @__PURE__ */ jsx(WrappedComponent, { ...props }) });
   };
   WithErrorBoundary.displayName = `WithErrorBoundary(${WrappedComponent.displayName || WrappedComponent.name || "Component"})`;
   return WithErrorBoundary;
@@ -1163,12 +1191,12 @@ init_constants();
 // src/components/Input/sub-components.tsx
 init_constants();
 init_functions();
-import { m as m2, AnimatePresence as AnimatePresence2 } from "motion/react";
-import { memo as memo2 } from "react";
-import { jsx as jsx3, jsxs as jsxs3 } from "react/jsx-runtime";
-var PasteFlash = memo2(function PasteFlash2({ show }) {
-  return /* @__PURE__ */ jsx3(AnimatePresence2, { children: show && /* @__PURE__ */ jsx3(
-    m2.span,
+import { m, AnimatePresence } from "motion/react";
+import { memo } from "react";
+import { jsx as jsx2, jsxs as jsxs2 } from "react/jsx-runtime";
+var PasteFlash = memo(function PasteFlash2({ show }) {
+  return /* @__PURE__ */ jsx2(AnimatePresence, { children: show && /* @__PURE__ */ jsx2(
+    m.span,
     {
       className: "absolute inset-0 bg-primary rounded-[inherit] pointer-events-none",
       variants: PASTE_FLASH_VARIANTS,
@@ -1178,14 +1206,14 @@ var PasteFlash = memo2(function PasteFlash2({ show }) {
     }
   ) });
 });
-var LoadingIndicator = memo2(function LoadingIndicator2({ progress, iconSize }) {
+var LoadingIndicator = memo(function LoadingIndicator2({ progress, iconSize }) {
   const hasProgress = typeof progress === "number";
   const clampedProgress = hasProgress ? Math.min(100, Math.max(0, progress)) : 0;
   const radius = 10;
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset = circumference - clampedProgress / 100 * circumference;
-  return /* @__PURE__ */ jsxs3(
-    m2.span,
+  return /* @__PURE__ */ jsxs2(
+    m.span,
     {
       className: "relative flex items-center justify-center",
       initial: { opacity: 0, scale: 0.8 },
@@ -1197,10 +1225,10 @@ var LoadingIndicator = memo2(function LoadingIndicator2({ progress, iconSize }) 
       "aria-valuemax": 100,
       "aria-label": hasProgress ? `Loading ${Math.round(clampedProgress)}%` : "Loading",
       children: [
-        hasProgress ? /* @__PURE__ */ jsxs3("svg", { className: cn(iconSize, "text-primary -rotate-90"), viewBox: "0 0 24 24", fill: "none", "aria-hidden": "true", children: [
-          /* @__PURE__ */ jsx3("circle", { cx: "12", cy: "12", r: radius, stroke: "currentColor", strokeOpacity: "0.15", strokeWidth: "2.5" }),
-          /* @__PURE__ */ jsx3(
-            m2.circle,
+        hasProgress ? /* @__PURE__ */ jsxs2("svg", { className: cn(iconSize, "text-primary -rotate-90"), viewBox: "0 0 24 24", fill: "none", "aria-hidden": "true", children: [
+          /* @__PURE__ */ jsx2("circle", { cx: "12", cy: "12", r: radius, stroke: "currentColor", strokeOpacity: "0.15", strokeWidth: "2.5" }),
+          /* @__PURE__ */ jsx2(
+            m.circle,
             {
               cx: "12",
               cy: "12",
@@ -1215,8 +1243,8 @@ var LoadingIndicator = memo2(function LoadingIndicator2({ progress, iconSize }) 
               transition: { type: "spring", stiffness: 100, damping: 20 }
             }
           )
-        ] }) : /* @__PURE__ */ jsxs3(
-          m2.svg,
+        ] }) : /* @__PURE__ */ jsxs2(
+          m.svg,
           {
             fill: "none",
             "aria-hidden": "true",
@@ -1225,13 +1253,13 @@ var LoadingIndicator = memo2(function LoadingIndicator2({ progress, iconSize }) 
             className: cn(iconSize, "text-primary"),
             transition: { repeat: Number.POSITIVE_INFINITY, duration: 1, ease: "linear" },
             children: [
-              /* @__PURE__ */ jsx3("circle", { cx: "12", cy: "12", r: "10", stroke: "currentColor", strokeOpacity: "0.15", strokeWidth: "2.5" }),
-              /* @__PURE__ */ jsx3("path", { d: "M12 2C6.47715 2 2 6.47715 2 12", stroke: "currentColor", strokeWidth: "2.5", strokeLinecap: "round" })
+              /* @__PURE__ */ jsx2("circle", { cx: "12", cy: "12", r: "10", stroke: "currentColor", strokeOpacity: "0.15", strokeWidth: "2.5" }),
+              /* @__PURE__ */ jsx2("path", { d: "M12 2C6.47715 2 2 6.47715 2 12", stroke: "currentColor", strokeWidth: "2.5", strokeLinecap: "round" })
             ]
           }
         ),
-        hasProgress && /* @__PURE__ */ jsx3(
-          m2.span,
+        hasProgress && /* @__PURE__ */ jsx2(
+          m.span,
           {
             "aria-hidden": "true",
             initial: { opacity: 0 },
@@ -1245,25 +1273,25 @@ var LoadingIndicator = memo2(function LoadingIndicator2({ progress, iconSize }) 
     }
   );
 });
-var ValidationIcon = memo2(function ValidationIcon2({ state, iconSize }) {
+var ValidationIcon = memo(function ValidationIcon2({ state, iconSize }) {
   const icons = {
-    success: /* @__PURE__ */ jsxs3("svg", { className: cn(iconSize, "text-green-500"), viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", "aria-hidden": "true", children: [
-      /* @__PURE__ */ jsx3("path", { d: "M22 11.08V12a10 10 0 1 1-5.93-9.14", strokeLinecap: "round", strokeLinejoin: "round" }),
-      /* @__PURE__ */ jsx3("path", { d: "m9 11 3 3L22 4", strokeLinecap: "round", strokeLinejoin: "round" })
+    success: /* @__PURE__ */ jsxs2("svg", { className: cn(iconSize, "text-green-500"), viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", "aria-hidden": "true", children: [
+      /* @__PURE__ */ jsx2("path", { d: "M22 11.08V12a10 10 0 1 1-5.93-9.14", strokeLinecap: "round", strokeLinejoin: "round" }),
+      /* @__PURE__ */ jsx2("path", { d: "m9 11 3 3L22 4", strokeLinecap: "round", strokeLinejoin: "round" })
     ] }),
-    warning: /* @__PURE__ */ jsxs3("svg", { className: cn(iconSize, "text-amber-500"), viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", "aria-hidden": "true", children: [
-      /* @__PURE__ */ jsx3("path", { d: "m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z", strokeLinecap: "round", strokeLinejoin: "round" }),
-      /* @__PURE__ */ jsx3("path", { d: "M12 9v4", strokeLinecap: "round", strokeLinejoin: "round" }),
-      /* @__PURE__ */ jsx3("path", { d: "M12 17h.01", strokeLinecap: "round", strokeLinejoin: "round" })
+    warning: /* @__PURE__ */ jsxs2("svg", { className: cn(iconSize, "text-amber-500"), viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", "aria-hidden": "true", children: [
+      /* @__PURE__ */ jsx2("path", { d: "m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z", strokeLinecap: "round", strokeLinejoin: "round" }),
+      /* @__PURE__ */ jsx2("path", { d: "M12 9v4", strokeLinecap: "round", strokeLinejoin: "round" }),
+      /* @__PURE__ */ jsx2("path", { d: "M12 17h.01", strokeLinecap: "round", strokeLinejoin: "round" })
     ] }),
-    error: /* @__PURE__ */ jsxs3("svg", { className: cn(iconSize, "text-red-500"), viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", "aria-hidden": "true", children: [
-      /* @__PURE__ */ jsx3("circle", { cx: "12", cy: "12", r: "10" }),
-      /* @__PURE__ */ jsx3("path", { d: "m15 9-6 6", strokeLinecap: "round", strokeLinejoin: "round" }),
-      /* @__PURE__ */ jsx3("path", { d: "m9 9 6 6", strokeLinecap: "round", strokeLinejoin: "round" })
+    error: /* @__PURE__ */ jsxs2("svg", { className: cn(iconSize, "text-red-500"), viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", "aria-hidden": "true", children: [
+      /* @__PURE__ */ jsx2("circle", { cx: "12", cy: "12", r: "10" }),
+      /* @__PURE__ */ jsx2("path", { d: "m15 9-6 6", strokeLinecap: "round", strokeLinejoin: "round" }),
+      /* @__PURE__ */ jsx2("path", { d: "m9 9 6 6", strokeLinecap: "round", strokeLinejoin: "round" })
     ] })
   };
-  return /* @__PURE__ */ jsx3(
-    m2.span,
+  return /* @__PURE__ */ jsx2(
+    m.span,
     {
       exit: "exit",
       initial: "initial",
@@ -1274,7 +1302,7 @@ var ValidationIcon = memo2(function ValidationIcon2({ state, iconSize }) {
     }
   );
 });
-var ActionButton = memo2(function ActionButton2({
+var ActionButton = memo(function ActionButton2({
   label,
   onClick,
   disabled,
@@ -1282,8 +1310,8 @@ var ActionButton = memo2(function ActionButton2({
   children,
   isSuccess
 }) {
-  return /* @__PURE__ */ jsx3(
-    m2.button,
+  return /* @__PURE__ */ jsx2(
+    m.button,
     {
       type: "button",
       onClick,
@@ -1304,10 +1332,10 @@ var ActionButton = memo2(function ActionButton2({
     }
   );
 });
-var ValidationProgressBar = memo2(function ValidationProgressBar2({ progress }) {
+var ValidationProgressBar = memo(function ValidationProgressBar2({ progress }) {
   const clampedProgress = Math.min(100, Math.max(0, progress));
-  return /* @__PURE__ */ jsx3(
-    m2.div,
+  return /* @__PURE__ */ jsx2(
+    m.div,
     {
       role: "progressbar",
       "aria-valuemin": 0,
@@ -1317,8 +1345,8 @@ var ValidationProgressBar = memo2(function ValidationProgressBar2({ progress }) 
       animate: { opacity: 1 },
       "aria-valuenow": clampedProgress,
       className: "absolute bottom-0 left-0 right-0 h-0.5 bg-primary/10 overflow-hidden rounded-b-[inherit]",
-      children: /* @__PURE__ */ jsx3(
-        m2.div,
+      children: /* @__PURE__ */ jsx2(
+        m.div,
         {
           initial: { width: 0 },
           className: "h-full bg-primary",
@@ -1329,12 +1357,12 @@ var ValidationProgressBar = memo2(function ValidationProgressBar2({ progress }) 
     }
   );
 });
-var LoadingProgressBar = memo2(function LoadingProgressBar2({ progress }) {
+var LoadingProgressBar = memo(function LoadingProgressBar2({ progress }) {
   const hasProgress = typeof progress === "number";
   const clampedProgress = hasProgress ? Math.min(100, Math.max(0, progress)) : 0;
   if (!hasProgress) {
-    return /* @__PURE__ */ jsx3(
-      m2.div,
+    return /* @__PURE__ */ jsx2(
+      m.div,
       {
         role: "progressbar",
         "aria-label": "Loading",
@@ -1342,8 +1370,8 @@ var LoadingProgressBar = memo2(function LoadingProgressBar2({ progress }) {
         initial: { opacity: 0 },
         animate: { opacity: 1 },
         className: "absolute bottom-0 left-0 right-0 h-0.5 bg-primary/10 overflow-hidden rounded-b-[inherit]",
-        children: /* @__PURE__ */ jsx3(
-          m2.div,
+        children: /* @__PURE__ */ jsx2(
+          m.div,
           {
             animate: { x: ["-100%", "400%"] },
             className: "h-full w-1/3 bg-primary",
@@ -1353,8 +1381,8 @@ var LoadingProgressBar = memo2(function LoadingProgressBar2({ progress }) {
       }
     );
   }
-  return /* @__PURE__ */ jsx3(
-    m2.div,
+  return /* @__PURE__ */ jsx2(
+    m.div,
     {
       role: "progressbar",
       "aria-valuemin": 0,
@@ -1364,8 +1392,8 @@ var LoadingProgressBar = memo2(function LoadingProgressBar2({ progress }) {
       animate: { opacity: 1 },
       "aria-valuenow": clampedProgress,
       className: "absolute bottom-0 left-0 right-0 h-0.5 bg-primary/10 overflow-hidden rounded-b-[inherit]",
-      children: /* @__PURE__ */ jsx3(
-        m2.div,
+      children: /* @__PURE__ */ jsx2(
+        m.div,
         {
           className: "h-full bg-primary",
           initial: { width: 0 },
@@ -1376,10 +1404,10 @@ var LoadingProgressBar = memo2(function LoadingProgressBar2({ progress }) {
     }
   );
 });
-var HistoryButtons = memo2(function HistoryButtons2({ canUndo, canRedo, onUndo, onRedo, iconSize }) {
-  return /* @__PURE__ */ jsxs3("div", { className: "flex items-center gap-0.5", role: "group", "aria-label": "History controls", children: [
-    /* @__PURE__ */ jsx3(
-      m2.button,
+var HistoryButtons = memo(function HistoryButtons2({ canUndo, canRedo, onUndo, onRedo, iconSize }) {
+  return /* @__PURE__ */ jsxs2("div", { className: "flex items-center gap-0.5", role: "group", "aria-label": "History controls", children: [
+    /* @__PURE__ */ jsx2(
+      m.button,
       {
         type: "button",
         onClick: onUndo,
@@ -1395,14 +1423,14 @@ var HistoryButtons = memo2(function HistoryButtons2({ canUndo, canRedo, onUndo, 
         whileHover: canUndo ? "hover" : void 0,
         whileTap: canUndo ? "tap" : void 0,
         "aria-label": "Undo",
-        children: /* @__PURE__ */ jsxs3("svg", { viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", className: "w-full h-full", "aria-hidden": "true", children: [
-          /* @__PURE__ */ jsx3("path", { d: "M3 7v6h6", strokeLinecap: "round", strokeLinejoin: "round" }),
-          /* @__PURE__ */ jsx3("path", { d: "M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13", strokeLinecap: "round", strokeLinejoin: "round" })
+        children: /* @__PURE__ */ jsxs2("svg", { viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", className: "w-full h-full", "aria-hidden": "true", children: [
+          /* @__PURE__ */ jsx2("path", { d: "M3 7v6h6", strokeLinecap: "round", strokeLinejoin: "round" }),
+          /* @__PURE__ */ jsx2("path", { d: "M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13", strokeLinecap: "round", strokeLinejoin: "round" })
         ] })
       }
     ),
-    /* @__PURE__ */ jsx3(
-      m2.button,
+    /* @__PURE__ */ jsx2(
+      m.button,
       {
         type: "button",
         onClick: onRedo,
@@ -1418,20 +1446,20 @@ var HistoryButtons = memo2(function HistoryButtons2({ canUndo, canRedo, onUndo, 
         variants: ACTION_BUTTON_VARIANTS,
         initial: "initial",
         "aria-label": "Redo",
-        children: /* @__PURE__ */ jsxs3("svg", { viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", className: "w-full h-full", "aria-hidden": "true", children: [
-          /* @__PURE__ */ jsx3("path", { d: "M21 7v6h-6", strokeLinecap: "round", strokeLinejoin: "round" }),
-          /* @__PURE__ */ jsx3("path", { d: "M3 17a9 9 0 0 1 9-9 9 9 0 0 1 6 2.3l3 2.7", strokeLinecap: "round", strokeLinejoin: "round" })
+        children: /* @__PURE__ */ jsxs2("svg", { viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", className: "w-full h-full", "aria-hidden": "true", children: [
+          /* @__PURE__ */ jsx2("path", { d: "M21 7v6h-6", strokeLinecap: "round", strokeLinejoin: "round" }),
+          /* @__PURE__ */ jsx2("path", { d: "M3 17a9 9 0 0 1 9-9 9 9 0 0 1 6 2.3l3 2.7", strokeLinecap: "round", strokeLinejoin: "round" })
         ] })
       }
     )
   ] });
 });
-var ClearButton = memo2(function ClearButton2({ onClick, iconSize }) {
-  return /* @__PURE__ */ jsx3(ActionButton, { onClick, label: "Clear", iconSize, children: /* @__PURE__ */ jsx3("svg", { viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", className: "w-full h-full", "aria-hidden": "true", children: /* @__PURE__ */ jsx3("path", { d: "M18 6L6 18M6 6l12 12", strokeLinecap: "round", strokeLinejoin: "round" }) }) });
+var ClearButton = memo(function ClearButton2({ onClick, iconSize }) {
+  return /* @__PURE__ */ jsx2(ActionButton, { onClick, label: "Clear", iconSize, children: /* @__PURE__ */ jsx2("svg", { viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", className: "w-full h-full", "aria-hidden": "true", children: /* @__PURE__ */ jsx2("path", { d: "M18 6L6 18M6 6l12 12", strokeLinecap: "round", strokeLinejoin: "round" }) }) });
 });
-var CopyButton = memo2(function CopyButton2({ onClick, iconSize, copied }) {
-  return /* @__PURE__ */ jsx3(ActionButton, { onClick, label: "Copy", iconSize, isSuccess: copied, children: /* @__PURE__ */ jsx3(AnimatePresence2, { mode: "wait", children: copied ? /* @__PURE__ */ jsx3(
-    m2.svg,
+var CopyButton = memo(function CopyButton2({ onClick, iconSize, copied }) {
+  return /* @__PURE__ */ jsx2(ActionButton, { onClick, label: "Copy", iconSize, isSuccess: copied, children: /* @__PURE__ */ jsx2(AnimatePresence, { mode: "wait", children: copied ? /* @__PURE__ */ jsx2(
+    m.svg,
     {
       viewBox: "0 0 24 24",
       fill: "none",
@@ -1442,11 +1470,11 @@ var CopyButton = memo2(function CopyButton2({ onClick, iconSize, copied }) {
       animate: { scale: 1, opacity: 1 },
       exit: { scale: 0, opacity: 0 },
       "aria-hidden": "true",
-      children: /* @__PURE__ */ jsx3("path", { d: "M20 6L9 17l-5-5", strokeLinecap: "round", strokeLinejoin: "round" })
+      children: /* @__PURE__ */ jsx2("path", { d: "M20 6L9 17l-5-5", strokeLinecap: "round", strokeLinejoin: "round" })
     },
     "check"
-  ) : /* @__PURE__ */ jsxs3(
-    m2.svg,
+  ) : /* @__PURE__ */ jsxs2(
+    m.svg,
     {
       viewBox: "0 0 24 24",
       fill: "none",
@@ -1458,16 +1486,16 @@ var CopyButton = memo2(function CopyButton2({ onClick, iconSize, copied }) {
       exit: { scale: 0, opacity: 0 },
       "aria-hidden": "true",
       children: [
-        /* @__PURE__ */ jsx3("rect", { x: "9", y: "9", width: "13", height: "13", rx: "2", ry: "2" }),
-        /* @__PURE__ */ jsx3("path", { d: "M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" })
+        /* @__PURE__ */ jsx2("rect", { x: "9", y: "9", width: "13", height: "13", rx: "2", ry: "2" }),
+        /* @__PURE__ */ jsx2("path", { d: "M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" })
       ]
     },
     "copy"
   ) }) });
 });
-var PasteButton = memo2(function PasteButton2({ onClick, iconSize, pasted }) {
-  return /* @__PURE__ */ jsx3(ActionButton, { onClick, label: "Paste", iconSize, isSuccess: pasted, children: /* @__PURE__ */ jsx3(AnimatePresence2, { mode: "wait", children: pasted ? /* @__PURE__ */ jsx3(
-    m2.svg,
+var PasteButton = memo(function PasteButton2({ onClick, iconSize, pasted }) {
+  return /* @__PURE__ */ jsx2(ActionButton, { onClick, label: "Paste", iconSize, isSuccess: pasted, children: /* @__PURE__ */ jsx2(AnimatePresence, { mode: "wait", children: pasted ? /* @__PURE__ */ jsx2(
+    m.svg,
     {
       fill: "none",
       strokeWidth: "2",
@@ -1478,11 +1506,11 @@ var PasteButton = memo2(function PasteButton2({ onClick, iconSize, pasted }) {
       animate: { scale: 1, opacity: 1 },
       initial: { scale: 0, opacity: 0 },
       className: "w-full h-full text-green-500",
-      children: /* @__PURE__ */ jsx3("path", { d: "M20 6L9 17l-5-5", strokeLinecap: "round", strokeLinejoin: "round" })
+      children: /* @__PURE__ */ jsx2("path", { d: "M20 6L9 17l-5-5", strokeLinecap: "round", strokeLinejoin: "round" })
     },
     "check"
-  ) : /* @__PURE__ */ jsxs3(
-    m2.svg,
+  ) : /* @__PURE__ */ jsxs2(
+    m.svg,
     {
       fill: "none",
       strokeWidth: "2",
@@ -1494,29 +1522,29 @@ var PasteButton = memo2(function PasteButton2({ onClick, iconSize, pasted }) {
       initial: { scale: 0, opacity: 0 },
       animate: { scale: 1, opacity: 1 },
       children: [
-        /* @__PURE__ */ jsx3("path", { d: "M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" }),
-        /* @__PURE__ */ jsx3("rect", { x: "8", y: "2", width: "8", height: "4", rx: "1", ry: "1" })
+        /* @__PURE__ */ jsx2("path", { d: "M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" }),
+        /* @__PURE__ */ jsx2("rect", { x: "8", y: "2", width: "8", height: "4", rx: "1", ry: "1" })
       ]
     },
     "paste"
   ) }) });
 });
-var PasswordToggleButton = memo2(function PasswordToggleButton2({
+var PasswordToggleButton = memo(function PasswordToggleButton2({
   onClick,
   iconSize,
   showPassword
 }) {
-  return /* @__PURE__ */ jsx3(ActionButton, { onClick, label: showPassword ? "Hide password" : "Show password", iconSize, children: showPassword ? /* @__PURE__ */ jsxs3("svg", { viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", className: "w-full h-full", "aria-hidden": "true", children: [
-    /* @__PURE__ */ jsx3("path", { d: "M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" }),
-    /* @__PURE__ */ jsx3("line", { x1: "1", y1: "1", x2: "23", y2: "23" })
-  ] }) : /* @__PURE__ */ jsxs3("svg", { viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", className: "w-full h-full", "aria-hidden": "true", children: [
-    /* @__PURE__ */ jsx3("path", { d: "M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" }),
-    /* @__PURE__ */ jsx3("circle", { cx: "12", cy: "12", r: "3" })
+  return /* @__PURE__ */ jsx2(ActionButton, { onClick, label: showPassword ? "Hide password" : "Show password", iconSize, children: showPassword ? /* @__PURE__ */ jsxs2("svg", { viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", className: "w-full h-full", "aria-hidden": "true", children: [
+    /* @__PURE__ */ jsx2("path", { d: "M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" }),
+    /* @__PURE__ */ jsx2("line", { x1: "1", y1: "1", x2: "23", y2: "23" })
+  ] }) : /* @__PURE__ */ jsxs2("svg", { viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", className: "w-full h-full", "aria-hidden": "true", children: [
+    /* @__PURE__ */ jsx2("path", { d: "M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" }),
+    /* @__PURE__ */ jsx2("circle", { cx: "12", cy: "12", r: "3" })
   ] }) });
 });
-var ClipboardErrorMessage = memo2(function ClipboardErrorMessage2({ message, onDismiss }) {
-  return /* @__PURE__ */ jsxs3(
-    m2.div,
+var ClipboardErrorMessage = memo(function ClipboardErrorMessage2({ message, onDismiss }) {
+  return /* @__PURE__ */ jsxs2(
+    m.div,
     {
       className: "flex items-center justify-between gap-2 mt-1.5 px-2 py-1.5 bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 rounded-md",
       initial: { opacity: 0, y: -4, height: 0 },
@@ -1525,22 +1553,22 @@ var ClipboardErrorMessage = memo2(function ClipboardErrorMessage2({ message, onD
       transition: { duration: 0.2 },
       role: "alert",
       children: [
-        /* @__PURE__ */ jsxs3("div", { className: "flex items-center gap-2", children: [
-          /* @__PURE__ */ jsxs3("svg", { className: "w-4 h-4 text-red-500 shrink-0", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", "aria-hidden": "true", children: [
-            /* @__PURE__ */ jsx3("circle", { cx: "12", cy: "12", r: "10" }),
-            /* @__PURE__ */ jsx3("path", { d: "M12 8v4", strokeLinecap: "round" }),
-            /* @__PURE__ */ jsx3("path", { d: "M12 16h.01", strokeLinecap: "round" })
+        /* @__PURE__ */ jsxs2("div", { className: "flex items-center gap-2", children: [
+          /* @__PURE__ */ jsxs2("svg", { className: "w-4 h-4 text-red-500 shrink-0", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", "aria-hidden": "true", children: [
+            /* @__PURE__ */ jsx2("circle", { cx: "12", cy: "12", r: "10" }),
+            /* @__PURE__ */ jsx2("path", { d: "M12 8v4", strokeLinecap: "round" }),
+            /* @__PURE__ */ jsx2("path", { d: "M12 16h.01", strokeLinecap: "round" })
           ] }),
-          /* @__PURE__ */ jsx3("span", { className: "text-xs text-red-600 dark:text-red-400", children: message })
+          /* @__PURE__ */ jsx2("span", { className: "text-xs text-red-600 dark:text-red-400", children: message })
         ] }),
-        /* @__PURE__ */ jsx3(
+        /* @__PURE__ */ jsx2(
           "button",
           {
             type: "button",
             onClick: onDismiss,
             className: "p-0.5 text-red-400 hover:text-red-600 dark:hover:text-red-300 transition-colors rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500/50",
             "aria-label": "Dismiss error",
-            children: /* @__PURE__ */ jsx3("svg", { className: "w-3.5 h-3.5", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", children: /* @__PURE__ */ jsx3("path", { d: "M18 6L6 18M6 6l12 12", strokeLinecap: "round", strokeLinejoin: "round" }) })
+            children: /* @__PURE__ */ jsx2("svg", { className: "w-3.5 h-3.5", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", children: /* @__PURE__ */ jsx2("path", { d: "M18 6L6 18M6 6l12 12", strokeLinecap: "round", strokeLinejoin: "round" }) })
           }
         )
       ]
@@ -1549,11 +1577,13 @@ var ClipboardErrorMessage = memo2(function ClipboardErrorMessage2({ message, onD
 });
 
 // src/components/Input/index.tsx
-import { Fragment as Fragment2, jsx as jsx12, jsxs as jsxs8 } from "react/jsx-runtime";
+import { Fragment as Fragment2, jsx as jsx13, jsxs as jsxs8 } from "react/jsx-runtime";
 var InsideLabel2 = lazy(() => Promise.resolve().then(() => (init_InsideLabel(), InsideLabel_exports)));
+var StackedLabel2 = lazy(() => Promise.resolve().then(() => (init_StackedLabel(), StackedLabel_exports)));
 var OutsideLabel2 = lazy(() => Promise.resolve().then(() => (init_OutsideLabel(), OutsideLabel_exports)));
 var OutsideTopLabel2 = lazy(() => Promise.resolve().then(() => (init_OutsideTopLabel(), OutsideTopLabel_exports)));
 var OutsideLeftLabel2 = lazy(() => Promise.resolve().then(() => (init_OutsideLeftLabel(), OutsideLeftLabel_exports)));
+var LeftAnimatedLabel2 = lazy(() => Promise.resolve().then(() => (init_LeftAnimatedLabel(), LeftAnimatedLabel_exports)));
 var RippleContainer2 = lazy(() => Promise.resolve().then(() => (init_RippleContainer(), RippleContainer_exports)));
 var CharacterCounter2 = lazy(() => Promise.resolve().then(() => (init_CharacterCounter(), CharacterCounter_exports)));
 var RequirementsList2 = lazy(() => Promise.resolve().then(() => (init_RequirementsList(), RequirementsList_exports)));
@@ -2123,30 +2153,30 @@ ${watermarkOnCopy}` : controlledValue;
     const iconSize = sizeStyles.iconSize;
     if (enableHistory && showHistoryButtons) {
       buttons.push(
-        /* @__PURE__ */ jsx12(HistoryButtons, { canUndo, canRedo, onUndo: handleUndo, onRedo: handleRedo, iconSize }, "history")
+        /* @__PURE__ */ jsx13(HistoryButtons, { canUndo, canRedo, onUndo: handleUndo, onRedo: handleRedo, iconSize }, "history")
       );
     }
     if (isLoading || isValidating) {
-      buttons.push(/* @__PURE__ */ jsx12(LoadingIndicator, { progress: loadingProgress, iconSize }, "loading"));
+      buttons.push(/* @__PURE__ */ jsx13(LoadingIndicator, { progress: loadingProgress, iconSize }, "loading"));
     } else if (validationState && !showClearButton) {
-      buttons.push(/* @__PURE__ */ jsx12(ValidationIcon, { state: validationState, iconSize }, "validation"));
+      buttons.push(/* @__PURE__ */ jsx13(ValidationIcon, { state: validationState, iconSize }, "validation"));
     }
     if (showClearButton && hasValue && !isDisabledOrLoading) {
-      buttons.push(/* @__PURE__ */ jsx12(ClearButton, { onClick: handleClear, iconSize }, "clear"));
+      buttons.push(/* @__PURE__ */ jsx13(ClearButton, { onClick: handleClear, iconSize }, "clear"));
     }
     if (showCopyButton && !isDisabledOrLoading) {
-      buttons.push(/* @__PURE__ */ jsx12(CopyButton, { onClick: handleCopy, iconSize, copied: state.copied }, "copy"));
+      buttons.push(/* @__PURE__ */ jsx13(CopyButton, { onClick: handleCopy, iconSize, copied: state.copied }, "copy"));
     }
     if (showPasteButton && !isDisabledOrLoading) {
-      buttons.push(/* @__PURE__ */ jsx12(PasteButton, { onClick: handlePasteButton, iconSize, pasted: state.pasted }, "paste"));
+      buttons.push(/* @__PURE__ */ jsx13(PasteButton, { onClick: handlePasteButton, iconSize, pasted: state.pasted }, "paste"));
     }
     if (showPasswordToggle && type === "password") {
-      buttons.push(/* @__PURE__ */ jsx12(PasswordToggleButton, { onClick: togglePassword, iconSize, showPassword: state.showPassword }, "password"));
+      buttons.push(/* @__PURE__ */ jsx13(PasswordToggleButton, { onClick: togglePassword, iconSize, showPassword: state.showPassword }, "password"));
     }
     if (trailingIcon) {
       buttons.push(
-        /* @__PURE__ */ jsx12(
-          m12.span,
+        /* @__PURE__ */ jsx13(
+          m13.span,
           {
             className: "text-muted-foreground shrink-0",
             animate: { scale: state.isFocused ? 1.05 : 1 },
@@ -2188,8 +2218,8 @@ ${watermarkOnCopy}` : controlledValue;
     state.isFocused
   ]);
   const progressBar = useMemo(() => {
-    if (typeof validationProgress === "number") return /* @__PURE__ */ jsx12(ValidationProgressBar, { progress: validationProgress });
-    if (isLoading) return /* @__PURE__ */ jsx12(LoadingProgressBar, { progress: loadingProgress });
+    if (typeof validationProgress === "number") return /* @__PURE__ */ jsx13(ValidationProgressBar, { progress: validationProgress });
+    if (isLoading) return /* @__PURE__ */ jsx13(LoadingProgressBar, { progress: loadingProgress });
     return null;
   }, [validationProgress, isLoading, loadingProgress]);
   const messagesArea = useMemo(() => {
@@ -2208,8 +2238,8 @@ ${watermarkOnCopy}` : controlledValue;
     if (!message) return null;
     const color = errorMsg ? "text-red-500" : warningMsg ? "text-amber-500" : successMsg ? "text-green-500" : "text-muted-foreground";
     const isError = !!errorMsg;
-    return /* @__PURE__ */ jsx12(
-      m12.p,
+    return /* @__PURE__ */ jsx13(
+      m13.p,
       {
         id: messageId,
         exit: { opacity: 0, y: -4 },
@@ -2226,12 +2256,12 @@ ${watermarkOnCopy}` : controlledValue;
   }, [error, asyncError, warning, success, helperText, renderMessages, messageId]);
   const bottomSection = useMemo(() => {
     return /* @__PURE__ */ jsxs8(Fragment2, { children: [
-      state.clipboardError && /* @__PURE__ */ jsx12(ClipboardErrorMessage, { message: state.clipboardError, onDismiss: handleDismissClipboardError }),
-      showCharacterCount && maxCharacters && /* @__PURE__ */ jsx12(Suspense, { fallback: null, children: /* @__PURE__ */ jsx12("div", { className: "flex justify-end mt-1.5", children: /* @__PURE__ */ jsx12(CharacterCounter2, { current: controlledValue.length, max: maxCharacters, limit }) }) }),
+      state.clipboardError && /* @__PURE__ */ jsx13(ClipboardErrorMessage, { message: state.clipboardError, onDismiss: handleDismissClipboardError }),
+      showCharacterCount && maxCharacters && /* @__PURE__ */ jsx13(Suspense, { fallback: null, children: /* @__PURE__ */ jsx13("div", { className: "flex justify-end mt-1.5", children: /* @__PURE__ */ jsx13(CharacterCounter2, { current: controlledValue.length, max: maxCharacters, limit }) }) }),
       messagesArea,
-      showPasswordStrength && type === "password" && /* @__PURE__ */ jsx12(Suspense, { fallback: null, children: /* @__PURE__ */ jsx12(PasswordStrengthMeter2, { strength: passwordStrength }) }),
-      showRequirements && passwordRequirements && /* @__PURE__ */ jsx12(Suspense, { fallback: null, children: /* @__PURE__ */ jsx12(RequirementsList2, { requirements: passwordRequirements, value: controlledValue }) }),
-      /* @__PURE__ */ jsx12("div", { className: "relative", children: /* @__PURE__ */ jsx12(Suspense, { fallback: null, children: /* @__PURE__ */ jsx12(
+      showPasswordStrength && type === "password" && /* @__PURE__ */ jsx13(Suspense, { fallback: null, children: /* @__PURE__ */ jsx13(PasswordStrengthMeter2, { strength: passwordStrength }) }),
+      showRequirements && passwordRequirements && /* @__PURE__ */ jsx13(Suspense, { fallback: null, children: /* @__PURE__ */ jsx13(RequirementsList2, { requirements: passwordRequirements, value: controlledValue }) }),
+      /* @__PURE__ */ jsx13("div", { className: "relative", children: /* @__PURE__ */ jsx13(Suspense, { fallback: null, children: /* @__PURE__ */ jsx13(
         SuggestionsDropdown2,
         {
           inputId,
@@ -2284,11 +2314,11 @@ ${watermarkOnCopy}` : controlledValue;
   );
   const inputContent = useMemo(
     () => /* @__PURE__ */ jsxs8(Fragment2, { children: [
-      /* @__PURE__ */ jsx12(RippleContainer2, { ripples, onComplete: removeRipple }),
-      /* @__PURE__ */ jsx12(PasteFlash, { show: state.showPasteFlash }),
-      prefix && /* @__PURE__ */ jsx12("span", { className: "text-muted-foreground text-sm shrink-0 select-none", children: prefix }),
-      leadingIcon && /* @__PURE__ */ jsx12(
-        m12.span,
+      /* @__PURE__ */ jsx13(RippleContainer2, { ripples, onComplete: removeRipple }),
+      /* @__PURE__ */ jsx13(PasteFlash, { show: state.showPasteFlash }),
+      prefix && /* @__PURE__ */ jsx13("span", { className: "text-muted-foreground text-sm shrink-0 select-none", children: prefix }),
+      leadingIcon && /* @__PURE__ */ jsx13(
+        m13.span,
         {
           className: cn("text-muted-foreground shrink-0 transition-colors", state.isFocused && "text-foreground"),
           animate: { scale: state.isFocused ? 1.05 : 1 },
@@ -2296,7 +2326,7 @@ ${watermarkOnCopy}` : controlledValue;
           children: leadingIcon
         }
       ),
-      /* @__PURE__ */ jsx12(
+      /* @__PURE__ */ jsx13(
         "input",
         {
           name,
@@ -2320,7 +2350,7 @@ ${watermarkOnCopy}` : controlledValue;
           ...commonAriaProps
         }
       ),
-      suffix && /* @__PURE__ */ jsx12("span", { className: "text-muted-foreground text-sm shrink-0 select-none", children: suffix }),
+      suffix && /* @__PURE__ */ jsx13("span", { className: "text-muted-foreground text-sm shrink-0 select-none", children: suffix }),
       actionButtons,
       progressBar
     ] }),
@@ -2357,8 +2387,8 @@ ${watermarkOnCopy}` : controlledValue;
     ]
   );
   if (multiline) {
-    return /* @__PURE__ */ jsx12(MotionConfig, { reducedMotion: "user", children: /* @__PURE__ */ jsx12(LazyMotion, { features: animationFeatures, strict: true, children: /* @__PURE__ */ jsxs8("div", { ref: containerRef, className: cn("w-full", className), children: [
-      label && /* @__PURE__ */ jsx12(
+    return /* @__PURE__ */ jsx13(MotionConfig, { reducedMotion: "user", children: /* @__PURE__ */ jsx13(LazyMotion, { features: animationFeatures, strict: true, children: /* @__PURE__ */ jsxs8("div", { ref: containerRef, className: cn("w-full", className), children: [
+      label && /* @__PURE__ */ jsx13(
         OutsideTopLabel2,
         {
           label,
@@ -2375,10 +2405,10 @@ ${watermarkOnCopy}` : controlledValue;
           onClick: handleContainerClick,
           ...onLongPress ? longPressHandlers : {},
           children: [
-            /* @__PURE__ */ jsx12(RippleContainer2, { ripples, onComplete: removeRipple }),
-            /* @__PURE__ */ jsx12(PasteFlash, { show: state.showPasteFlash }),
-            leadingIcon && /* @__PURE__ */ jsx12(
-              m12.span,
+            /* @__PURE__ */ jsx13(RippleContainer2, { ripples, onComplete: removeRipple }),
+            /* @__PURE__ */ jsx13(PasteFlash, { show: state.showPasteFlash }),
+            leadingIcon && /* @__PURE__ */ jsx13(
+              m13.span,
               {
                 className: cn("text-muted-foreground shrink-0 mt-0.5 transition-colors", state.isFocused && "text-foreground"),
                 animate: { scale: state.isFocused ? 1.05 : 1 },
@@ -2386,7 +2416,7 @@ ${watermarkOnCopy}` : controlledValue;
                 children: leadingIcon
               }
             ),
-            /* @__PURE__ */ jsx12(
+            /* @__PURE__ */ jsx13(
               "textarea",
               {
                 ref: setTextareaRef,
@@ -2424,8 +2454,8 @@ ${watermarkOnCopy}` : controlledValue;
     ] }) }) });
   }
   if (labelPosition === "outside-top") {
-    return /* @__PURE__ */ jsx12(MotionConfig, { reducedMotion: "user", children: /* @__PURE__ */ jsx12(LazyMotion, { features: animationFeatures, strict: true, children: /* @__PURE__ */ jsxs8("div", { ref: containerRef, className: cn("w-full", className), children: [
-      label && /* @__PURE__ */ jsx12(
+    return /* @__PURE__ */ jsx13(MotionConfig, { reducedMotion: "user", children: /* @__PURE__ */ jsx13(LazyMotion, { features: animationFeatures, strict: true, children: /* @__PURE__ */ jsxs8("div", { ref: containerRef, className: cn("w-full", className), children: [
+      label && /* @__PURE__ */ jsx13(
         OutsideTopLabel2,
         {
           label,
@@ -2435,16 +2465,16 @@ ${watermarkOnCopy}` : controlledValue;
           shouldReduceMotion: shouldReduceMotion ?? false
         }
       ),
-      /* @__PURE__ */ jsx12("div", { className: containerClasses, onClick: handleContainerClick, ...onLongPress ? longPressHandlers : {}, children: inputContent }),
+      /* @__PURE__ */ jsx13("div", { className: containerClasses, onClick: handleContainerClick, ...onLongPress ? longPressHandlers : {}, children: inputContent }),
       bottomSection
     ] }) }) });
   }
   if (labelPosition === "outside" || labelPosition === "outside-border") {
-    return /* @__PURE__ */ jsx12(MotionConfig, { reducedMotion: "user", children: /* @__PURE__ */ jsx12(LazyMotion, { features: animationFeatures, strict: true, children: /* @__PURE__ */ jsxs8("div", { ref: containerRef, className: cn("w-full", className), children: [
+    return /* @__PURE__ */ jsx13(MotionConfig, { reducedMotion: "user", children: /* @__PURE__ */ jsx13(LazyMotion, { features: animationFeatures, strict: true, children: /* @__PURE__ */ jsxs8("div", { ref: containerRef, className: cn("w-full", className), children: [
       /* @__PURE__ */ jsxs8("div", { className: cn(containerClasses, "relative mt-7"), onClick: handleContainerClick, ...onLongPress ? longPressHandlers : {}, children: [
-        /* @__PURE__ */ jsx12(RippleContainer2, { ripples, onComplete: removeRipple }),
-        /* @__PURE__ */ jsx12(PasteFlash, { show: state.showPasteFlash }),
-        label && /* @__PURE__ */ jsx12(
+        /* @__PURE__ */ jsx13(RippleContainer2, { ripples, onComplete: removeRipple }),
+        /* @__PURE__ */ jsx13(PasteFlash, { show: state.showPasteFlash }),
+        label && /* @__PURE__ */ jsx13(
           OutsideLabel2,
           {
             label,
@@ -2458,8 +2488,8 @@ ${watermarkOnCopy}` : controlledValue;
             sizeClass: sizeStyles.text
           }
         ),
-        leadingIcon && /* @__PURE__ */ jsx12(
-          m12.span,
+        leadingIcon && /* @__PURE__ */ jsx13(
+          m13.span,
           {
             className: cn("text-muted-foreground shrink-0 transition-colors", state.isFocused && "text-foreground"),
             animate: { scale: state.isFocused ? 1.05 : 1 },
@@ -2467,8 +2497,8 @@ ${watermarkOnCopy}` : controlledValue;
             children: leadingIcon
           }
         ),
-        prefix && /* @__PURE__ */ jsx12("span", { className: "text-muted-foreground text-sm shrink-0 select-none", children: prefix }),
-        /* @__PURE__ */ jsx12(
+        prefix && /* @__PURE__ */ jsx13("span", { className: "text-muted-foreground text-sm shrink-0 select-none", children: prefix }),
+        /* @__PURE__ */ jsx13(
           "input",
           {
             ref: setInputRef,
@@ -2491,7 +2521,7 @@ ${watermarkOnCopy}` : controlledValue;
             ...commonAriaProps
           }
         ),
-        suffix && /* @__PURE__ */ jsx12("span", { className: "text-muted-foreground text-sm shrink-0 select-none", children: suffix }),
+        suffix && /* @__PURE__ */ jsx13("span", { className: "text-muted-foreground text-sm shrink-0 select-none", children: suffix }),
         actionButtons,
         progressBar
       ] }),
@@ -2499,16 +2529,16 @@ ${watermarkOnCopy}` : controlledValue;
     ] }) }) });
   }
   if (labelPosition === "outside-left") {
-    return /* @__PURE__ */ jsx12(MotionConfig, { reducedMotion: "user", children: /* @__PURE__ */ jsx12(LazyMotion, { features: animationFeatures, strict: true, children: /* @__PURE__ */ jsxs8("div", { ref: containerRef, className: cn("w-full", className), children: [
+    return /* @__PURE__ */ jsx13(MotionConfig, { reducedMotion: "user", children: /* @__PURE__ */ jsx13(LazyMotion, { features: animationFeatures, strict: true, children: /* @__PURE__ */ jsxs8("div", { ref: containerRef, className: cn("w-full", className), children: [
       /* @__PURE__ */ jsxs8("div", { className: "flex items-center gap-3", children: [
-        label && /* @__PURE__ */ jsx12(OutsideLeftLabel2, { label, htmlFor: inputId, isFocused: state.isFocused, colorClass: getLabelColor() }),
-        /* @__PURE__ */ jsx12("div", { className: cn(containerClasses, "flex-1"), onClick: handleContainerClick, ...onLongPress ? longPressHandlers : {}, children: inputContent })
+        label && /* @__PURE__ */ jsx13(OutsideLeftLabel2, { label, htmlFor: inputId, isFocused: state.isFocused, colorClass: getLabelColor() }),
+        /* @__PURE__ */ jsx13("div", { className: cn(containerClasses, "flex-1"), onClick: handleContainerClick, ...onLongPress ? longPressHandlers : {}, children: inputContent })
       ] }),
       bottomSection
     ] }) }) });
   }
   if (labelPosition === "stacked") {
-    return /* @__PURE__ */ jsx12(MotionConfig, { reducedMotion: "user", children: /* @__PURE__ */ jsx12(LazyMotion, { features: animationFeatures, strict: true, children: /* @__PURE__ */ jsxs8("div", { ref: containerRef, className: cn("w-full", className), children: [
+    return /* @__PURE__ */ jsx13(MotionConfig, { reducedMotion: "user", children: /* @__PURE__ */ jsx13(LazyMotion, { features: animationFeatures, strict: true, children: /* @__PURE__ */ jsxs8("div", { ref: containerRef, className: cn("w-full", className), children: [
       /* @__PURE__ */ jsxs8(
         "div",
         {
@@ -2516,11 +2546,11 @@ ${watermarkOnCopy}` : controlledValue;
           onClick: handleContainerClick,
           ...onLongPress ? longPressHandlers : {},
           children: [
-            /* @__PURE__ */ jsx12(RippleContainer2, { ripples, onComplete: removeRipple }),
-            /* @__PURE__ */ jsx12(PasteFlash, { show: state.showPasteFlash }),
+            /* @__PURE__ */ jsx13(RippleContainer2, { ripples, onComplete: removeRipple }),
+            /* @__PURE__ */ jsx13(PasteFlash, { show: state.showPasteFlash }),
             /* @__PURE__ */ jsxs8("div", { className: "flex items-center gap-2 w-full", children: [
-              leadingIcon && /* @__PURE__ */ jsx12(
-                m12.span,
+              leadingIcon && /* @__PURE__ */ jsx13(
+                m13.span,
                 {
                   className: cn("text-muted-foreground shrink-0 transition-colors", state.isFocused && "text-foreground"),
                   animate: { scale: state.isFocused ? 1.05 : 1 },
@@ -2529,8 +2559,8 @@ ${watermarkOnCopy}` : controlledValue;
                 }
               ),
               /* @__PURE__ */ jsxs8("div", { className: "flex-1 flex flex-col min-w-0", children: [
-                label && /* @__PURE__ */ jsx12(
-                  StackedLabel,
+                label && /* @__PURE__ */ jsx13(
+                  StackedLabel2,
                   {
                     label,
                     htmlFor: inputId,
@@ -2539,7 +2569,7 @@ ${watermarkOnCopy}` : controlledValue;
                     shouldReduceMotion: shouldReduceMotion ?? false
                   }
                 ),
-                /* @__PURE__ */ jsx12(
+                /* @__PURE__ */ jsx13(
                   "input",
                   {
                     ref: setInputRef,
@@ -2563,7 +2593,7 @@ ${watermarkOnCopy}` : controlledValue;
                   }
                 )
               ] }),
-              suffix && /* @__PURE__ */ jsx12("span", { className: "text-muted-foreground text-sm shrink-0 select-none", children: suffix }),
+              suffix && /* @__PURE__ */ jsx13("span", { className: "text-muted-foreground text-sm shrink-0 select-none", children: suffix }),
               actionButtons
             ] }),
             progressBar
@@ -2574,10 +2604,10 @@ ${watermarkOnCopy}` : controlledValue;
     ] }) }) });
   }
   if (labelPosition === "left") {
-    return /* @__PURE__ */ jsx12(MotionConfig, { reducedMotion: "user", children: /* @__PURE__ */ jsx12(LazyMotion, { features: animationFeatures, strict: true, children: /* @__PURE__ */ jsxs8("div", { ref: containerRef, className: cn("w-full", className), children: [
+    return /* @__PURE__ */ jsx13(MotionConfig, { reducedMotion: "user", children: /* @__PURE__ */ jsx13(LazyMotion, { features: animationFeatures, strict: true, children: /* @__PURE__ */ jsxs8("div", { ref: containerRef, className: cn("w-full", className), children: [
       /* @__PURE__ */ jsxs8("div", { className: "flex items-center", children: [
-        label && /* @__PURE__ */ jsx12(
-          LeftAnimatedLabel,
+        label && /* @__PURE__ */ jsx13(
+          LeftAnimatedLabel2,
           {
             label,
             htmlFor: inputId,
@@ -2589,11 +2619,11 @@ ${watermarkOnCopy}` : controlledValue;
           }
         ),
         /* @__PURE__ */ jsxs8("div", { className: cn(containerClasses, "flex-1"), onClick: handleContainerClick, ...onLongPress ? longPressHandlers : {}, children: [
-          /* @__PURE__ */ jsx12(RippleContainer2, { ripples, onComplete: removeRipple }),
-          /* @__PURE__ */ jsx12(PasteFlash, { show: state.showPasteFlash }),
-          prefix && /* @__PURE__ */ jsx12("span", { className: "text-muted-foreground text-sm shrink-0 select-none", children: prefix }),
-          leadingIcon && /* @__PURE__ */ jsx12(
-            m12.span,
+          /* @__PURE__ */ jsx13(RippleContainer2, { ripples, onComplete: removeRipple }),
+          /* @__PURE__ */ jsx13(PasteFlash, { show: state.showPasteFlash }),
+          prefix && /* @__PURE__ */ jsx13("span", { className: "text-muted-foreground text-sm shrink-0 select-none", children: prefix }),
+          leadingIcon && /* @__PURE__ */ jsx13(
+            m13.span,
             {
               className: cn("text-muted-foreground shrink-0 transition-colors", state.isFocused && "text-foreground"),
               animate: { scale: state.isFocused ? 1.05 : 1 },
@@ -2601,7 +2631,7 @@ ${watermarkOnCopy}` : controlledValue;
               children: leadingIcon
             }
           ),
-          /* @__PURE__ */ jsx12("div", { className: "relative flex-1 min-w-0", children: /* @__PURE__ */ jsx12(
+          /* @__PURE__ */ jsx13("div", { className: "relative flex-1 min-w-0", children: /* @__PURE__ */ jsx13(
             "input",
             {
               ref: setInputRef,
@@ -2624,7 +2654,7 @@ ${watermarkOnCopy}` : controlledValue;
               ...commonAriaProps
             }
           ) }),
-          suffix && /* @__PURE__ */ jsx12("span", { className: "text-muted-foreground text-sm shrink-0 select-none", children: suffix }),
+          suffix && /* @__PURE__ */ jsx13("span", { className: "text-muted-foreground text-sm shrink-0 select-none", children: suffix }),
           actionButtons,
           progressBar
         ] })
@@ -2632,11 +2662,11 @@ ${watermarkOnCopy}` : controlledValue;
       bottomSection
     ] }) }) });
   }
-  return /* @__PURE__ */ jsx12(MotionConfig, { reducedMotion: "user", children: /* @__PURE__ */ jsx12(LazyMotion, { features: animationFeatures, strict: true, children: /* @__PURE__ */ jsxs8("div", { ref: containerRef, className: cn("w-full", className), children: [
+  return /* @__PURE__ */ jsx13(MotionConfig, { reducedMotion: "user", children: /* @__PURE__ */ jsx13(LazyMotion, { features: animationFeatures, strict: true, children: /* @__PURE__ */ jsxs8("div", { ref: containerRef, className: cn("w-full", className), children: [
     /* @__PURE__ */ jsxs8("div", { className: cn(containerClasses, label && "pt-7 pb-3"), onClick: handleContainerClick, ...onLongPress ? longPressHandlers : {}, children: [
-      /* @__PURE__ */ jsx12(RippleContainer2, { ripples, onComplete: removeRipple }),
-      /* @__PURE__ */ jsx12(PasteFlash, { show: state.showPasteFlash }),
-      label && /* @__PURE__ */ jsx12(
+      /* @__PURE__ */ jsx13(RippleContainer2, { ripples, onComplete: removeRipple }),
+      /* @__PURE__ */ jsx13(PasteFlash, { show: state.showPasteFlash }),
+      label && /* @__PURE__ */ jsx13(
         InsideLabel2,
         {
           label,
@@ -2650,9 +2680,9 @@ ${watermarkOnCopy}` : controlledValue;
           sizeClass: sizeStyles.text
         }
       ),
-      prefix && /* @__PURE__ */ jsx12("span", { className: "text-muted-foreground text-sm shrink-0 select-none", children: prefix }),
-      leadingIcon && /* @__PURE__ */ jsx12(
-        m12.span,
+      prefix && /* @__PURE__ */ jsx13("span", { className: "text-muted-foreground text-sm shrink-0 select-none", children: prefix }),
+      leadingIcon && /* @__PURE__ */ jsx13(
+        m13.span,
         {
           className: cn("text-muted-foreground shrink-0 transition-colors", state.isFocused && "text-foreground"),
           animate: { scale: state.isFocused ? 1.05 : 1 },
@@ -2660,7 +2690,7 @@ ${watermarkOnCopy}` : controlledValue;
           children: leadingIcon
         }
       ),
-      /* @__PURE__ */ jsx12(
+      /* @__PURE__ */ jsx13(
         "input",
         {
           ref: setInputRef,
@@ -2683,15 +2713,15 @@ ${watermarkOnCopy}` : controlledValue;
           ...commonAriaProps
         }
       ),
-      suffix && /* @__PURE__ */ jsx12("span", { className: "text-muted-foreground text-sm shrink-0 select-none", children: suffix }),
+      suffix && /* @__PURE__ */ jsx13("span", { className: "text-muted-foreground text-sm shrink-0 select-none", children: suffix }),
       actionButtons,
       progressBar
     ] }),
     bottomSection
   ] }) }) });
 }
-var Input_default = memo12(function AnimatedInput(props) {
-  return /* @__PURE__ */ jsx12(
+var Input_default = memo13(function AnimatedInput(props) {
+  return /* @__PURE__ */ jsx13(
     AnimatedInputErrorBoundary,
     {
       fallbackInputProps: {
@@ -2702,7 +2732,7 @@ var Input_default = memo12(function AnimatedInput(props) {
         name: props.name,
         id: props.id
       },
-      children: /* @__PURE__ */ jsx12(InputInner, { ...props })
+      children: /* @__PURE__ */ jsx13(InputInner, { ...props })
     }
   );
 });

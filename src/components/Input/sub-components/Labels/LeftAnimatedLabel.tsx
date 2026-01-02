@@ -1,59 +1,10 @@
 "use client";
-import { PREMIUM_SPRING, FAST_SPRING } from "./constants";
 import { m, AnimatePresence } from "motion/react";
+import { cn } from "../../../../utils/functions";
 import { type ReactNode, memo } from "react";
-import { cn } from "../../utils/functions";
+import { FAST_SPRING } from "../../constants";
 
-import type { LabelProps } from "./types";
-
-
-/**
- * Label component that stacks above the input value within the input field.
- * Reduces size and moves upward when floating, creating a stacked appearance.
- *
- * @component
- * @param {Omit<LabelProps, "hasLeadingIcon" | "isFocused" | "hasPrefix">} props - Component props
- * @returns {ReactNode} Animated label element that stacks within the input
- *
- * @remarks
- * - Label shrinks and stacks above the value when input has content
- * - Animates size, opacity, and vertical position
- * - Uses premium spring animation for smooth transitions
- * - Respects reduced motion preferences
- *
- * @example
- * <StackedLabel
- *   label="Description"
- *   htmlFor="description-input"
- *   isFloating={hasValue}
- *   colorClass="text-muted-foreground"
- * />
- */
-export const StackedLabel = memo(function StackedLabel({
-	label,
-	htmlFor,
-	isFloating,
-	colorClass,
-	shouldReduceMotion,
-}: Omit<LabelProps, "hasLeadingIcon" | "isFocused" | "hasPrefix">): ReactNode {
-	return (
-		<m.label
-			animate={{
-				fontSize: isFloating ? "0.7rem" : "0.875rem",
-				marginBottom: isFloating ? 2 : 0,
-				opacity: isFloating ? 0.85 : 0.7,
-				y: isFloating ? 0 : 6,
-			}}
-			initial={false}
-			htmlFor={htmlFor}
-			id={`${htmlFor}-label`}
-			style={{ backfaceVisibility: "hidden" }}
-			transition={shouldReduceMotion ? { duration: 0 } : PREMIUM_SPRING}
-			className={cn("origin-left font-medium pointer-events-none select-none will-change-transform", colorClass)}>
-			{label}
-		</m.label>
-	);
-});
+import type { LabelProps } from "../../types";
 
 /**
  * Props for the LeftAnimatedLabel component.
@@ -95,7 +46,7 @@ interface LeftAnimatedLabelProps extends Omit<LabelProps, "hasLeadingIcon" | "ha
  *   <input id="search-input" />
  * </div>
  */
-export const LeftAnimatedLabel = memo(function LeftAnimatedLabel({
+export default memo(function LeftAnimatedLabel({
 	label,
 	htmlFor,
 	isFloating,
