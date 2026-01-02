@@ -43,6 +43,8 @@ import type {
 	KeyboardEventHandler,
 } from "react";
 
+import type { AnimatedInputProps, Suggestion } from "./types";
+
 // Labels
 const InsideLabel = lazy(() => import("./sub-components/Labels/InsideLabel"));
 const StackedLabel = lazy(() => import("./sub-components/Labels/StackedLabel"));
@@ -58,7 +60,6 @@ const RequirementsList = lazy(() => import("./sub-components/RequirementsList"))
 const SuggestionsDropdown = lazy(() => import("./sub-components/SuggestionsDropdown"));
 const PasswordStrengthMeter = lazy(() => import("./sub-components/PasswordStrengthMeter"));
 
-import type { AnimatedInputProps, Suggestion } from "./types";
 
 export function InputInner(InnerProps: AnimatedInputProps): ReactNode {
 	const {
