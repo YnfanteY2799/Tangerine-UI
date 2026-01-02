@@ -43,7 +43,7 @@ import type {
 	KeyboardEventHandler,
 } from "react";
 
-import type { AnimatedInputProps, Suggestion } from "./types";
+import type { InputProps, Suggestion } from "./types";
 
 // Labels
 const InsideLabel = lazy(() => import("./sub-components/Labels/InsideLabel"));
@@ -60,8 +60,7 @@ const RequirementsList = lazy(() => import("./sub-components/RequirementsList"))
 const SuggestionsDropdown = lazy(() => import("./sub-components/SuggestionsDropdown"));
 const PasswordStrengthMeter = lazy(() => import("./sub-components/PasswordStrengthMeter"));
 
-
-export function InputInner(InnerProps: AnimatedInputProps): ReactNode {
+export function InputInner(InnerProps: InputProps): ReactNode {
 	const {
 		variant = "default",
 		size = "md",
@@ -1392,7 +1391,7 @@ export function InputInner(InnerProps: AnimatedInputProps): ReactNode {
 	);
 }
 
-export default memo(function AnimatedInput(props: AnimatedInputProps): ReactNode {
+export default memo(function AnimatedInput(props: InputProps): ReactNode {
 	return (
 		<AnimatedInputErrorBoundary
 			fallbackInputProps={{
