@@ -1,0 +1,54 @@
+{
+  "name": "tangerine-ui",
+  "version": "1.0.0",
+  "description": "Animated input components for React",
+  "types": "./dist/index.d.ts",
+  "module": "./dist/index.mjs",
+  "main": "./dist/index.js",
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts --external react --external react-dom --external motion/react",
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch --external react --external react-dom --external motion/react",
+    "prepublishOnly": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YnfanteY2799/Tangerine-UI.git"
+  },
+  "keywords": [
+    "react",
+    "input",
+    "animated",
+    "form",
+    "component"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/YnfanteY2799/Tangerine-UI/issues"
+  },
+  "homepage": "https://github.com/YnfanteY2799/Tangerine-UI#readme",
+  "devDependencies": {
+    "@types/node": "^25.0.3",
+    "@types/react": "^19.2.7",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^3.4.0"
+  },
+  "peerDependencies": {
+    "lucide-react": "^0.562.0",
+    "motion": "^12.23.26",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3"
+  }
+}
