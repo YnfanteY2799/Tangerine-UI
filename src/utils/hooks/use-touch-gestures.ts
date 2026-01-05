@@ -5,8 +5,8 @@ import { useEffect, useRef, useCallback, type RefObject } from "react";
 interface UseTouchGesturesProps {
 	isOpen: boolean;
 	isMobile: boolean;
-	enableDragToClose: boolean;
 	onClose: () => void;
+	enableDragToClose: boolean;
 	contentRef: RefObject<HTMLDivElement | null>;
 }
 
@@ -131,4 +131,3 @@ export function useTouchGestures({ isOpen, isMobile, enableDragToClose, onClose,
 		isDragging: isDragging.current,
 	};
 }
-

@@ -6,9 +6,9 @@ import { useState, useCallback, useRef } from "react";
  * History state structure for undo/redo functionality.
  */
 export interface HistoryState<T> {
-	past: T[];
+	future: Array<T>;
+	past: Array<T>;
 	present: T;
-	future: T[];
 }
 
 /**
@@ -53,9 +53,9 @@ export interface UseHistoryReturn<T> {
  */
 export function useHistory<T>(initialValue: T, maxHistory = 50): UseHistoryReturn<T> {
 	const [history, setHistory] = useState<HistoryState<T>>({
-		past: [],
 		present: initialValue,
 		future: [],
+		past: [],
 	});
 
 	const isUndoRedoRef = useRef(false);
@@ -111,21 +111,20 @@ export function useHistory<T>(initialValue: T, maxHistory = 50): UseHistoryRetur
 	}, []);
 
 	const clear = useCallback(() => {
-		setHistory({
-			past: [],
+		setHistory(() => ({
 			present: history.present,
 			future: [],
-		});
+			past: [],
+		}));
 	}, [history.present]);
 
 	return {
-		state: history.present,
-		setState,
 		undo,
 		redo,
+		clear,
+		setState,
+		state: history.present,
 		canUndo: history.past.length > 0,
 		canRedo: history.future.length > 0,
-		clear,
 	};
 }
-
