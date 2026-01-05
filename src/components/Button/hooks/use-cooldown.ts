@@ -49,16 +49,16 @@ export default function useCooldown(options: UseCooldownOptions = {}): UseCooldo
 	const { cooldownMs = 0, clicksBeforeCooldown = 1, onCooldownStart, onCooldownEnd } = options;
 
 	// Internal State
-	const [cooldownProgress, setCooldownProgress] = useState(0);
-	const [isInCooldown, setIsInCooldown] = useState(false);
-	const [clickCount, setClickCount] = useState(0);
+	const [cooldownProgress, setCooldownProgress] = useState<number>(0);
+	const [isInCooldown, setIsInCooldown] = useState<boolean>(false);
+	const [clickCount, setClickCount] = useState<number>(0);
 
 	// Internal Ref's
 	const progressIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 	const cooldownTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-	const onCooldownStartRef = useRef(onCooldownStart);
+	const onCooldownStartRef = useRef<Function>(onCooldownStart);
+	const onCooldownEndRef = useRef<Function>(onCooldownEnd);
 	const cooldownStartTimeRef = useRef<number>(0);
-	const onCooldownEndRef = useRef(onCooldownEnd);
 
 	// Keep callback refs up to date
 	useEffect(() => {
@@ -80,8 +80,8 @@ export default function useCooldown(options: UseCooldownOptions = {}): UseCooldo
 	const startCooldown = useCallback(() => {
 		if (cooldownMs <= 0) return;
 
-		setIsInCooldown(true);
-		setCooldownProgress(0);
+		setIsInCooldown(() => true);
+		setCooldownProgress(() => 0);
 		cooldownStartTimeRef.current = Date.now();
 		onCooldownStartRef.current?.();
 
@@ -89,7 +89,7 @@ export default function useCooldown(options: UseCooldownOptions = {}): UseCooldo
 		progressIntervalRef.current = setInterval(() => {
 			const elapsed = Date.now() - cooldownStartTimeRef.current;
 			const progress = Math.min(elapsed / cooldownMs, 1);
-			setCooldownProgress(progress);
+			setCooldownProgress(() => progress);
 
 			if (progress >= 1 && progressIntervalRef.current) {
 				clearInterval(progressIntervalRef.current);
@@ -98,9 +98,9 @@ export default function useCooldown(options: UseCooldownOptions = {}): UseCooldo
 		}, 16);
 
 		cooldownTimerRef.current = setTimeout(() => {
-			setIsInCooldown(false);
-			setCooldownProgress(0);
-			setClickCount(0);
+			setIsInCooldown(() => false);
+			setCooldownProgress(() => 0);
+			setClickCount(() => 0);
 			onCooldownEndRef.current?.();
 
 			if (progressIntervalRef.current) {
@@ -120,7 +120,6 @@ export default function useCooldown(options: UseCooldownOptions = {}): UseCooldo
 			// Increment click count
 			setClickCount((prev) => {
 				const newCount = prev + 1;
-
 				// Check if we've reached the click threshold
 				if (newCount >= clicksBeforeCooldown && cooldownMs > 0) startCooldown();
 				return newCount;
@@ -133,9 +132,9 @@ export default function useCooldown(options: UseCooldownOptions = {}): UseCooldo
 
 	const resetCooldown = useCallback(() => {
 		clearTimers();
-		setIsInCooldown(false);
-		setCooldownProgress(0);
-		setClickCount(0);
+		setIsInCooldown(() => false);
+		setCooldownProgress(() => 0);
+		setClickCount(() => 0);
 	}, [clearTimers]);
 
 	const getRemainingTime = useCallback(() => {

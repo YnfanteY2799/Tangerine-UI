@@ -1,7 +1,7 @@
 "use client";
 import { Children, cloneElement, Fragment, isValidElement, memo, useMemo } from "react";
 import { getStaggerVariant } from "./configs/animations/stagger";
-import { m, LazyMotion, domMin } from "motion/react";
+import { m, LazyMotion, domAnimation } from "motion/react";
 import { cn } from "../../utils/functions";
 
 import type { ButtonGroupProps, InternalButtonProps } from "./types/components";
@@ -94,7 +94,7 @@ export default memo(function ButtonGroup(props: ButtonGroupProps): ReactNode {
 	}, [childArray, totalCount, staggerAnimation, staggerDelay, staggerDirection, spacing, orientation, itemVariants]);
 
 	return (
-		<LazyMotion features={domMin} strict>
+		<LazyMotion features={domAnimation} strict>
 			<m.div
 				className={cn(
 					"inline-flex",

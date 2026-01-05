@@ -1,5 +1,5 @@
 "use client";
-import { domMin, LazyMotion, m } from "motion/react";
+import { domAnimation, LazyMotion, m } from "motion/react";
 import { progressVariants } from "./configs/variants";
 import { type ReactNode, memo } from "react";
 import { cn } from "../../utils/functions";
@@ -63,7 +63,7 @@ export default memo(function CooldownIndicator({ progress, color = "default", cl
 	const clampedProgress = Math.min(Math.max(progress, 0), 1);
 
 	return (
-		<LazyMotion features={domMin} strict>
+		<LazyMotion features={domAnimation} strict>
 			<div className={cn("pointer-events-none absolute inset-0 overflow-hidden", className)} aria-hidden="true" role="presentation">
 				<m.div
 					className={cn("absolute inset-y-0 left-0", progressVariants({ color }))}

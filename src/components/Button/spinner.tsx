@@ -1,5 +1,5 @@
 "use client";
-import { domMin, LazyMotion, m } from "motion/react";
+import { domAnimation, LazyMotion, m } from "motion/react";
 import { type ReactNode, memo } from "react";
 import { cn } from "../../utils/functions";
 
@@ -115,7 +115,7 @@ const SCALE_VALUE = 0.8;
  */
 export default memo(function Spinner({ size = "md", className, label = "loading" }: SpinnerProps): ReactNode {
 	return (
-		<LazyMotion features={domMin} strict>
+		<LazyMotion features={domAnimation} strict>
 			<m.svg
 				className={cn(SIZE_MAP[size], "animate-spin", className)}
 				initial={{ opacity: 0, scale: SCALE_VALUE }}

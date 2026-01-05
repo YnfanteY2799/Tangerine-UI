@@ -294,6 +294,12 @@ export interface UseRippleOptions {
 	 * @default 3
 	 */
 	maxRipples?: number;
+
+	/**
+	 * Whether ripple effect should emit haptic response.
+	 * @default false
+	 */
+	enableHapticFeedback?: boolean;
 }
 
 /**
@@ -317,7 +323,7 @@ export interface UseRippleReturn {
 	 *   />
 	 * ))}
 	 */
-	ripples: RippleType[];
+	ripples: Array<RippleType>;
 
 	/**
 	 * Creates a new ripple at the event's click/touch position.

@@ -1,5 +1,5 @@
 "use client";
-import { m, AnimatePresence, LazyMotion, domMin } from "motion/react";
+import { m, AnimatePresence, LazyMotion, domAnimation } from "motion/react";
 import { rippleVariants } from "./configs/variants";
 import { memo, type ReactNode } from "react";
 import { cn } from "../../utils/functions";
@@ -161,9 +161,9 @@ const RippleItem = memo(function RippleItem({ ripple, color, onComplete }: IRipp
  */
 export default memo(function RippleContainer({ onAnimationComplete, color = "default", className, ripples }: RippleContainerProps): ReactNode {
 	return (
-		<LazyMotion features={domMin} strict>
+		<LazyMotion features={domAnimation} strict>
 			<span className={cn("pointer-events-none absolute inset-0 overflow-hidden", className)} aria-hidden="true" role="presentation">
-				<AnimatePresence>
+				<AnimatePresence mode="popLayout">
 					{ripples.map((ripple) => (
 						<RippleItem key={ripple.key} ripple={ripple} color={color} onComplete={() => onAnimationComplete(ripple.key)} />
 					))}

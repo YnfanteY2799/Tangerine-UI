@@ -1,4 +1,4 @@
-import { type MouseEvent, type TouchEvent, useCallback, useRef, useState } from "react";
+import { type MouseEvent, type TouchEvent, useCallback, useEffect, useRef, useState } from "react";
 
 import type { UseRippleOptions, UseRippleReturn, RippleType } from "../types/hooks";
 
@@ -92,14 +92,14 @@ import type { UseRippleOptions, UseRippleReturn, RippleType } from "../types/hoo
  */
 export default function useRipple(options: UseRippleOptions = {}): UseRippleReturn {
 	// Props
-	const { disabled = false, duration = 600, maxRipples = 3 } = options;
+	const { disabled = false, duration = 600, maxRipples = 3, enableHapticFeedback = false } = options;
 
 	// Ref's
 	const timeoutRefs = useRef<Map<number, ReturnType<typeof setTimeout>>>(new Map());
 	const rippleKeyRef = useRef(0);
 
 	// State
-	const [ripples, setRipples] = useState<RippleType[]>([]);
+	const [ripples, setRipples] = useState<Array<RippleType>>([]);
 
 	const clearRipple = useCallback((key: number) => {
 		setRipples((prev) => prev.filter((ripple) => ripple.key !== key));
@@ -113,7 +113,7 @@ export default function useRipple(options: UseRippleOptions = {}): UseRippleRetu
 	}, []);
 
 	const clearAllRipples = useCallback(() => {
-		setRipples([]);
+		setRipples(() => []);
 
 		// Clear all timeouts
 		timeoutRefs.current.forEach((timeout) => clearTimeout(timeout));
@@ -148,6 +148,9 @@ export default function useRipple(options: UseRippleOptions = {}): UseRippleRetu
 			// Calculate size to ensure ripple covers entire element
 			const size = Math.max(rect.width, rect.height) * 2;
 
+			// Trigger haptic feedback
+			if (enableHapticFeedback && navigator.vibrate) navigator.vibrate(3);
+
 			// Generate unique key (use modulo to prevent overflow)
 			const key = rippleKeyRef.current;
 			rippleKeyRef.current = (rippleKeyRef.current + 1) % Number.MAX_SAFE_INTEGER;
@@ -181,17 +184,15 @@ export default function useRipple(options: UseRippleOptions = {}): UseRippleRetu
 
 			// Auto-remove ripple after duration
 			if (duration > 0) {
-				const timeout = setTimeout(() => {
-					clearRipple(key);
-				}, duration);
+				const timeout = setTimeout(() => clearRipple(key), duration);
 				timeoutRefs.current.set(key, timeout);
 			}
 		},
-		[disabled, duration, maxRipples, clearRipple]
+		[disabled, duration, maxRipples, clearRipple, enableHapticFeedback]
 	);
 
 	// Cleanup all timeouts on unmount
-	useCallback(() => {
+	useEffect(() => {
 		return () => {
 			timeoutRefs.current.forEach((timeout) => clearTimeout(timeout));
 			timeoutRefs.current.clear();
