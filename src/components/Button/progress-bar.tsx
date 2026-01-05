@@ -1,5 +1,5 @@
 "use client";
-import { m, AnimatePresence, LazyMotion, domMin } from "motion/react";
+import { m, AnimatePresence, LazyMotion, domAnimation } from "motion/react";
 import { progressVariants } from "./configs/variants";
 import { memo, type ReactNode } from "react";
 import { cn } from "../../utils/functions";
@@ -178,7 +178,7 @@ export default memo(function ProgressBar({ progress, placement, color = "default
 	};
 
 	return (
-		<LazyMotion features={domMin} strict>
+		<LazyMotion features={domAnimation} strict>
 			{renderContent()}
 		</LazyMotion>
 	);

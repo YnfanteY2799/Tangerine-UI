@@ -1,6 +1,6 @@
 "use client";
+import { domAnimation, LazyMotion, m } from "motion/react";
 import { type ReactNode, memo, useMemo } from "react";
-import { domMin, LazyMotion, m } from "motion/react";
 import { cn } from "../../utils/functions";
 
 import type { ButtonColor, ButtonVariant } from "./types/variants";
@@ -206,7 +206,7 @@ export default memo(function LongPressIndicator(props: LongPressIndicatorProps):
 	const { backdrop, background } = useMemo(() => getProgressStyles(color, variant), [color, variant]);
 
 	return (
-		<LazyMotion features={domMin} strict>
+		<LazyMotion features={domAnimation} strict>
 			<m.div
 				aria-hidden="true"
 				role="presentation"

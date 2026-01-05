@@ -320,8 +320,8 @@ export function useAsyncValidation(
  * @param {Function} [onLongPress] - Callback function to execute after long press completes
  * @param {Function} getValue - Function that returns the current value to pass to onLongPress
  * @param {number} [delay=500] - Duration in milliseconds to hold before triggering long press
- * @returns {Object} Long press event handlers
- * @returns {Object} returns.handlers - Object containing event handler props to spread on element
+ * @returns Long press event handlers
+ * @returns returns.handlers - Object containing event handler props to spread on element
  * @returns {Function} returns.handlers.onMouseDown - Mouse down handler to start long press
  * @returns {Function} returns.handlers.onMouseUp - Mouse up handler to cancel long press
  * @returns {Function} returns.handlers.onMouseLeave - Mouse leave handler to cancel long press
@@ -341,7 +341,7 @@ export function useAsyncValidation(
  * );
  * return <button {...handlers}>Hold me</button>;
  */
-export function useLongPress(onLongPress: ((value: string) => void) | undefined, getValue: () => string, delay = 500) {
+export function useLongPress(onLongPress: ((value: string) => void) | undefined, getValue: () => string, delay: number = 500) {
 	const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
 	const start = useCallback(() => {
@@ -365,11 +365,11 @@ export function useLongPress(onLongPress: ((value: string) => void) | undefined,
 
 	return {
 		handlers: {
-			onMouseDown: start,
 			onMouseUp: stop,
-			onMouseLeave: stop,
-			onTouchStart: start,
 			onTouchEnd: stop,
+			onMouseLeave: stop,
+			onMouseDown: start,
+			onTouchStart: start,
 		},
 	};
 }

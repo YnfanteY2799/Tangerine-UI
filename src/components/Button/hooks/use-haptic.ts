@@ -7,10 +7,10 @@ import type { HapticPattern, UseHapticOptions, UseHapticReturn } from "../types/
  * Values are in milliseconds: single number for duration, array for pattern.
  * Pattern arrays alternate: [vibrate, pause, vibrate, pause, ...]
  */
-const hapticPatterns: Record<HapticPattern, number | number[]> = {
+const hapticPatterns: Record<HapticPattern, number | Array<number>> = {
 	light: 10,
-	medium: 25,
 	heavy: 50,
+	medium: 25,
 	success: [10, 50, 10],
 	warning: [25, 50, 25],
 	error: [50, 25, 50, 25, 50],
@@ -96,12 +96,12 @@ export default function useHaptic(options: UseHapticOptions = {}): UseHapticRetu
 	}, [isSupported]);
 
 	const vibrate = useCallback(
-		(pattern: HapticPattern | number | number[] = "light") => {
+		(pattern: HapticPattern | number | Array<number> = "light") => {
 			// Early returns for disabled or unsupported cases
 			if (!enabled || !isSupported) return false;
 
 			try {
-				let vibrationPattern: number | number[];
+				let vibrationPattern: number | Array<number>;
 
 				// Handle different input types
 				if (typeof pattern === "string") {
@@ -109,9 +109,7 @@ export default function useHaptic(options: UseHapticOptions = {}): UseHapticRetu
 					if (!(pattern in hapticPatterns)) {
 						console.warn(`Unknown haptic pattern: "${pattern}". Falling back to "light".`);
 						vibrationPattern = hapticPatterns.light;
-					} else {
-						vibrationPattern = hapticPatterns[pattern];
-					}
+					} else vibrationPattern = hapticPatterns[pattern];
 				} else if (typeof pattern === "number") {
 					// Custom single duration
 					vibrationPattern = Math.max(0, pattern); // Ensure non-negative

@@ -1,5 +1,5 @@
 "use client";
-import { AnimatePresence, useReducedMotion, type Transition, m, LazyMotion, domMin } from "motion/react";
+import { AnimatePresence, useReducedMotion, type Transition, m, LazyMotion, domMax } from "motion/react";
 import { memo, useId, useRef, useMemo, useEffect, useCallback, ComponentProps } from "react";
 import { getEntranceExitVariants } from "./configs/animations/entrance-exit";
 import { buttonVariants, peeledBgVariants } from "./configs/variants";
@@ -179,6 +179,7 @@ export default memo(function Button(innerProps: ButtonProps): ReactNode {
 	// ============================================================================
 	const { ripples, createRipple, clearRipple } = useRipple({
 		disabled: disableRipple || shouldDisableAnimation || isDisabled || isLoading,
+		enableHapticFeedback: enableHaptic,
 	});
 
 	const {
@@ -193,14 +194,7 @@ export default memo(function Button(innerProps: ButtonProps): ReactNode {
 
 	const { vibrate } = useHaptic({ enabled: enableHaptic });
 
-	const {
-		isInCooldown,
-		cooldownProgress,
-		handleClick: handleCooldownClick,
-	} = useCooldown({
-		cooldownMs,
-		clicksBeforeCooldown,
-	});
+	const { isInCooldown, cooldownProgress, handleClick: handleCooldownClick } = useCooldown({ cooldownMs, clicksBeforeCooldown });
 
 	// ============================================================================
 	// Memoized Animation Variants
@@ -210,9 +204,7 @@ export default memo(function Button(innerProps: ButtonProps): ReactNode {
 	const pressVariant = useMemo(() => (shouldDisableAnimation ? {} : getPressVariant(pressAnimation)), [pressAnimation, shouldDisableAnimation]);
 
 	const entranceExitVariant = useMemo(() => {
-		if (shouldDisableAnimation || (!animateOnMount && !animateOnUnmount)) {
-			return { initial: {}, animate: {}, exit: {} };
-		}
+		if (shouldDisableAnimation || (!animateOnMount && !animateOnUnmount)) return { initial: {}, animate: {}, exit: {} };
 		return getEntranceExitVariants(animateOnMount ? entranceAnimation : "none", animateOnUnmount ? exitAnimation : "none");
 	}, [animateOnMount, animateOnUnmount, entranceAnimation, exitAnimation, shouldDisableAnimation]);
 
@@ -239,13 +231,9 @@ export default memo(function Button(innerProps: ButtonProps): ReactNode {
 				return;
 			}
 
-			if (!disableRipple && !shouldDisableAnimation) {
-				createRipple(event);
-			}
+			if (!disableRipple && !shouldDisableAnimation) createRipple(event);
 
-			if (enableHaptic) {
-				vibrate("light");
-			}
+			if (enableHaptic) vibrate("light");
 
 			const now = Date.now();
 			if (onDoubleClick && now - lastClickTimeRef.current < DOUBLE_CLICK_DELAY) {
@@ -524,16 +512,13 @@ export default memo(function Button(innerProps: ButtonProps): ReactNode {
 		() => ({
 			layoutRoot: true,
 			layout: "size" as const,
+			transition: SMOOTH_TWEEN_TRANSITION,
 			exit: entranceExitVariant.exit as never,
 			initial: entranceExitVariant.initial as never,
+			style: { willChange: "transform, width, height" },
 			whileTap: (isEffectivelyDisabled ? {} : pressVariant.tap) as never,
 			whileHover: (isEffectivelyDisabled ? {} : hoverVariant.hover) as never,
-			transition: SMOOTH_TWEEN_TRANSITION,
-			animate: {
-				...entranceExitVariant.animate,
-				transition: { delay: staggerDelay, ...SMOOTH_TWEEN_TRANSITION },
-			},
-			style: { willChange: "transform, width, height" },
+			animate: { ...entranceExitVariant.animate, transition: { delay: staggerDelay, ...SMOOTH_TWEEN_TRANSITION } },
 		}),
 		[entranceExitVariant, isEffectivelyDisabled, pressVariant, hoverVariant, staggerDelay]
 	);
@@ -622,7 +607,7 @@ export default memo(function Button(innerProps: ButtonProps): ReactNode {
 	// Main Render with asChild Support + Motion Preservation
 	// ============================================================================
 	return (
-		<LazyMotion strict features={domMin}>
+		<LazyMotion strict features={domMax}>
 			{asChild ? (
 				// SOLUTION: Wrap Slot with motion to preserve animations when asChild is used
 				<m.span {...motionProps} style={{ display: "inline-block", isolation: "isolate", ...motionProps.style }}>
