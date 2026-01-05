@@ -141,15 +141,11 @@ export function useTimeoutManager(): UseTimeoutManagerReturn {
 	const timersRef = useRef<Map<TimeoutKey, NodeJS.Timeout>>(new Map());
 
 	const set = useCallback((key: TimeoutKey, callback: TimeoutCallback, delay: TimeoutDelay): void => {
-		if (delay < 0) {
-			throw new Error(`Timeout delay must be non-negative, received: ${delay}`);
-		}
+		if (delay < 0) throw new Error(`Timeout delay must be non-negative, received: ${delay}`);
 
 		// Clear existing timer with same key
 		const existing = timersRef.current.get(key);
-		if (existing !== undefined) {
-			clearTimeout(existing);
-		}
+		if (existing !== undefined) clearTimeout(existing);
 
 		// Set new timer
 		const timer = setTimeout(() => {
@@ -175,44 +171,30 @@ export function useTimeoutManager(): UseTimeoutManagerReturn {
 		timersRef.current.clear();
 	}, []);
 
-	const has = useCallback(
-		(key: TimeoutKey): boolean => {
-			return timersRef.current.has(key);
-		},
-		[]
-	);
+	const has = useCallback((key: TimeoutKey): boolean => timersRef.current.has(key), []);
 
 	const setBatch = useCallback(
 		(configs: readonly BatchTimeoutConfig[]): void => {
 			// Clear any existing timers with the same keys first
-			configs.forEach((config) => {
-				clear(config.key);
-			});
+			configs.forEach(({ key }) => clear(key));
 
 			// Set all new timers
-			configs.forEach((config) => {
-				set(config.key, config.callback, config.delay);
-			});
+			configs.forEach(({ callback, delay, key }) => set(key, callback, delay));
 		},
 		[clear, set]
 	);
 
 	const clearBatch = useCallback(
 		(keys: readonly TimeoutKey[]): void => {
-			keys.forEach((key) => {
-				clear(key);
-			});
+			keys.forEach((key) => clear(key));
 		},
 		[clear]
 	);
 
 	// Cleanup on unmount
 	useEffect(() => {
-		return () => {
-			clearAll();
-		};
+		return () => clearAll();
 	}, [clearAll]);
 
 	return { set, clear, clearAll, has, setBatch, clearBatch };
 }
-
