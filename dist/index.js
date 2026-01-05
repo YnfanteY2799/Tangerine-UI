@@ -602,6 +602,7 @@ var index_exports = {};
 __export(index_exports, {
   AnimatedInputErrorBoundary: () => AnimatedInputErrorBoundary,
   Button: () => Button_default,
+  ButtonGroup: () => button_group_default,
   Input: () => Input_default,
   calculatePasswordStrength: () => calculatePasswordStrength,
   cn: () => cn,
@@ -921,11 +922,11 @@ function useLongPress(onLongPress, getValue, delay = 500) {
   }, []);
   return {
     handlers: {
-      onMouseDown: start,
       onMouseUp: stop,
+      onTouchEnd: stop,
       onMouseLeave: stop,
-      onTouchStart: start,
-      onTouchEnd: stop
+      onMouseDown: start,
+      onTouchStart: start
     }
   };
 }
@@ -3535,8 +3536,8 @@ function getHoverVariant(animation) {
 }
 
 // src/components/Button/long-press-indicator.tsx
-var import_react33 = require("react");
-var import_react34 = require("motion/react");
+var import_react33 = require("motion/react");
+var import_react34 = require("react");
 init_functions();
 var import_jsx_runtime15 = require("react/jsx-runtime");
 var DARK_BACKGROUND_VARIANTS = ["solid", "shadow", "gradient"];
@@ -3570,12 +3571,12 @@ var getProgressStyles = (color, variant) => {
     backdrop: isLightBg ? colors.backdrop : "bg-transparent"
   };
 };
-var long_press_indicator_default = (0, import_react33.memo)(function LongPressIndicator(props) {
+var long_press_indicator_default = (0, import_react34.memo)(function LongPressIndicator(props) {
   const { progress, color = "default", variant = "solid", duration = 500 } = props;
-  const remainingDuration = (0, import_react33.useMemo)(() => duration * (1 - progress) / 1e3, [duration, progress]);
-  const { backdrop, background } = (0, import_react33.useMemo)(() => getProgressStyles(color, variant), [color, variant]);
-  return /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(import_react34.LazyMotion, { features: import_react34.domMin, strict: true, children: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(
-    import_react34.m.div,
+  const remainingDuration = (0, import_react34.useMemo)(() => duration * (1 - progress) / 1e3, [duration, progress]);
+  const { backdrop, background } = (0, import_react34.useMemo)(() => getProgressStyles(color, variant), [color, variant]);
+  return /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(import_react33.LazyMotion, { features: import_react33.domAnimation, strict: true, children: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(
+    import_react33.m.div,
     {
       "aria-hidden": "true",
       role: "presentation",
@@ -3585,7 +3586,7 @@ var long_press_indicator_default = (0, import_react33.memo)(function LongPressIn
       transition: { duration: FADE_DURATION },
       className: cn("absolute inset-0 overflow-hidden rounded-[inherit] pointer-events-none", backdrop),
       children: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(
-        import_react34.m.div,
+        import_react33.m.div,
         {
           transition: { duration: remainingDuration, ease: "linear" },
           className: cn("absolute inset-y-0 left-0", background),
@@ -3605,7 +3606,7 @@ var import_jsx_runtime16 = require("react/jsx-runtime");
 var FRAME_DURATION = 0.016;
 var cooldown_indicator_default = (0, import_react36.memo)(function CooldownIndicator({ progress, color = "default", className }) {
   const clampedProgress = Math.min(Math.max(progress, 0), 1);
-  return /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(import_react35.LazyMotion, { features: import_react35.domMin, strict: true, children: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("div", { className: cn("pointer-events-none absolute inset-0 overflow-hidden", className), "aria-hidden": "true", role: "presentation", children: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(import_react35.LazyMotion, { features: import_react35.domAnimation, strict: true, children: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("div", { className: cn("pointer-events-none absolute inset-0 overflow-hidden", className), "aria-hidden": "true", role: "presentation", children: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(
     import_react35.m.div,
     {
       className: cn("absolute inset-y-0 left-0", progressVariants({ color })),
@@ -3732,8 +3733,8 @@ function useCooldown(options = {}) {
   const progressIntervalRef = (0, import_react38.useRef)(null);
   const cooldownTimerRef = (0, import_react38.useRef)(null);
   const onCooldownStartRef = (0, import_react38.useRef)(onCooldownStart);
-  const cooldownStartTimeRef = (0, import_react38.useRef)(0);
   const onCooldownEndRef = (0, import_react38.useRef)(onCooldownEnd);
+  const cooldownStartTimeRef = (0, import_react38.useRef)(0);
   (0, import_react38.useEffect)(() => {
     onCooldownStartRef.current = onCooldownStart;
     onCooldownEndRef.current = onCooldownEnd;
@@ -3750,23 +3751,23 @@ function useCooldown(options = {}) {
   }, []);
   const startCooldown = (0, import_react38.useCallback)(() => {
     if (cooldownMs <= 0) return;
-    setIsInCooldown(true);
-    setCooldownProgress(0);
+    setIsInCooldown(() => true);
+    setCooldownProgress(() => 0);
     cooldownStartTimeRef.current = Date.now();
     onCooldownStartRef.current?.();
     progressIntervalRef.current = setInterval(() => {
       const elapsed = Date.now() - cooldownStartTimeRef.current;
       const progress = Math.min(elapsed / cooldownMs, 1);
-      setCooldownProgress(progress);
+      setCooldownProgress(() => progress);
       if (progress >= 1 && progressIntervalRef.current) {
         clearInterval(progressIntervalRef.current);
         progressIntervalRef.current = null;
       }
     }, 16);
     cooldownTimerRef.current = setTimeout(() => {
-      setIsInCooldown(false);
-      setCooldownProgress(0);
-      setClickCount(0);
+      setIsInCooldown(() => false);
+      setCooldownProgress(() => 0);
+      setClickCount(() => 0);
       onCooldownEndRef.current?.();
       if (progressIntervalRef.current) {
         clearInterval(progressIntervalRef.current);
@@ -3789,9 +3790,9 @@ function useCooldown(options = {}) {
   );
   const resetCooldown = (0, import_react38.useCallback)(() => {
     clearTimers();
-    setIsInCooldown(false);
-    setCooldownProgress(0);
-    setClickCount(0);
+    setIsInCooldown(() => false);
+    setCooldownProgress(() => 0);
+    setClickCount(() => 0);
   }, [clearTimers]);
   const getRemainingTime = (0, import_react38.useCallback)(() => {
     if (!isInCooldown || cooldownMs <= 0) return 0;
@@ -3811,8 +3812,8 @@ var import_react_slot = require("@radix-ui/react-slot");
 var import_react39 = require("react");
 var hapticPatterns = {
   light: 10,
-  medium: 25,
   heavy: 50,
+  medium: 25,
   success: [10, 50, 10],
   warning: [25, 50, 25],
   error: [50, 25, 50, 25, 50]
@@ -3838,9 +3839,7 @@ function useHaptic(options = {}) {
           if (!(pattern in hapticPatterns)) {
             console.warn(`Unknown haptic pattern: "${pattern}". Falling back to "light".`);
             vibrationPattern = hapticPatterns.light;
-          } else {
-            vibrationPattern = hapticPatterns[pattern];
-          }
+          } else vibrationPattern = hapticPatterns[pattern];
         } else if (typeof pattern === "number") {
           vibrationPattern = Math.max(0, pattern);
         } else {
@@ -3864,7 +3863,7 @@ function useHaptic(options = {}) {
 // src/components/Button/hooks/use-ripple.ts
 var import_react40 = require("react");
 function useRipple2(options = {}) {
-  const { disabled = false, duration = 600, maxRipples = 3 } = options;
+  const { disabled = false, duration = 600, maxRipples = 3, enableHapticFeedback = false } = options;
   const timeoutRefs = (0, import_react40.useRef)(/* @__PURE__ */ new Map());
   const rippleKeyRef = (0, import_react40.useRef)(0);
   const [ripples, setRipples] = (0, import_react40.useState)([]);
@@ -3877,7 +3876,7 @@ function useRipple2(options = {}) {
     }
   }, []);
   const clearAllRipples = (0, import_react40.useCallback)(() => {
-    setRipples([]);
+    setRipples(() => []);
     timeoutRefs.current.forEach((timeout) => clearTimeout(timeout));
     timeoutRefs.current.clear();
   }, []);
@@ -3899,6 +3898,7 @@ function useRipple2(options = {}) {
       const x = clientX - rect.left;
       const y = clientY - rect.top;
       const size = Math.max(rect.width, rect.height) * 2;
+      if (enableHapticFeedback && navigator.vibrate) navigator.vibrate(3);
       const key = rippleKeyRef.current;
       rippleKeyRef.current = (rippleKeyRef.current + 1) % Number.MAX_SAFE_INTEGER;
       const newRipple = {
@@ -3923,15 +3923,13 @@ function useRipple2(options = {}) {
         return updated;
       });
       if (duration > 0) {
-        const timeout = setTimeout(() => {
-          clearRipple(key);
-        }, duration);
+        const timeout = setTimeout(() => clearRipple(key), duration);
         timeoutRefs.current.set(key, timeout);
       }
     },
-    [disabled, duration, maxRipples, clearRipple]
+    [disabled, duration, maxRipples, clearRipple, enableHapticFeedback]
   );
-  (0, import_react40.useCallback)(() => {
+  (0, import_react40.useEffect)(() => {
     return () => {
       timeoutRefs.current.forEach((timeout) => clearTimeout(timeout));
       timeoutRefs.current.clear();
@@ -4019,7 +4017,7 @@ var progress_bar_default = (0, import_react42.memo)(function ProgressBar({ progr
         );
     }
   };
-  return /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(import_react41.LazyMotion, { features: import_react41.domMin, strict: true, children: renderContent() });
+  return /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(import_react41.LazyMotion, { features: import_react41.domAnimation, strict: true, children: renderContent() });
 });
 
 // src/components/Button/ripple.tsx
@@ -4044,7 +4042,7 @@ var RippleItem = (0, import_react44.memo)(function RippleItem2({ ripple, color, 
   );
 });
 var ripple_default = (0, import_react44.memo)(function RippleContainer3({ onAnimationComplete, color = "default", className, ripples }) {
-  return /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(import_react43.LazyMotion, { features: import_react43.domMin, strict: true, children: /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("span", { className: cn("pointer-events-none absolute inset-0 overflow-hidden", className), "aria-hidden": "true", role: "presentation", children: /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(import_react43.AnimatePresence, { children: ripples.map((ripple) => /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(RippleItem, { ripple, color, onComplete: () => onAnimationComplete(ripple.key) }, ripple.key)) }) }) });
+  return /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(import_react43.LazyMotion, { features: import_react43.domAnimation, strict: true, children: /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("span", { className: cn("pointer-events-none absolute inset-0 overflow-hidden", className), "aria-hidden": "true", role: "presentation", children: /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(import_react43.AnimatePresence, { mode: "popLayout", children: ripples.map((ripple) => /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(RippleItem, { ripple, color, onComplete: () => onAnimationComplete(ripple.key) }, ripple.key)) }) }) });
 });
 
 // src/components/Button/spinner.tsx
@@ -4062,7 +4060,7 @@ var SIZE_MAP = {
 var FADE_DURATION2 = 0.15;
 var SCALE_VALUE = 0.8;
 var spinner_default = (0, import_react46.memo)(function Spinner({ size = "md", className, label = "loading" }) {
-  return /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(import_react45.LazyMotion, { features: import_react45.domMin, strict: true, children: /* @__PURE__ */ (0, import_jsx_runtime19.jsxs)(
+  return /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(import_react45.LazyMotion, { features: import_react45.domAnimation, strict: true, children: /* @__PURE__ */ (0, import_jsx_runtime19.jsxs)(
     import_react45.m.svg,
     {
       className: cn(SIZE_MAP[size], "animate-spin", className),
@@ -4185,7 +4183,8 @@ var Button_default = (0, import_react48.memo)(function Button(innerProps) {
     [ref]
   );
   const { ripples, createRipple, clearRipple } = useRipple2({
-    disabled: disableRipple || shouldDisableAnimation || isDisabled || isLoading
+    disabled: disableRipple || shouldDisableAnimation || isDisabled || isLoading,
+    enableHapticFeedback: enableHaptic
   });
   const {
     progress: longPressProgress,
@@ -4197,20 +4196,11 @@ var Button_default = (0, import_react48.memo)(function Button(innerProps) {
     disabled: isDisabled || isLoading || !onLongPress
   });
   const { vibrate } = useHaptic({ enabled: enableHaptic });
-  const {
-    isInCooldown,
-    cooldownProgress,
-    handleClick: handleCooldownClick
-  } = useCooldown({
-    cooldownMs,
-    clicksBeforeCooldown
-  });
+  const { isInCooldown, cooldownProgress, handleClick: handleCooldownClick } = useCooldown({ cooldownMs, clicksBeforeCooldown });
   const hoverVariant = (0, import_react48.useMemo)(() => shouldDisableAnimation ? {} : getHoverVariant(hoverAnimation), [hoverAnimation, shouldDisableAnimation]);
   const pressVariant = (0, import_react48.useMemo)(() => shouldDisableAnimation ? {} : getPressVariant(pressAnimation), [pressAnimation, shouldDisableAnimation]);
   const entranceExitVariant = (0, import_react48.useMemo)(() => {
-    if (shouldDisableAnimation || !animateOnMount && !animateOnUnmount) {
-      return { initial: {}, animate: {}, exit: {} };
-    }
+    if (shouldDisableAnimation || !animateOnMount && !animateOnUnmount) return { initial: {}, animate: {}, exit: {} };
     return getEntranceExitVariants(animateOnMount ? entranceAnimation : "none", animateOnUnmount ? exitAnimation : "none");
   }, [animateOnMount, animateOnUnmount, entranceAnimation, exitAnimation, shouldDisableAnimation]);
   const handleKeyDownUpdated = (0, import_react48.useCallback)(
@@ -4231,12 +4221,8 @@ var Button_default = (0, import_react48.memo)(function Button(innerProps) {
         event.preventDefault();
         return;
       }
-      if (!disableRipple && !shouldDisableAnimation) {
-        createRipple(event);
-      }
-      if (enableHaptic) {
-        vibrate("light");
-      }
+      if (!disableRipple && !shouldDisableAnimation) createRipple(event);
+      if (enableHaptic) vibrate("light");
       const now = Date.now();
       if (onDoubleClick && now - lastClickTimeRef.current < DOUBLE_CLICK_DELAY) {
         if (doubleClickTimeoutRef.current) {
@@ -4478,16 +4464,13 @@ var Button_default = (0, import_react48.memo)(function Button(innerProps) {
     () => ({
       layoutRoot: true,
       layout: "size",
+      transition: SMOOTH_TWEEN_TRANSITION,
       exit: entranceExitVariant.exit,
       initial: entranceExitVariant.initial,
+      style: { willChange: "transform, width, height" },
       whileTap: isEffectivelyDisabled ? {} : pressVariant.tap,
       whileHover: isEffectivelyDisabled ? {} : hoverVariant.hover,
-      transition: SMOOTH_TWEEN_TRANSITION,
-      animate: {
-        ...entranceExitVariant.animate,
-        transition: { delay: staggerDelay, ...SMOOTH_TWEEN_TRANSITION }
-      },
-      style: { willChange: "transform, width, height" }
+      animate: { ...entranceExitVariant.animate, transition: { delay: staggerDelay, ...SMOOTH_TWEEN_TRANSITION } }
     }),
     [entranceExitVariant, isEffectivelyDisabled, pressVariant, hoverVariant, staggerDelay]
   );
@@ -4554,7 +4537,7 @@ var Button_default = (0, import_react48.memo)(function Button(innerProps) {
       renderContent
     ]
   );
-  return /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(import_react47.LazyMotion, { strict: true, features: import_react47.domMin, children: [
+  return /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(import_react47.LazyMotion, { strict: true, features: import_react47.domMax, children: [
     asChild ? (
       // SOLUTION: Wrap Slot with motion to preserve animations when asChild is used
       /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(import_react47.m.span, { ...motionProps, style: { display: "inline-block", isolation: "isolate", ...motionProps.style }, children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(import_react_slot.Slot, { ...htmlProps, "data-button-wrapper": "true", children: buttonContent }) })
@@ -4566,10 +4549,147 @@ var Button_default = (0, import_react48.memo)(function Button(innerProps) {
     typeof progress === "number" && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("span", { id: progressAnnouncementId, role: "status", "aria-live": "polite", "aria-atomic": "true", className: "sr-only", children: `Progress: ${Math.round(progress)}%` })
   ] });
 });
+
+// src/components/Button/button-group.tsx
+var import_react49 = require("react");
+
+// src/components/Button/configs/animations/stagger.ts
+var staggerAnimations = {
+  fade: {
+    initial: { opacity: 0 },
+    exit: { opacity: 0, transition: { duration: 0.2 } },
+    animate: { opacity: 1, transition: { duration: 0.3, ease: "easeOut" } }
+  },
+  slide: {
+    initial: { opacity: 0, y: 20 },
+    exit: { opacity: 0, y: -10, transition: { duration: 0.2 } },
+    animate: { y: 0, opacity: 1, transition: { type: "spring", stiffness: 400, damping: 25 } }
+  },
+  scale: {
+    initial: { opacity: 0, scale: 0.8 },
+    exit: { opacity: 0, scale: 0.9, transition: { duration: 0.15 } },
+    animate: { opacity: 1, scale: 1, transition: { type: "spring", stiffness: 400, damping: 20 } }
+  },
+  cascade: {
+    initial: { opacity: 0, x: -30, rotate: -5, scale: 0.95 },
+    exit: { opacity: 0, x: 20, rotate: 3, transition: { duration: 0.2 } },
+    animate: { opacity: 1, x: 0, rotate: 0, scale: 1, transition: { type: "spring", stiffness: 350, damping: 25 } }
+  },
+  // Wave - bouncy entrance from below
+  wave: {
+    initial: { y: 40, opacity: 0, scale: 0.9 },
+    exit: { opacity: 0, y: 20, transition: { duration: 0.2 } },
+    animate: { opacity: 1, y: 0, scale: 1, transition: { type: "spring", stiffness: 300, damping: 15, mass: 0.8 } }
+  },
+  // Pop - explosive scale with overshoot
+  pop: {
+    initial: { opacity: 0, scale: 0.3, filter: "blur(10px)" },
+    exit: { opacity: 0, scale: 0.5, filter: "blur(5px)", transition: { duration: 0.15 } },
+    animate: { opacity: 1, scale: 1, filter: "blur(0px)", transition: { type: "spring", stiffness: 500, damping: 15 } }
+  },
+  // Typewriter - reveals from left with clip
+  typewriter: {
+    initial: { opacity: 0, scaleX: 0, originX: 0 },
+    exit: { opacity: 0, scaleX: 0, transition: { duration: 0.2 } },
+    animate: { opacity: 1, scaleX: 1, transition: { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] } }
+  },
+  none: { initial: {}, animate: {}, exit: {} }
+};
+function getStaggerVariant(animation) {
+  return staggerAnimations[animation] || staggerAnimations.none;
+}
+
+// src/components/Button/button-group.tsx
+var import_react50 = require("motion/react");
+init_functions();
+var import_jsx_runtime21 = require("react/jsx-runtime");
+var spacingClasses = { none: "gap-0", sm: "gap-1", md: "gap-2", lg: "gap-4" };
+function getStaggerOrder(index, totalCount, direction) {
+  switch (direction) {
+    case "forward":
+      return index;
+    case "reverse":
+      return totalCount - 1 - index;
+    case "center":
+      return Math.abs(index - Math.floor(totalCount / 2));
+    default:
+      return index;
+  }
+}
+var button_group_default = (0, import_react49.memo)(function ButtonGroup(props) {
+  const {
+    children,
+    className,
+    role = "group",
+    spacing = "none",
+    staggerDelay = 0.05,
+    "aria-label": ariaLabel,
+    staggerAnimation = false,
+    orientation = "horizontal",
+    staggerDirection = "forward",
+    staggerAnimationType = "fade"
+  } = props;
+  const childArray = (0, import_react49.useMemo)(() => import_react49.Children.toArray(children).filter(import_react49.isValidElement), [children]);
+  const totalCount = childArray.length;
+  const staggerVariant = (0, import_react49.useMemo)(() => getStaggerVariant(staggerAnimationType), [staggerAnimationType]);
+  const containerVariants = (0, import_react49.useMemo)(
+    () => ({
+      visible: { transition: { staggerChildren: staggerAnimation ? staggerDelay : 0, delayChildren: 0 } },
+      hidden: {}
+    }),
+    [staggerAnimation, staggerDelay]
+  );
+  const itemVariants = (0, import_react49.useMemo)(() => ({ hidden: staggerVariant.initial, visible: staggerVariant.animate }), [staggerVariant]);
+  const enhancedChildren = (0, import_react49.useMemo)(() => {
+    return childArray.map((child, index) => {
+      if (!(0, import_react49.isValidElement)(child)) return child;
+      const staggerOrder = getStaggerOrder(index, totalCount, staggerDirection);
+      const internalProps = { _staggerIndex: staggerOrder, _staggerDelay: staggerAnimation ? staggerDelay : 0 };
+      let radiusOverride = "";
+      if (spacing === "none") {
+        if (orientation === "horizontal") {
+          if (index === 0) radiusOverride = "rounded-r-none";
+          else if (index === totalCount - 1) radiusOverride = "rounded-l-none";
+          else radiusOverride = "rounded-none";
+        } else {
+          if (index === 0) radiusOverride = "rounded-b-none";
+          else if (index === totalCount - 1) radiusOverride = "rounded-t-none";
+          else radiusOverride = "rounded-none";
+        }
+      }
+      const enhancedChild = (0, import_react49.cloneElement)(child, {
+        ...internalProps,
+        className: cn(child.props.className, radiusOverride)
+      });
+      return staggerAnimation ? /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(import_react50.m.div, { variants: itemVariants, children: enhancedChild }, index) : /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(import_react49.Fragment, { children: enhancedChild }, index);
+    });
+  }, [childArray, totalCount, staggerAnimation, staggerDelay, staggerDirection, spacing, orientation, itemVariants]);
+  return /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(import_react50.LazyMotion, { features: import_react50.domAnimation, strict: true, children: /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(
+    import_react50.m.div,
+    {
+      className: cn(
+        "inline-flex",
+        spacingClasses[spacing],
+        orientation === "vertical" ? "flex-col" : "flex-row",
+        spacing === "none" && orientation === "horizontal" && "[&>*:not(:first-child)]:-ml-px",
+        spacing === "none" && orientation === "vertical" && "[&>*:not(:first-child)]:-mt-px",
+        className
+      ),
+      variants: staggerAnimation ? containerVariants : void 0,
+      animate: staggerAnimation ? "visible" : void 0,
+      initial: staggerAnimation ? "hidden" : void 0,
+      "aria-orientation": orientation,
+      "aria-label": ariaLabel,
+      role,
+      children: enhancedChildren
+    }
+  ) });
+});
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   AnimatedInputErrorBoundary,
   Button,
+  ButtonGroup,
   Input,
   calculatePasswordStrength,
   cn,

@@ -257,7 +257,7 @@ interface InputProps extends Omit<ComponentProps<"input" | "textarea">, "size" |
     animationBundle?: "minimal" | "full";
 }
 
-declare const _default$1: react.NamedExoticComponent<InputProps>;
+declare const _default$2: react.NamedExoticComponent<InputProps>;
 
 /**
  * State interface for the AnimatedInputErrorBoundary component.
@@ -594,6 +594,8 @@ type ButtonSize = "icon" | "xs" | "sm" | "md" | "lg";
 type HoverAnimation = "scale" | "lift" | "glow" | "colorShift";
 type PressAnimation = "squeeze" | "bounce" | "rotate";
 type EntranceExitAnimation = "slideRight" | "slideDown" | "slideLeft" | "slideUp" | "elastic" | "rotate" | "bounce" | "scale" | "slide" | "fade" | "flip" | "blur" | "none";
+type StaggerAnimation = "fade" | "slide" | "scale" | "cascade" | "wave" | "pop" | "typewriter" | "none";
+type StaggerDirection = "forward" | "reverse" | "center";
 type ProgressPlacement = "inline" | "overlay" | "label";
 type SpinnerPlacement = "start" | "end";
 
@@ -637,6 +639,18 @@ interface InternalButtonProps {
     /** @internal Stagger delay from ButtonGroup */
     _staggerDelay?: number;
 }
+interface ButtonGroupProps {
+    role?: "group" | "toolbar" | "radiogroup";
+    staggerAnimationType?: StaggerAnimation;
+    orientation?: "horizontal" | "vertical";
+    spacing?: "none" | "sm" | "md" | "lg";
+    staggerDirection?: StaggerDirection;
+    staggerAnimation?: boolean;
+    staggerDelay?: number;
+    "aria-label"?: string;
+    children: ReactNode;
+    className?: string;
+}
 
 /**
  * A highly customizable animated button component with advanced interaction features.
@@ -670,6 +684,8 @@ interface InternalButtonProps {
  * </Button>
  * ```
  */
-declare const _default: react.NamedExoticComponent<ButtonProps>;
+declare const _default$1: react.NamedExoticComponent<ButtonProps>;
 
-export { AnimatedInputErrorBoundary, _default as Button, type FormatType, _default$1 as Input, type InputProps, type InputRadius, type InputShadow, type InputSize, type InputVariant, type LabelPosition, type PasswordRequirement, type PhoneFormat, type Suggestion, calculatePasswordStrength, cn, detectAndFormat, formatCreditCard, formatCurrency, formatDate, formatPhone, useHistory, useTimeoutManager, withErrorBoundary };
+declare const _default: react.NamedExoticComponent<ButtonGroupProps>;
+
+export { AnimatedInputErrorBoundary, _default$1 as Button, _default as ButtonGroup, type FormatType, _default$2 as Input, type InputProps, type InputRadius, type InputShadow, type InputSize, type InputVariant, type LabelPosition, type PasswordRequirement, type PhoneFormat, type Suggestion, calculatePasswordStrength, cn, detectAndFormat, formatCreditCard, formatCurrency, formatDate, formatPhone, useHistory, useTimeoutManager, withErrorBoundary };
