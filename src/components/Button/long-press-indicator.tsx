@@ -124,8 +124,8 @@ const getProgressStyles = (color: ButtonColor, variant: ButtonVariant): Progress
 	// Destructive variant always uses red
 	if (variant === "destructive") return { background: "bg-red-500/70", backdrop: "bg-red-950/10" };
 
-	const isDarkBg = DARK_BACKGROUND_VARIANTS.includes(variant as any);
-	const isLightBg = LIGHT_BACKGROUND_VARIANTS.includes(variant as any);
+	const isDarkBg = DARK_BACKGROUND_VARIANTS.includes(variant);
+	const isLightBg = LIGHT_BACKGROUND_VARIANTS.includes(variant);
 	const colors = COLOR_MAP[color];
 
 	return {
