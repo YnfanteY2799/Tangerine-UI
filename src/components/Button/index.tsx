@@ -386,7 +386,6 @@ export default memo(function Button(innerProps: ButtonProps): ReactNode {
 				<AnimatePresence mode="wait">
 					{isLoading ? (
 						<m.span
-							layout
 							key="spinner-icon"
 							aria-hidden="true"
 							exit={{ opacity: 0, scale: 0.9 }}
@@ -398,7 +397,6 @@ export default memo(function Button(innerProps: ButtonProps): ReactNode {
 						</m.span>
 					) : (
 						<m.span
-							layout
 							key="icon-content"
 							exit={{ opacity: 0, scale: 0.95 }}
 							initial={{ opacity: 0, scale: 0.95 }}
@@ -417,9 +415,8 @@ export default memo(function Button(innerProps: ButtonProps): ReactNode {
 				<AnimatePresence mode="wait">
 					{isLoading && spinnerPlacement === "start" ? (
 						<m.span
-							layout
-							initial={{ opacity: 0, scale: 0.9, width: 0 }}
 							animate={{ opacity: 1, scale: 1, width: "auto" }}
+							initial={{ opacity: 0, scale: 0.9, width: 0 }}
 							exit={{ opacity: 0, scale: 0.9, width: 0 }}
 							transition={CONTENT_TRANSITION}
 							key="spinner-start"
@@ -429,11 +426,10 @@ export default memo(function Button(innerProps: ButtonProps): ReactNode {
 						</m.span>
 					) : startContent ? (
 						<m.span
-							layout
-							className="inline-flex shrink-0"
-							initial={{ opacity: 0, width: 0, scale: 0.95 }}
 							animate={{ opacity: 1, width: "auto", scale: 1 }}
+							initial={{ opacity: 0, width: 0, scale: 0.95 }}
 							exit={{ opacity: 0, width: 0, scale: 0.95 }}
+							className="inline-flex shrink-0"
 							transition={CONTENT_TRANSITION}
 							key="start-content"
 							aria-hidden="true"
@@ -448,7 +444,6 @@ export default memo(function Button(innerProps: ButtonProps): ReactNode {
 						<ProgressBar key="progress-label" progress={progress!} placement="label" color={color} />
 					) : (
 						<m.span
-							layout
 							key="children"
 							className="truncate"
 							transition={CONTENT_TRANSITION}
@@ -462,7 +457,6 @@ export default memo(function Button(innerProps: ButtonProps): ReactNode {
 				<AnimatePresence mode="wait">
 					{isLoading && spinnerPlacement === "end" ? (
 						<m.span
-							layout
 							key="spinner-end"
 							aria-hidden="true"
 							transition={CONTENT_TRANSITION}
@@ -474,7 +468,6 @@ export default memo(function Button(innerProps: ButtonProps): ReactNode {
 						</m.span>
 					) : endContent ? (
 						<m.span
-							layout
 							key="end-content"
 							aria-hidden="true"
 							transition={CONTENT_TRANSITION}
@@ -511,7 +504,6 @@ export default memo(function Button(innerProps: ButtonProps): ReactNode {
 	const motionProps = useMemo(
 		() => ({
 			layoutRoot: true,
-			layout: "size" as const,
 			transition: SMOOTH_TWEEN_TRANSITION,
 			exit: entranceExitVariant.exit as never,
 			initial: entranceExitVariant.initial as never,
@@ -571,7 +563,6 @@ export default memo(function Button(innerProps: ButtonProps): ReactNode {
 				</AnimatePresence>
 
 				<m.span
-					layout="size"
 					transition={SMOOTH_LAYOUT_TRANSITION}
 					className={cn(
 						"relative z-10 inline-flex items-center justify-center gap-2 will-change-transform",

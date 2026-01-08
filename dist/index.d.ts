@@ -1,263 +1,323 @@
-import * as react from 'react';
-import { ComponentProps, Ref, ClipboardEventHandler, ReactNode, ChangeEvent, Component, InputHTMLAttributes, ErrorInfo, ComponentType, FC } from 'react';
-import { ClassValue } from 'clsx';
-import { HTMLMotionProps } from 'motion/react';
+export { default as Button } from './button/index.js';
+export { default as ButtonGroup } from './button/button-group.js';
+import { P as PhoneFormat } from './index-Ch_0zA-X.js';
+export { F as FormatType, _ as Input, a as InputProps, c as InputRadius, b as InputShadow, I as InputSize, d as InputVariant, L as LabelPosition, e as PasswordRequirement, S as Suggestion } from './index-Ch_0zA-X.js';
+export { c as ButtonColor, a as ButtonGroupProps, B as ButtonProps, d as ButtonRadius, b as ButtonSize, e as ButtonVariant, C as CooldownIndicatorProps, E as EntranceExitAnimation, H as HoverAnimation, I as InternalButtonProps, P as PressAnimation, g as ProgressPlacement, h as SpinnerPlacement, S as StaggerAnimation, f as StaggerDirection } from './components-Czg3h4Wn.js';
+import { TouchEvent, MouseEvent, Component, ReactNode, InputHTMLAttributes, ErrorInfo, ComponentType, FC } from 'react';
+export { cn, useHistory, useTimeoutManager } from './utils/index.js';
+import 'motion/react';
+import 'clsx';
 
 /**
- * Defines the position of the input label relative to the input field.
- *
+ * Configuration options for the useCooldown hook.
  */
-type LabelPosition = "inside" | "stacked" | "outside" | "outside-border" | "outside-top" | "outside-left" | "left";
-/**
- * Defines the shadow style applied to the input field.
- *
- */
-type InputShadow = "none" | "sm" | "md" | "lg" | "xl" | "inner" | "glow" | "glow-sm" | "glow-lg" | "colored";
-/**
- * Defines the visual style variant of the input field.
- *
- */
-type InputVariant = "default" | "filled" | "ghost" | "underline" | "bordered" | "flushed" | "unstyled";
-/**
- * Defines the border radius of the input field.
- *
- */
-type InputRadius = "none" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "full";
-/**
- * Defines the size of the input field, affecting height, padding, and text size.
- *
- */
-type InputSize = "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "full";
-/**
- * Defines the automatic formatting type for input values.
- *
- */
-type FormatType = "none" | "phone" | "creditCard" | "date" | "currency";
-/**
- * Defines the phone number format pattern.
- *
- */
-type PhoneFormat = "US" | "UK" | "EU" | "international" | "custom";
-/**
- * Represents a password strength requirement with validation logic.
- *
- * @interface PasswordRequirement
- * @property {Function} validator - Function that validates if the password meets this requirement
- * @property {string} label - Human-readable description of the requirement
- */
-interface PasswordRequirement {
-    validator: (value: string) => boolean;
-    label: string;
-}
-/**
- * Represents an autocomplete suggestion with optional icon and label.
- *
- * @interface Suggestion
- * @property {ReactNode} [icon] - Optional icon to display with the suggestion
- * @property {string} [label] - Optional display label (if different from value)
- * @property {string} value - The actual value to insert when suggestion is selected
- */
-interface Suggestion {
-    icon?: ReactNode;
-    label?: string;
-    value: string;
-}
-/**
- * Props for the AnimatedInput component.
- * Extends native input props while providing extensive customization options.
- *
- * @interface InputProps
- * @extends {Omit<ComponentProps<"input">, "size" | "onChange">}
- *
- * @property {InputVariant} [variant="default"] - Visual style variant of the input
- * @property {InputSize} [size="md"] - Size of the input field
- * @property {InputRadius} [radius="md"] - Border radius style
- * @property {InputShadow} [shadow="none"] - Shadow effect style
- * @property {string} [label] - Label text for the input
- * @property {LabelPosition} [labelPosition="inside"] - Position of the label relative to input
- * @property {"spring" | "ease"} [labelAnimation="spring"] - Animation type for floating labels
- * @property {FormatType} [formatAs="none"] - Automatic formatting type (phone, credit card, etc.)
- * @property {PhoneFormat} [phoneFormat="US"] - Phone number format when formatAs is "phone"
- * @property {string} [customPhoneFormat] - Custom phone format pattern
- * @property {string} [currencySymbol="$"] - Currency symbol for currency formatting
- * @property {string} [mask] - Input mask pattern
- * @property {string} [prefix] - Text or icon to display before the input
- * @property {string} [suffix] - Text or icon to display after the input
- * @property {string | boolean} [error] - Error message or error state flag
- * @property {string | boolean} [warning] - Warning message or warning state flag
- * @property {string | boolean} [success] - Success message or success state flag
- * @property {string} [helperText] - Helper text displayed below the input
- * @property {number} [validationProgress] - Progress value (0-100) for validation indicator
- * @property {number} [loadingProgress] - Progress value (0-100) for loading indicator
- * @property {boolean} [isLoading] - Whether the input is in a loading state
- * @property {Function} [asyncValidate] - Async function to validate input value
- * @property {boolean} [asyncValidateOnChange=true] - Whether to trigger async validation on every change
- * @property {number} [asyncDebounceMs=500] - Debounce delay for async validation
- * @property {number} [asyncValidateTimeout=10000] - Timeout for async validation requests
- * @property {boolean} [showCharacterCount] - Whether to display character count
- * @property {"soft" | "hard"} [limit="soft"] - Character limit enforcement type
- * @property {number} [maxCharacters] - Maximum number of characters allowed
- * @property {RegExp} [characterRestrictions] - Regex pattern for allowed characters
- * @property {boolean} [showClearButton] - Whether to show a clear button
- * @property {boolean} [showCopyButton] - Whether to show a copy button
- * @property {boolean} [showPasteButton] - Whether to show a paste button
- * @property {boolean} [showPasswordToggle] - Whether to show password visibility toggle
- * @property {boolean} [allowCopy=true] - Whether copying is allowed
- * @property {boolean} [allowPaste=true] - Whether pasting is allowed
- * @property {ClipboardEventHandler} [onCopy] - Callback when content is copied
- * @property {ClipboardEventHandler} [onPaste] - Callback when content is pasted
- * @property {Function} [onClipboardError] - Callback when clipboard operation fails
- * @property {ReactNode} [trailingIcon] - Icon to display at the end of the input
- * @property {ReactNode} [leadingIcon] - Icon to display at the start of the input
- * @property {boolean} [multiline] - Whether to render as a textarea
- * @property {number} [rows] - Number of visible text rows (for multiline)
- * @property {number} [maxRows] - Maximum number of rows before scrolling (for multiline)
- * @property {"none" | "vertical" | "horizontal" | "both"} [resize="none"] - Resize behavior for textarea
- * @property {number} [obscureAfterTimeout] - Time in ms before auto-obscuring the value
- * @property {boolean} [isObscuredControlled] - Whether obscure state is controlled externally
- * @property {Function} [onObscureChange] - Callback when obscure state changes
- * @property {string} [watermarkOnCopy] - Watermark text to append when copying
- * @property {boolean} [selectAllOnDoubleClick] - Whether to select all text on double-click
- * @property {"none" | "sentences" | "words" | "characters"} [autoCapitalize] - Auto-capitalization behavior
- * @property {Array<Suggestion>} [suggestions] - Array of autocomplete suggestions
- * @property {Function} [onSuggestionSelect] - Callback when a suggestion is selected
- * @property {boolean} [enableRipple=true] - Whether to enable ripple effects on click
- * @property {boolean} [enableHaptics=false] - Whether to enable haptic feedback
- * @property {boolean} [enableHistory=false] - Whether to enable undo/redo functionality
- * @property {boolean} [showHistoryButtons] - Whether to show undo/redo buttons
- * @property {boolean} [smartPaste] - Whether to enable smart paste formatting
- * @property {boolean} [shakeOnError=true] - Whether to shake on validation errors
- * @property {boolean} [shakeOnSuccess] - Whether to shake on successful validation
- * @property {"ltr" | "rtl"} [direction="ltr"] - Text direction for the input
- * @property {Function} [onChange] - Standard change event handler
- * @property {Function} [onValueChange] - Callback with just the new value (not the event)
- * @property {number} [debounceMs=0] - Debounce delay for onChange callbacks
- * @property {boolean} [showPasswordStrength] - Whether to show password strength indicator
- * @property {Array<PasswordRequirement>} [passwordRequirements] - Array of password requirements to validate
- * @property {boolean} [showRequirements] - Whether to display password requirements list
- * @property {Function} [renderMessages] - Custom render function for messages (error, warning, success, helper)
- * @property {boolean} [autoTabOnComplete] - Whether to auto-tab to next input when complete
- * @property {boolean} [smartTrim] - Whether to automatically trim whitespace
- * @property {boolean} [formatOnBlur] - Whether to apply formatting on blur
- * @property {Function} [onComplete] - Callback when input reaches max characters or mask is complete
- * @property {Function} [onLongPress] - Callback when input is long-pressed
- * @property {number} [longPressMs=500] - Duration in ms to trigger long press
- */
-interface InputProps extends Omit<ComponentProps<"input" | "textarea">, "size" | "onChange" | "ref"> {
-    ref?: Ref<HTMLInputElement | HTMLTextAreaElement>;
-    variant?: InputVariant;
-    size?: InputSize;
-    radius?: InputRadius;
-    shadow?: InputShadow;
-    label?: string;
-    labelPosition?: LabelPosition;
-    labelAnimation?: "spring" | "ease";
-    formatAs?: FormatType;
-    phoneFormat?: PhoneFormat;
-    customPhoneFormat?: string;
-    currencySymbol?: string;
-    mask?: string;
-    prefix?: string;
-    suffix?: string;
-    error?: string | boolean;
-    warning?: string | boolean;
-    success?: string | boolean;
-    helperText?: string;
-    validationProgress?: number;
-    loadingProgress?: number;
-    isLoading?: boolean;
-    asyncValidate?: (value: string) => Promise<string | null>;
-    asyncValidateOnChange?: boolean;
-    asyncDebounceMs?: number;
-    asyncValidateTimeout?: number;
-    showCharacterCount?: boolean;
-    limit?: "soft" | "hard";
-    maxCharacters?: number;
-    characterRestrictions?: RegExp;
-    showClearButton?: boolean;
-    showCopyButton?: boolean;
-    showPasteButton?: boolean;
-    showPasswordToggle?: boolean;
-    allowCopy?: boolean;
-    allowPaste?: boolean;
-    onCopy?: ClipboardEventHandler<HTMLInputElement>;
-    onPaste?: ClipboardEventHandler<HTMLInputElement>;
-    onClipboardError?: (error: Error, operation: "copy" | "paste") => void;
-    trailingIcon?: ReactNode;
-    leadingIcon?: ReactNode;
-    multiline?: boolean;
-    rows?: number;
-    maxRows?: number;
-    resize?: "none" | "vertical" | "horizontal" | "both";
-    obscureAfterTimeout?: number;
-    isObscuredControlled?: boolean;
-    onObscureChange?: (isObscured: boolean) => void;
-    watermarkOnCopy?: string;
-    selectAllOnDoubleClick?: boolean;
-    autoCapitalize?: "none" | "sentences" | "words" | "characters";
-    suggestions?: Array<Suggestion>;
-    onSuggestionSelect?: (suggestion: Suggestion) => void;
-    enableRipple?: boolean;
-    enableHaptics?: boolean;
-    enableHistory?: boolean;
-    showHistoryButtons?: boolean;
-    smartPaste?: boolean;
-    shakeOnError?: boolean;
-    shakeOnSuccess?: boolean;
-    direction?: "ltr" | "rtl";
-    onChange?: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
-    onValueChange?: (value: string) => void;
-    debounceMs?: number;
-    showPasswordStrength?: boolean;
-    passwordRequirements?: PasswordRequirement[];
-    showRequirements?: boolean;
-    renderMessages?: (messages: {
-        error?: string;
-        warning?: string;
-        success?: string;
-        helper?: string;
-    }) => ReactNode;
-    autoTabOnComplete?: boolean;
-    smartTrim?: boolean;
-    formatOnBlur?: boolean;
-    onComplete?: () => void;
-    onLongPress?: (value: string) => void;
-    longPressMs?: number;
-    type?: HTMLInputElement["type"];
+interface UseCooldownOptions {
     /**
-     * Animation bundle size preference.
-     * - "full": Uses domAnimation with all features (gesture animations, layout animations). Default for feature-rich inputs.
-     * - "minimal": Uses domMin for smaller bundle size. Only available for simple inputs without advanced features.
-     * Automatically falls back to "full" if component requires features not available in domMin.
+     * Number of clicks allowed before cooldown is triggered.
+     * @default 1
+     */
+    clicksBeforeCooldown?: number;
+    /**
+     * Callback invoked when cooldown period starts.
+     */
+    onCooldownStart?: () => void;
+    /**
+     * Callback invoked when cooldown period ends.
+     */
+    onCooldownEnd?: () => void;
+    /**
+     * Duration of the cooldown period in milliseconds.
+     * Set to 0 to disable cooldown.
+     * @default 0
+     */
+    cooldownMs?: number;
+}
+/**
+ * Return type for the useCooldown hook.
+ */
+interface UseCooldownReturn {
+    /**
+     * Handles a click event with optional callback execution.
+     * Returns false if click was blocked by cooldown, true if executed.
      *
-     * @default "full"
+     * @param callback - Optional function to execute on successful click
+     * @returns boolean indicating if the click was processed
      *
      * @example
-     * ```typescript
-     * // Simple input - minimal bundle (~2-3KB smaller)
-     * <AnimatedInput animationBundle="minimal" label="Email" placeholder="Enter email" />
+     * const { handleClick } = useCooldown({ cooldownMs: 1000 });
      *
-     * // Complex input - auto-detects need for full bundle
-     * <AnimatedInput
-     *   animationBundle="minimal"
-     *   showCopyButton
-     *   suggestions={[...]}
-     * />
-     * // → Automatically falls back to "full" bundle due to advanced features
-     *
-     * // Explicitly use full bundle for feature-rich inputs
-     * <AnimatedInput
-     *   animationBundle="full"
-     *   showPasswordToggle
-     *   showClearButton
-     *   validationProgress={50}
-     * />
-     * ```
+     * <button onClick={() => handleClick(() => console.log('Clicked!'))}>
+     *   Click me
+     * </button>
      */
-    animationBundle?: "minimal" | "full";
+    handleClick: (callback?: () => void) => boolean;
+    /**
+     * Whether the hook is currently in cooldown state.
+     */
+    isInCooldown: boolean;
+    /**
+     * Manually reset the cooldown state and click counter.
+     * Clears all active timers and returns to initial state.
+     */
+    resetCooldown: () => void;
+    /**
+     * Get the remaining cooldown time in milliseconds.
+     * Returns 0 if not in cooldown.
+     *
+     * @returns Remaining milliseconds until cooldown ends
+     */
+    getRemainingTime: () => number;
+    /**
+     * Progress of current cooldown as a number between 0 and 1.
+     * 0 = just started, 1 = completed.
+     */
+    cooldownProgress: number;
+    /**
+     * Current number of clicks registered since last cooldown.
+     */
+    clickCount: number;
 }
-
-declare const _default$2: react.NamedExoticComponent<InputProps>;
+/**
+ * Predefined haptic feedback patterns for common use cases.
+ * - `light`: Quick, subtle feedback (10ms)
+ * - `medium`: Moderate feedback (25ms)
+ * - `heavy`: Strong feedback (50ms)
+ * - `success`: Double-tap pattern for positive confirmation
+ * - `warning`: Triple-tap pattern for caution
+ * - `error`: Rapid sequence pattern for errors/failures
+ */
+type HapticPattern = "light" | "medium" | "heavy" | "success" | "warning" | "error";
+/**
+ * Configuration options for the useHaptic hook.
+ */
+interface UseHapticOptions {
+    /**
+     * Whether haptic feedback is enabled.
+     * When false, all vibrate calls will be no-ops.
+     * @default true
+     */
+    enabled?: boolean;
+    /**
+     * Whether to automatically stop vibration when the component unmounts.
+     * Useful for preventing vibrations from continuing after navigation.
+     * @default true
+     */
+    stopOnUnmount?: boolean;
+}
+/**
+ * Return type for the useHaptic hook.
+ */
+interface UseHapticReturn {
+    /**
+     * Triggers a haptic vibration using a predefined pattern or custom duration.
+     * Returns true if vibration was triggered successfully, false otherwise.
+     *
+     * @param pattern - Predefined pattern name or custom duration/pattern
+     * @returns boolean indicating if vibration was triggered
+     *
+     * @example
+     * // Use predefined pattern
+     * vibrate('success');
+     *
+     * @example
+     * // Custom single duration
+     * vibrate(100);
+     *
+     * @example
+     * // Custom pattern: [vibrate, pause, vibrate, pause, ...]
+     * vibrate([50, 100, 50]);
+     */
+    vibrate: (pattern?: HapticPattern | number | number[]) => boolean;
+    /**
+     * Immediately stops any ongoing vibration.
+     * Safe to call even if no vibration is active.
+     */
+    stopVibration: () => void;
+    /**
+     * Whether the Vibration API is supported in the current environment.
+     * Always false in SSR or browsers without vibration support.
+     */
+    isSupported: boolean;
+}
+/**
+ * Configuration options for the useLongPress hook.
+ */
+interface UseLongPressOptions {
+    /**
+     * Duration in milliseconds before triggering long press.
+     * @default 500
+     */
+    delay?: number;
+    /**
+     * Callback invoked when long press duration is reached.
+     */
+    onLongPress?: () => void;
+    /**
+     * Callback invoked when element is pressed but released before long press delay.
+     * Not called if long press is triggered.
+     */
+    onPress?: () => void;
+    /**
+     * Callback invoked when press starts (mousedown/touchstart).
+     */
+    onStart?: () => void;
+    /**
+     * Whether long press is disabled.
+     * @default false
+     */
+    disabled?: boolean;
+    /**
+     * Whether to call preventDefault on the initiating event.
+     * Set to true to prevent context menus and text selection.
+     * @default false
+     */
+    preventDefault?: boolean;
+    /**
+     * Distance threshold in pixels for touch move to cancel long press.
+     * Prevents long press if user drags beyond this distance.
+     * @default 10
+     */
+    moveThreshold?: number;
+}
+/**
+ * Event handlers to spread onto target element.
+ */
+interface LongPressHandlers {
+    onTouchStart: (e: TouchEvent) => void;
+    onTouchMove: (e: TouchEvent) => void;
+    onMouseDown: (e: MouseEvent) => void;
+    onTouchEnd: (e: TouchEvent) => void;
+    onMouseUp: (e: MouseEvent) => void;
+    onTouchCancel: () => void;
+    onMouseLeave: () => void;
+}
+/**
+ * Return type for the useLongPress hook.
+ */
+interface UseLongPressReturn {
+    /**
+     * Event handlers to spread onto the target element.
+     *
+     * @example
+     * const { handlers } = useLongPress({ onLongPress: () => console.log('Long!') });
+     * <button {...handlers}>Press me</button>
+     */
+    handlers: LongPressHandlers;
+    /**
+     * Whether the element is currently being long pressed (delay reached).
+     */
+    isLongPress: boolean;
+    /**
+     * Progress of the long press as a number between 0 and 1.
+     * 0 = just started, 1 = long press triggered.
+     * Updates smoothly via requestAnimationFrame.
+     */
+    progress: number;
+    /**
+     * Whether the element is currently being pressed (before release).
+     */
+    isPressed: boolean;
+    /**
+     * Manually cancel the current long press operation.
+     * Clears all timers and resets state.
+     */
+    cancel: () => void;
+}
+/**
+ * Represents a single ripple effect instance.
+ */
+interface RippleType {
+    /**
+     * Unique identifier for the ripple.
+     */
+    key: number;
+    /**
+     * X position of ripple center relative to element (in pixels).
+     */
+    x: number;
+    /**
+     * Y position of ripple center relative to element (in pixels).
+     */
+    y: number;
+    /**
+     * Diameter of the ripple circle (in pixels).
+     */
+    size: number;
+}
+/**
+ * Configuration options for the useRipple hook.
+ */
+interface UseRippleOptions {
+    /**
+     * Whether ripple effect is disabled.
+     * @default false
+     */
+    disabled?: boolean;
+    /**
+     * Duration in milliseconds for ripple animation.
+     * After this duration, ripples are automatically removed.
+     * Set to 0 to disable auto-removal (manual cleanup required).
+     * @default 600
+     */
+    duration?: number;
+    /**
+     * Maximum number of simultaneous ripples allowed.
+     * Older ripples are removed when limit is exceeded.
+     * Set to 0 for unlimited ripples.
+     * @default 3
+     */
+    maxRipples?: number;
+    /**
+     * Whether ripple effect should emit haptic response.
+     * @default false
+     */
+    enableHapticFeedback?: boolean;
+}
+/**
+ * Return type for the useRipple hook.
+ */
+interface UseRippleReturn {
+    /**
+     * Array of active ripple instances.
+     * Map over this to render ripple elements in your component.
+     *
+     * @example
+     * {ripples.map(ripple => (
+     *   <span
+     *     key={ripple.key}
+     *     style={{
+     *       left: ripple.x,
+     *       top: ripple.y,
+     *       width: ripple.size,
+     *       height: ripple.size
+     *     }}
+     *   />
+     * ))}
+     */
+    ripples: Array<RippleType>;
+    /**
+     * Creates a new ripple at the event's click/touch position.
+     * Call this in onMouseDown or onTouchStart handlers.
+     *
+     * @param event - Mouse or touch event from the target element
+     *
+     * @example
+     * <button onMouseDown={createRipple}>Click me</button>
+     */
+    createRipple: (event: MouseEvent<HTMLElement> | TouchEvent<HTMLElement>) => void;
+    /**
+     * Removes a specific ripple by its key.
+     * Useful for manual cleanup when animations complete.
+     *
+     * @param key - Unique key of the ripple to remove
+     */
+    clearRipple: (key: number) => void;
+    /**
+     * Immediately removes all active ripples.
+     * Useful for cleanup on component state changes.
+     */
+    clearAllRipples: () => void;
+}
 
 /**
  * State interface for the AnimatedInputErrorBoundary component.
@@ -417,275 +477,4 @@ declare function calculatePasswordStrength(password: string): number;
  */
 declare function detectAndFormat(value: string): string;
 
-declare function cn(...inputs: Array<ClassValue>): string;
-
-/**
- * Timer key identifier for type-safe timeout management.
- */
-type TimeoutKey = string;
-/**
- * Timeout callback function type.
- */
-type TimeoutCallback = () => void;
-/**
- * Delay in milliseconds for timeout.
- */
-type TimeoutDelay = number;
-/**
- * Configuration for batch timeout operations.
- */
-interface BatchTimeoutConfig {
-    /** Timer key identifier */
-    key: TimeoutKey;
-    /** Callback function to execute */
-    callback: TimeoutCallback;
-    /** Delay in milliseconds */
-    delay: TimeoutDelay;
-}
-/**
- * Return type for useTimeoutManager hook.
- */
-interface UseTimeoutManagerReturn {
-    /**
-     * Set a timeout with the given key, callback, and delay.
-     * If a timeout with the same key already exists, it will be cleared first.
-     *
-     * @param key - Unique identifier for the timeout
-     * @param callback - Function to execute after the delay
-     * @param delay - Delay in milliseconds (must be >= 0)
-     * @throws {Error} If delay is negative
-     *
-     * @example
-     * timeouts.set('debounce', () => console.log('debounced'), 300);
-     */
-    set: (key: TimeoutKey, callback: TimeoutCallback, delay: TimeoutDelay) => void;
-    /**
-     * Clear a specific timeout by key.
-     *
-     * @param key - The key of the timeout to clear
-     *
-     * @example
-     * timeouts.clear('debounce');
-     */
-    clear: (key: TimeoutKey) => void;
-    /**
-     * Clear all active timeouts.
-     *
-     * @example
-     * timeouts.clearAll();
-     */
-    clearAll: () => void;
-    /**
-     * Check if a timeout exists for the given key.
-     *
-     * @param key - The key to check
-     * @returns true if a timeout exists, false otherwise
-     *
-     * @example
-     * if (timeouts.has('debounce')) {
-     *   // Timer is active
-     * }
-     */
-    has: (key: TimeoutKey) => boolean;
-    /**
-     * Set multiple timeouts in a single operation.
-     * All timeouts are cleared if any key already exists.
-     *
-     * @param configs - Array of timeout configurations
-     *
-     * @example
-     * timeouts.setBatch([
-     *   { key: 'flash', callback: () => hide(), delay: 500 },
-     *   { key: 'feedback', callback: () => reset(), delay: 1500 }
-     * ]);
-     */
-    setBatch: (configs: readonly BatchTimeoutConfig[]) => void;
-    /**
-     * Clear multiple timeouts by their keys.
-     *
-     * @param keys - Array of keys to clear
-     *
-     * @example
-     * timeouts.clearBatch(['flash', 'feedback', 'debounce']);
-     */
-    clearBatch: (keys: readonly TimeoutKey[]) => void;
-}
-/**
- * Centralized timeout manager hook that tracks all timeouts and ensures proper cleanup.
- * Prevents memory leaks by automatically clearing all timeouts on unmount.
- *
- * @returns Object with timeout management methods
- *
- * @example
- * ```typescript
- * const timeouts = useTimeoutManager();
- *
- * // Set a timeout
- * timeouts.set('debounce', () => console.log('debounced'), 300);
- *
- * // Check if exists
- * if (timeouts.has('debounce')) {
- *   console.log('Timer is active');
- * }
- *
- * // Clear a timeout
- * timeouts.clear('debounce');
- *
- * // Set multiple timeouts at once
- * timeouts.setBatch([
- *   { key: 'flash', callback: () => hide(), delay: 500 },
- *   { key: 'feedback', callback: () => reset(), delay: 1500 }
- * ]);
- *
- * // Clear multiple timeouts
- * timeouts.clearBatch(['flash', 'feedback']);
- *
- * // Clear all timeouts
- * timeouts.clearAll();
- * ```
- */
-declare function useTimeoutManager(): UseTimeoutManagerReturn;
-
-/**
- * Return type for useHistory hook.
- */
-interface UseHistoryReturn<T> {
-    /** Current state value */
-    state: T;
-    /** Set a new state value (adds to history) */
-    setState: (value: T) => void;
-    /** Undo to previous state */
-    undo: () => void;
-    /** Redo to next state */
-    redo: () => void;
-    /** Clear history while keeping current state */
-    clear: () => void;
-    /** Whether undo is available */
-    canUndo: boolean;
-    /** Whether redo is available */
-    canRedo: boolean;
-}
-/**
- * Generic hook to manage undo/redo history for any value type.
- * Provides history management with configurable max history size.
- *
- * @param initialValue - The initial value for the history state
- * @param maxHistory - Maximum number of history entries to keep (default: 50)
- * @returns History management functions and current state
- *
- * @example
- * ```tsx
- * // For string values
- * const { state, setState, undo, redo, canUndo, canRedo } = useHistory("", 100);
- * setState("new value");
- * if (canUndo) undo();
- *
- * // For object values
- * const { state, setState, undo, redo } = useHistory({ count: 0 });
- * setState({ count: 1 });
- * ```
- */
-declare function useHistory<T>(initialValue: T, maxHistory?: number): UseHistoryReturn<T>;
-
-type ButtonVariant = "destructive" | "hoverable" | "bordered" | "gradient" | "spatial" | "subtle" | "peeled" | "shadow" | "solid" | "light" | "faded" | "ghost" | "muted" | "flat" | "link" | "soft";
-type ButtonColor = "default" | "primary" | "secondary" | "success" | "warning" | "danger";
-type ButtonRadius = "none" | "xs" | "sm" | "md" | "lg" | "full";
-type ButtonSize = "icon" | "xs" | "sm" | "md" | "lg";
-type HoverAnimation = "scale" | "lift" | "glow" | "colorShift";
-type PressAnimation = "squeeze" | "bounce" | "rotate";
-type EntranceExitAnimation = "slideRight" | "slideDown" | "slideLeft" | "slideUp" | "elastic" | "rotate" | "bounce" | "scale" | "slide" | "fade" | "flip" | "blur" | "none";
-type StaggerAnimation = "fade" | "slide" | "scale" | "cascade" | "wave" | "pop" | "typewriter" | "none";
-type StaggerDirection = "forward" | "reverse" | "center";
-type ProgressPlacement = "inline" | "overlay" | "label";
-type SpinnerPlacement = "start" | "end";
-
-interface ButtonProps extends Omit<HTMLMotionProps<"button">, "color">, InternalButtonProps {
-    variant?: ButtonVariant;
-    radius?: ButtonRadius;
-    color?: ButtonColor;
-    size?: ButtonSize;
-    isDisabled?: boolean;
-    isLoading?: boolean;
-    startContent?: ReactNode;
-    endContent?: ReactNode;
-    isIconOnly?: boolean;
-    spinnerPlacement?: SpinnerPlacement;
-    spinner?: ReactNode;
-    progressPlacement?: ProgressPlacement;
-    showProgressText?: boolean;
-    progress?: number;
-    disableAnimation?: boolean;
-    disableRipple?: boolean;
-    hoverAnimation?: HoverAnimation;
-    pressAnimation?: PressAnimation;
-    entranceAnimation?: EntranceExitAnimation;
-    exitAnimation?: EntranceExitAnimation;
-    animateOnUnmount?: boolean;
-    animateOnMount?: boolean;
-    showLongPressIndicator?: boolean;
-    onDoubleClick?: () => void;
-    onLongPress?: () => void;
-    longPressDelay?: number;
-    enableHaptic?: boolean;
-    showCooldownIndicator?: boolean;
-    clicksBeforeCooldown?: number;
-    cooldownMs?: number;
-    loadingText?: string;
-    asChild?: boolean;
-}
-interface InternalButtonProps {
-    /** @internal Stagger index from ButtonGroup */
-    _staggerIndex?: number;
-    /** @internal Stagger delay from ButtonGroup */
-    _staggerDelay?: number;
-}
-interface ButtonGroupProps {
-    role?: "group" | "toolbar" | "radiogroup";
-    staggerAnimationType?: StaggerAnimation;
-    orientation?: "horizontal" | "vertical";
-    spacing?: "none" | "sm" | "md" | "lg";
-    staggerDirection?: StaggerDirection;
-    staggerAnimation?: boolean;
-    staggerDelay?: number;
-    "aria-label"?: string;
-    children: ReactNode;
-    className?: string;
-}
-
-/**
- * A highly customizable animated button component with advanced interaction features.
- *
- * This component provides a comprehensive button solution with:
- * - **Composition**: `asChild` pattern for rendering as any element (Link, a, etc.) WITH animations preserved
- * - **Animations**: Entrance, exit, hover, and press animations
- * - **Loading states**: Built-in spinner with customizable placement
- * - **Progress tracking**: Visual progress indicators (inline, overlay, or label)
- * - **Ripple effects**: Material Design-inspired touch feedback
- * - **Long press**: Configurable long-press detection with visual indicator
- * - **Cooldown**: Prevent spam clicks with cooldown timer
- * - **Haptic feedback**: Optional vibration on interactions
- * - **Accessibility**: Comprehensive ARIA attributes and screen reader support
- * - **Variants**: Multiple visual styles (solid, ghost, peeled, etc.)
- *
- * @component
- * @example
- * ```tsx
- * // Basic button
- * <Button>Click me</Button>
- *
- * // As Next.js Link WITH animations preserved
- * <Button asChild entranceAnimation="slide" hoverAnimation="lift">
- *   <Link href="/dashboard">Dashboard</Link>
- * </Button>
- *
- * // As download link with features and animations
- * <Button asChild variant="bordered" isLoading={downloading} hoverAnimation="glow">
- *   <a href="/file.pdf" download>Download PDF</a>
- * </Button>
- * ```
- */
-declare const _default$1: react.NamedExoticComponent<ButtonProps>;
-
-declare const _default: react.NamedExoticComponent<ButtonGroupProps>;
-
-export { AnimatedInputErrorBoundary, _default$1 as Button, _default as ButtonGroup, type FormatType, _default$2 as Input, type InputProps, type InputRadius, type InputShadow, type InputSize, type InputVariant, type LabelPosition, type PasswordRequirement, type PhoneFormat, type Suggestion, calculatePasswordStrength, cn, detectAndFormat, formatCreditCard, formatCurrency, formatDate, formatPhone, useHistory, useTimeoutManager, withErrorBoundary };
+export { AnimatedInputErrorBoundary, type HapticPattern, type LongPressHandlers, PhoneFormat, type RippleType, type UseCooldownOptions, type UseCooldownReturn, type UseHapticOptions, type UseHapticReturn, type UseLongPressOptions, type UseLongPressReturn, type UseRippleOptions, type UseRippleReturn, calculatePasswordStrength, detectAndFormat, formatCreditCard, formatCurrency, formatDate, formatPhone, withErrorBoundary };
