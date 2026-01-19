@@ -77,27 +77,27 @@ export default memo(function Button(innerProps: ButtonProps): ReactNode {
 		spinner,
 
 		// Visual props
-		size = "md",
+		isIconOnly = false,
 		color = "default",
 		variant = "solid",
 		radius = "md",
+		size = "md",
 		className,
-		isIconOnly = false,
 
 		// State
-		isLoading = false,
 		isDisabled = false,
+		isLoading = false,
 		progress,
 
 		// Animation config
-		disableAnimation = false,
-		disableRipple = false,
-		animateOnMount = false,
-		animateOnUnmount = false,
 		entranceAnimation = "fade",
-		exitAnimation = "fade",
-		hoverAnimation = "scale",
 		pressAnimation = "squeeze",
+		disableAnimation = false,
+		animateOnUnmount = false,
+		hoverAnimation = "scale",
+		animateOnMount = false,
+		exitAnimation = "fade",
+		disableRipple = false,
 
 		// Progress config
 		progressPlacement = "overlay",
