@@ -33,17 +33,20 @@
       "import": "./dist/utils/index.mjs",
       "require": "./dist/utils/index.js"
     },
-    "./styles": "./dist/styles.css",
+    "./tailwind-preset": "./tailwind.preset.cjs",
     "./package.json": "./package.json"
   },
   "files": [
     "dist",
     "README.md",
-    "LICENSE"
+    "LICENSE",
+    "tailwind.preset.cjs"
   ],
   "scripts": {
     "build": "tsup",
-    "dev": "tsup --watch",
+    "dev": "vite --config playground/vite.config.ts",
+    "dev:lib": "tsup --watch",
+    "playground": "vite --config playground/vite.config.ts",
     "lint": "eslint src --ext .ts,.tsx",
     "type-check": "tsc --noEmit",
     "prepublishOnly": "npm run build",
@@ -69,7 +72,7 @@
     "framer-motion",
     "design-system"
   ],
-  "author": "Your Name <your.email@example.com>",
+  "author": "YnfanteY2799",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/YnfanteY2799/Tangerine-UI/issues"
@@ -79,12 +82,22 @@
     "access": "public"
   },
   "devDependencies": {
+    "@radix-ui/react-slot": "^1.2.4",
     "@types/node": "^25.0.3",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.0",
+    "@vitejs/plugin-react": "^5.1.2",
+    "autoprefixer": "^10.4.23",
+    "class-variance-authority": "^0.7.1",
+    "eslint": "^9.17.0",
+    "motion": "^12.23.26",
+    "postcss": "^8.5.6",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "tailwindcss": "^3.4.19",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3",
-    "eslint": "^9.17.0",
+    "vite": "^7.3.1",
     "vitest": "^2.1.8"
   },
   "dependencies": {
@@ -97,7 +110,8 @@
     "lucide-react": "^0.562.0",
     "motion": "^12.23.26",
     "react": "^18.0.0 || ^19.0.0",
-    "react-dom": "^18.0.0 || ^19.0.0"
+    "react-dom": "^18.0.0 || ^19.0.0",
+    "tailwindcss": "^3.4.0 || ^4.0.0"
   },
   "peerDependenciesMeta": {
     "lucide-react": {
