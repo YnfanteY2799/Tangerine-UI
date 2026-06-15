@@ -37,16 +37,25 @@ In `globals.css` — **Tailwind first**, then the library import:
 
 CSS does not allow `@import` after other rules, so use one of the helpers below to inline tokens at that position.
 
-**Vite** (recommended — no dev warnings):
+**Vite** (recommended — required for Vite apps: theme inlining + React dedupe so hooks work):
 
 ```ts
 // vite.config.ts
-import tuiStyles from "@tangerine-ui/core/vite";
+import { createRequire } from "node:module";
+import tui from "@tangerine-ui/core/vite";
+
+const require = createRequire(import.meta.url);
+// or: import tui from "@tangerine-ui/core/vite" if your bundler resolves the CJS export
 
 export default defineConfig({
-  plugins: [tuiStyles(), /* react(), etc. */],
+  plugins: [
+    tui(), // before @tailwindcss/vite / react()
+    /* tailwindcss(), react(), etc. */
+  ],
 });
 ```
+
+Without this plugin, Vite may pre-bundle `@tangerine-ui/core` with a second copy of React and you will get **Invalid hook call** errors.
 
 Keep PostCSS for Tailwind only (`tailwindcss`, `autoprefixer`). Do **not** add a Vite `resolve.alias` for `@tangerine-ui/core/styles` — that makes Vite resolve `@import` natively and triggers order warnings.
 

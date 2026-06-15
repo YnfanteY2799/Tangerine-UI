@@ -12,7 +12,7 @@ Requires React 18 or 19 and Tailwind CSS 3.4+ (recommended for the bundled prese
 
 ## Vite plugin (required)
 
-Add the Tangerine styles plugin so `@import "@tangerine-ui/core/styles"` can sit **after** Tailwind without Vite warnings:
+Add the Tangerine Vite plugin **before** `tailwindcss()` and `viteReact()`. It inlines theme CSS and prevents Vite from pre-bundling the library with a duplicate React (which causes **Invalid hook call** / `useRef` errors).
 
 ```ts
 // vite.config.ts
@@ -29,6 +29,7 @@ export default defineConfig({
   plugins: [
     tuiStyles(),
     tsConfigPaths(),
+    tailwindcss(),
     tanstackStart(),
     viteReact(),
   ],
