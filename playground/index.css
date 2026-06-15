@@ -2,11 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-@import "../src/styles/styles.css";
+@import "@tangerine-ui/core/styles";
 
-/* Playground overrides — same pattern as shadcn globals.css */
+/* Playground overrides — `dark` is a mode class on <html>, not an @apply utility */
 @layer base {
 	html {
-		@apply dark min-h-screen bg-zinc-950 text-zinc-100;
+		/* @apply min-h-screen bg-zinc-950 text-zinc-100 antialiased; */
 	}
 }

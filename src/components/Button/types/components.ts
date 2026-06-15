@@ -1,5 +1,5 @@
 import type { ComponentPropsWithRef, ReactNode, AriaAttributes } from "react";
-import type { HTMLMotionProps } from "motion/react";
+import type { HTMLMotionProps, Variants } from "motion/react";
 import type {
 	ButtonSize,
 	ButtonColor,
@@ -54,6 +54,8 @@ export interface InternalButtonProps {
 	_staggerIndex?: number;
 	/** @internal Stagger delay from ButtonGroup */
 	_staggerDelay?: number;
+	/** @internal Per-item stagger variants (`hidden` / `visible`) from ButtonGroup */
+	_staggerItemVariants?: Variants;
 }
 
 /** Standard `<button>` DOM props (no Motion-specific keys on the root type). */
@@ -69,7 +71,7 @@ export type ButtonNativeAttributes = Omit<ComponentPropsWithRef<"button">, "colo
  *
  * - **`animateOnUnmount`** — Requires an ancestor **`AnimatePresence`**; otherwise exit animations never run.
  *   For multiple buttons unmounting together, prefer **`mode="sync"`** on `AnimatePresence`.
- * - **`ButtonMotionRoot`** — Optional app/layout wrapper so many buttons can share one Motion feature load;
+ * - **`TuiMotionRoot`** — Optional app/layout wrapper so many buttons can share one Motion feature load;
  *   use **`tier="max"`** when using **`layoutResize`** or **`motionProps`** with layout/drag.
  * - **Default export is `memo` (shallow compare)** — Inline lambdas, fresh **`motionProps`** objects, or unstable
  *   **`children`** force re-renders; stabilize in hot lists (`useCallback`, `useMemo`, hoisted nodes).
@@ -100,6 +102,7 @@ export interface ButtonProps extends ButtonNativeAttributes, InternalButtonProps
 	/** Striped pattern, soft outer glow, or default fill for progress chrome. */
 	progressVisual?: ProgressVisual;
 	showProgressText?: boolean;
+	/** Completion percentage from 0 to 100 (not 0–1). */
 	progress?: number;
 
 	// Animation toggles
@@ -181,7 +184,7 @@ export interface ButtonProps extends ButtonNativeAttributes, InternalButtonProps
 	/**
 	 * Merged onto the internal `motion` host **after** built-in hover/press/entrance props.
 	 * `layout` / `layoutId` / `drag` / `dragConstraints` pull in the heavier Motion bundle (`domMax`);
-	 * for large trees, wrap the app (or a route) in `ButtonMotionRoot` with `tier="max"` once so
+	 * for large trees, wrap the app (or a route) in {@link TuiMotionRoot} with `tier="max"` once so
 	 * each button can skip its own `LazyMotion` boundary. Other Motion APIs stay on the lighter bundle.
 	 */
 	motionProps?: Omit<Partial<HTMLMotionProps<"button">>, "children" | "ref">;
@@ -245,6 +248,7 @@ export const BUTTON_DESTRUCTURE_KEYS = [
 	"aria-keyshortcuts",
 	"_staggerIndex",
 	"_staggerDelay",
+	"_staggerItemVariants",
 	"type",
 	"tabIndex",
 	"onClickDebounceMs",

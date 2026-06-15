@@ -195,16 +195,14 @@ export interface UseLongPressOptions {
 }
 
 /**
- * Event handlers to spread onto target element.
+ * Pointer event handlers to spread onto the target element (or compose with existing handlers).
  */
 export interface LongPressHandlers {
-	onTouchStart: (e: TouchEvent) => void;
-	onTouchMove: (e: TouchEvent) => void;
-	onMouseDown: (e: MouseEvent) => void;
-	onTouchEnd: (e: TouchEvent) => void;
-	onMouseUp: (e: MouseEvent) => void;
-	onTouchCancel: () => void;
-	onMouseLeave: () => void;
+	onPointerDown: (e: PointerEvent) => void;
+	onPointerUp: (e: PointerEvent) => void;
+	onPointerMove: (e: PointerEvent) => void;
+	onPointerLeave: (e: PointerEvent) => void;
+	onPointerCancel: (e: PointerEvent) => void;
 }
 
 /**
@@ -242,6 +240,12 @@ export interface UseLongPressReturn {
 	 * Clears all timers and resets state.
 	 */
 	cancel: () => void;
+
+	/**
+	 * Returns true once after a long press fired, so the next `click` can be ignored.
+	 * Clears the flag when consumed.
+	 */
+	consumeSuppressClick: () => boolean;
 }
 
 /**

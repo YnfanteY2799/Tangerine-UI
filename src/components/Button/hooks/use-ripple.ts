@@ -141,9 +141,7 @@ export default function useRipple(options: UseRippleOptions = {}): UseRippleRetu
 			} else if ("clientX" in event) {
 				clientX = event.clientX;
 				clientY = event.clientY;
-			} else {
-				return;
-			}
+			} else return;
 
 			// Calculate position relative to element
 			const x = clientX - rect.left;
@@ -159,12 +157,7 @@ export default function useRipple(options: UseRippleOptions = {}): UseRippleRetu
 			const key = rippleKeyRef.current;
 			rippleKeyRef.current = (rippleKeyRef.current + 1) % Number.MAX_SAFE_INTEGER;
 
-			const newRipple: RippleType = {
-				key,
-				x: x - size / 2,
-				y: y - size / 2,
-				size,
-			};
+			const newRipple: RippleType = { key, x: x - size / 2, y: y - size / 2, size };
 
 			setRipples((prev) => {
 				const updated = [...prev, newRipple];
@@ -192,7 +185,7 @@ export default function useRipple(options: UseRippleOptions = {}): UseRippleRetu
 				timeoutRefs.current.set(key, timeout);
 			}
 		},
-		[disabled, duration, maxRipples, clearRipple, enableHapticFeedback]
+		[disabled, duration, maxRipples, clearRipple, enableHapticFeedback],
 	);
 
 	// Cleanup all timeouts on unmount

@@ -1,0 +1,13 @@
+/**
+ * Tangerine UI — default theme entry.
+ *
+ * In your global CSS (after Tailwind directives):
+ *
+ *   @tailwind base;
+ *   @tailwind components;
+ *   @tailwind utilities;
+ *   @import "@tangerine-ui/core/styles";
+ *
+ * Use `@tangerine-ui/core/postcss` in PostCSS so the import can sit after `@tailwind`.
+ */
+@import "./styles.css";

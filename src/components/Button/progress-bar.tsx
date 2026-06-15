@@ -55,13 +55,7 @@ const glowClassForColor = (color: ButtonColor): string => {
 	}
 };
 
-const getProgressAriaProps = (progress: number) => ({
-	"aria-label": `Progress: ${Math.round(progress)}%`,
-	"aria-valuenow": Math.round(progress),
-	role: "progressbar" as const,
-	"aria-valuemax": 100,
-	"aria-valuemin": 0,
-});
+const getProgressDecorativeLabel = (progress: number) => `Progress: ${Math.round(progress)}%`;
 
 export default memo(function ProgressBar({
 	progress,
@@ -83,8 +77,8 @@ export default memo(function ProgressBar({
 							"pointer-events-none absolute inset-x-0 bottom-0 z-8 h-1.5 overflow-hidden rounded-sm",
 							className,
 						)}
-						{...getProgressAriaProps(clampedProgress)}
-						aria-hidden="true">
+						aria-hidden="true"
+						title={getProgressDecorativeLabel(clampedProgress)}>
 						<div className={cn("absolute inset-0 rounded-sm", TRACK_SUBTLE)} aria-hidden />
 						<m.div
 							className={cn("relative z-1 h-full w-full origin-left", fillBase)}
@@ -104,8 +98,8 @@ export default memo(function ProgressBar({
 							"pointer-events-none absolute inset-x-0 top-0 z-8 h-1.5 overflow-hidden rounded-sm",
 							className,
 						)}
-						{...getProgressAriaProps(clampedProgress)}
-						aria-hidden="true">
+						aria-hidden="true"
+						title={getProgressDecorativeLabel(clampedProgress)}>
 						<div className={cn("absolute inset-0 rounded-sm", TRACK_SUBTLE)} aria-hidden />
 						<m.div
 							className={cn("relative z-1 h-full w-full origin-left", fillBase)}
@@ -125,8 +119,8 @@ export default memo(function ProgressBar({
 							"pointer-events-none absolute inset-y-1.5 left-1.5 z-8 w-2.5 overflow-visible rounded-full",
 							className,
 						)}
-						{...getProgressAriaProps(clampedProgress)}
-						aria-hidden="true">
+						aria-hidden="true"
+						title={getProgressDecorativeLabel(clampedProgress)}>
 						<div className={RAIL_TRACK} aria-hidden />
 						<div className="absolute inset-0 overflow-hidden rounded-full" aria-hidden>
 							<m.div
@@ -185,8 +179,8 @@ export default memo(function ProgressBar({
 							"pointer-events-none absolute inset-0 z-8 overflow-hidden rounded-[inherit]",
 							className,
 						)}
-						{...getProgressAriaProps(clampedProgress)}
-						aria-hidden="true">
+						aria-hidden="true"
+						title={getProgressDecorativeLabel(clampedProgress)}>
 						{/* Same two-layer model as LongPressIndicator: backdrop + left-growing fill */}
 						<m.div
 							className={cn("absolute inset-0 overflow-hidden rounded-[inherit] pointer-events-none", backdrop)}

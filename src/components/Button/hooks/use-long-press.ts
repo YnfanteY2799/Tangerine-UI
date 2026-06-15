@@ -1,88 +1,22 @@
-import { type TouchEvent, type MouseEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { type PointerEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import type { UseLongPressOptions, UseLongPressReturn, LongPressHandlers } from "../types/hooks";
 
-/**
- * Custom React hook for detecting long press gestures with progress tracking.
- *
- * Provides event handlers for mouse and touch interactions, with smooth progress
- * animation and separate callbacks for short press vs long press. Useful for
- * context menus, delete confirmations, or game mechanics.
- *
- * **Features:**
- * - Separate callbacks for press vs long press
- * - Smooth progress animation (0-1) for visual feedback
- * - Touch move cancellation (prevents long press while dragging)
- * - Mouse and touch support
- * - Automatic cleanup on unmount
- *
- * @param options - Configuration options for long press behavior
- * @returns Object containing event handlers and press state
- *
- * @example
- * // Basic usage with callbacks
- * const { handlers, isLongPress } = useLongPress({
- *   onLongPress: () => console.log('Long pressed!'),
- *   onPress: () => console.log('Quick press'),
- *   delay: 800
- * });
- *
- * <button {...handlers}>
- *   {isLongPress ? 'Release!' : 'Hold me'}
- * </button>
- *
- * @example
- * // With progress indicator
- * const { handlers, progress, isPressed } = useLongPress({
- *   onLongPress: () => deleteItem(),
- *   delay: 1000
- * });
- *
- * return (
- *   <button {...handlers} style={{ position: 'relative' }}>
- *     Delete
- *     {isPressed && (
- *       <div
- *         style={{
- *           width: `${progress * 100}%`,
- *           height: '3px',
- *           background: 'red'
- *         }}
- *       />
- *     )}
- *   </button>
- * );
- *
- * @example
- * // With context menu prevention
- * const { handlers } = useLongPress({
- *   onLongPress: showContextMenu,
- *   preventDefault: true, // Prevents browser context menu
- *   delay: 500
- * });
- *
- * @example
- * // Conditional enabling
- * const [enabled, setEnabled] = useState(true);
- * const { handlers } = useLongPress({
- *   onLongPress: handleLongPress,
- *   disabled: !enabled
- * });
- */
 export default function useLongPress(options: UseLongPressOptions = {}): UseLongPressReturn {
 	const { delay = 500, onLongPress, onPress, onStart, disabled = false, preventDefault = false, moveThreshold = 10 } = options;
 
-	const touchStartPosRef = useRef<{ x: number; y: number } | null>(null);
+	const pointerStartPosRef = useRef<{ x: number; y: number } | null>(null);
+	const activePointerIdRef = useRef<number | null>(null);
 	const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 	const animationFrameRef = useRef<number | null>(null);
 	const startTimeRef = useRef<number>(0);
+	const suppressClickRef = useRef(false);
 
 	const [isLongPress, setIsLongPress] = useState<boolean>(false);
 	const [isPressed, setIsPressed] = useState<boolean>(false);
 	const [progress, setProgress] = useState<number>(0);
 	const isLongPressRef = useRef(false);
 
-	// Use refs for callbacks to avoid recreating handlers
 	const onLongPressRef = useRef(onLongPress);
 	const onPressRef = useRef(onPress);
 	const onStartRef = useRef(onStart);
@@ -119,22 +53,23 @@ export default function useLongPress(options: UseLongPressOptions = {}): UseLong
 		isLongPressRef.current = false;
 		setIsLongPress(false);
 		startTimeRef.current = 0;
-		touchStartPosRef.current = null;
+		pointerStartPosRef.current = null;
+		activePointerIdRef.current = null;
 		setIsPressed(false);
 		setProgress(0);
 	}, [cleanup]);
 
 	const start = useCallback(
-		(event: MouseEvent | TouchEvent) => {
+		(event: PointerEvent) => {
 			if (disabled) return;
+			if (activePointerIdRef.current !== null && activePointerIdRef.current !== event.pointerId) return;
+
+			cleanup();
 
 			if (preventDefault) event.preventDefault();
 
-			// Store touch position for move detection
-			if ("touches" in event && event.touches.length > 0) {
-				const touch = event.touches[0];
-				touchStartPosRef.current = { x: touch.clientX, y: touch.clientY };
-			}
+			activePointerIdRef.current = event.pointerId;
+			pointerStartPosRef.current = { x: event.clientX, y: event.clientY };
 
 			isLongPressRef.current = false;
 			setIsLongPress(false);
@@ -144,28 +79,28 @@ export default function useLongPress(options: UseLongPressOptions = {}): UseLong
 
 			onStartRef.current?.();
 
-			// Start progress animation
 			animationFrameRef.current = requestAnimationFrame(updateProgress);
 
 			timerRef.current = setTimeout(() => {
 				isLongPressRef.current = true;
 				setIsLongPress(true);
 				setProgress(1);
+				suppressClickRef.current = true;
 				onLongPressRef.current?.();
 			}, delay);
 		},
-		[delay, disabled, preventDefault, updateProgress]
+		[delay, disabled, preventDefault, updateProgress, cleanup],
 	);
 
 	const stop = useCallback(
-		(shouldTriggerClick = true) => {
+		(event: PointerEvent, shouldTriggerClick = true) => {
 			if (disabled) return;
+			if (activePointerIdRef.current !== null && event.pointerId !== activePointerIdRef.current) return;
 
 			const wasLongPress = isLongPressRef.current;
 
 			cleanup();
 
-			// If it wasn't a long press, trigger the regular press
 			if (shouldTriggerClick && !wasLongPress && startTimeRef.current > 0) {
 				onPressRef.current?.();
 			}
@@ -175,42 +110,47 @@ export default function useLongPress(options: UseLongPressOptions = {}): UseLong
 		[disabled, cleanup, reset],
 	);
 
-	const handleTouchMove = useCallback(
-		(event: TouchEvent) => {
-			if (disabled || !touchStartPosRef.current) return;
+	const handlePointerMove = useCallback(
+		(event: PointerEvent) => {
+			if (disabled || activePointerIdRef.current !== event.pointerId || !pointerStartPosRef.current) return;
 
-			const touch = event.touches[0];
-			if (!touch) return;
-
-			const deltaX = Math.abs(touch.clientX - touchStartPosRef.current.x);
-			const deltaY = Math.abs(touch.clientY - touchStartPosRef.current.y);
+			const deltaX = Math.abs(event.clientX - pointerStartPosRef.current.x);
+			const deltaY = Math.abs(event.clientY - pointerStartPosRef.current.y);
 			const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
 
-			// Cancel if moved beyond threshold
 			if (distance > moveThreshold) reset();
 		},
-		[disabled, moveThreshold, reset]
+		[disabled, moveThreshold, reset],
 	);
 
-	const cancel = useCallback(() => reset(), [reset]);
+	const cancel = useCallback(
+		(event: PointerEvent) => {
+			if (activePointerIdRef.current !== null && event.pointerId !== activePointerIdRef.current) return;
+			reset();
+		},
+		[reset],
+	);
 
-	// Cleanup on unmount
+	const consumeSuppressClick = useCallback(() => {
+		if (!suppressClickRef.current) return false;
+		suppressClickRef.current = false;
+		return true;
+	}, []);
+
 	useEffect(() => {
 		return () => cleanup();
 	}, [cleanup]);
 
 	const handlers = useMemo<LongPressHandlers>(
 		() => ({
-			onTouchEnd: () => stop(true),
-			onTouchMove: handleTouchMove,
-			onMouseUp: () => stop(true),
-			onTouchCancel: cancel,
-			onMouseLeave: cancel,
-			onTouchStart: start,
-			onMouseDown: start,
+			onPointerDown: start,
+			onPointerUp: (event) => stop(event, true),
+			onPointerMove: handlePointerMove,
+			onPointerLeave: cancel,
+			onPointerCancel: cancel,
 		}),
-		[start, stop, handleTouchMove, cancel]
+		[start, stop, handlePointerMove, cancel],
 	);
 
-	return { handlers, isLongPress, progress, isPressed, cancel };
+	return { handlers, isLongPress, progress, isPressed, cancel: reset, consumeSuppressClick };
 }

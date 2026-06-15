@@ -165,7 +165,7 @@ const RippleItem = memo(function RippleItem({ ripple, color, onComplete }: IRipp
 export default memo(function RippleContainer({ onAnimationComplete, color = "default", className, ripples }: RippleContainerProps): ReactNode {
 	return (
 		<span className={cn("pointer-events-none absolute inset-0 overflow-hidden", className)} aria-hidden="true" role="presentation">
-			<AnimatePresence mode="popLayout">
+			<AnimatePresence mode="sync">
 				{ripples.map((ripple) => (
 					<RippleItem key={ripple.key} ripple={ripple} color={color} onComplete={onAnimationComplete} />
 				))}

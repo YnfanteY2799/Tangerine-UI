@@ -2,7 +2,7 @@
  * Copy into your repo to customize the theme (shadcn-style).
  * Import the package defaults first, then override only what you need.
  *
- *   @import "@tangerine-ui/core/styles.css";
+ *   @import "@tangerine-ui/core/styles";
  *   @import "./tangerine-theme.css";   // this file, after editing
  */
 @layer base {

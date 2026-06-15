@@ -1,5 +1,5 @@
 "use client";
-import { Children, cloneElement, Fragment, isValidElement, memo, useMemo } from "react";
+import { Children, cloneElement, isValidElement, memo, useMemo } from "react";
 import { getStaggerVariant } from "./configs/animations/stagger";
 import { domAnimation, m } from "motion/react";
 import { TuiMotionBoundary } from "@/motion/motion-boundary";
@@ -11,7 +11,6 @@ import type { ReactElement, ReactNode } from "react";
 
 const spacingClasses = { none: "gap-0", sm: "gap-1", md: "gap-2", lg: "gap-4" };
 
-// Calculate stagger order based on direction
 function getStaggerOrder(index: number, totalCount: number, direction: StaggerDirection): number {
 	switch (direction) {
 		case "forward":
@@ -26,7 +25,6 @@ function getStaggerOrder(index: number, totalCount: number, direction: StaggerDi
 }
 
 export default memo(function ButtonGroup(props: ButtonGroupProps): ReactNode {
-	// Props
 	const {
 		children,
 		className,
@@ -40,19 +38,17 @@ export default memo(function ButtonGroup(props: ButtonGroupProps): ReactNode {
 		staggerAnimationType = "fade",
 	} = props;
 
-	// Count valid children
 	const childArray = useMemo(() => Children.toArray(children).filter(isValidElement), [children]);
 	const totalCount = childArray.length;
 
 	const staggerVariant = useMemo(() => getStaggerVariant(staggerAnimationType), [staggerAnimationType]);
 
-	// Container variants for stagger animation
 	const containerVariants = useMemo(
 		() => ({
 			visible: { transition: { staggerChildren: staggerAnimation ? staggerDelay : 0, delayChildren: 0 } },
 			hidden: {},
 		}),
-		[staggerAnimation, staggerDelay]
+		[staggerAnimation, staggerDelay],
 	);
 
 	const itemVariants = useMemo(() => ({ hidden: staggerVariant.initial, visible: staggerVariant.animate }), [staggerVariant]);
@@ -62,9 +58,12 @@ export default memo(function ButtonGroup(props: ButtonGroupProps): ReactNode {
 			if (!isValidElement(child)) return child;
 
 			const staggerOrder = getStaggerOrder(index, totalCount, staggerDirection);
-			const internalProps: InternalButtonProps = { _staggerIndex: staggerOrder, _staggerDelay: staggerAnimation ? staggerDelay : 0 };
+			const internalProps: InternalButtonProps = {
+				_staggerIndex: staggerOrder,
+				_staggerDelay: staggerAnimation ? staggerDelay : 0,
+				_staggerItemVariants: staggerAnimation ? itemVariants : undefined,
+			};
 
-			// Determine border radius classes based on position
 			let radiusOverride = "";
 
 			if (spacing === "none") {
@@ -79,31 +78,25 @@ export default memo(function ButtonGroup(props: ButtonGroupProps): ReactNode {
 				}
 			}
 
-			const enhancedChild = cloneElement(child as ReactElement<{ className?: string } & InternalButtonProps>, {
+			return cloneElement(child as ReactElement<{ className?: string } & InternalButtonProps>, {
 				...internalProps,
 				className: cn((child as ReactElement<{ className?: string }>).props.className, radiusOverride),
 			});
-
-			return staggerAnimation ? (
-				<m.div key={index} variants={itemVariants}>
-					{enhancedChild}
-				</m.div>
-			) : (
-				<Fragment key={index}>{enhancedChild}</Fragment>
-			);
 		});
 	}, [childArray, totalCount, staggerAnimation, staggerDelay, staggerDirection, spacing, orientation, itemVariants]);
 
+	const groupClassName = cn(
+		"inline-flex",
+		spacingClasses[spacing],
+		orientation === "vertical" ? "flex-col" : "flex-row",
+		spacing === "none" && orientation === "horizontal" && "[&>*:not(:first-child)]:-ml-px",
+		spacing === "none" && orientation === "vertical" && "[&>*:not(:first-child)]:-mt-px",
+		className,
+	);
+
 	const group = staggerAnimation ? (
 		<m.div
-			className={cn(
-				"inline-flex",
-				spacingClasses[spacing],
-				orientation === "vertical" ? "flex-col" : "flex-row",
-				spacing === "none" && orientation === "horizontal" && "[&>*:not(:first-child)]:-ml-px",
-				spacing === "none" && orientation === "vertical" && "[&>*:not(:first-child)]:-mt-px",
-				className
-			)}
+			className={groupClassName}
 			variants={containerVariants}
 			animate="visible"
 			initial="hidden"
@@ -113,18 +106,7 @@ export default memo(function ButtonGroup(props: ButtonGroupProps): ReactNode {
 			{enhancedChildren}
 		</m.div>
 	) : (
-		<div
-			className={cn(
-				"inline-flex",
-				spacingClasses[spacing],
-				orientation === "vertical" ? "flex-col" : "flex-row",
-				spacing === "none" && orientation === "horizontal" && "[&>*:not(:first-child)]:-ml-px",
-				spacing === "none" && orientation === "vertical" && "[&>*:not(:first-child)]:-mt-px",
-				className
-			)}
-			aria-orientation={orientation}
-			aria-label={ariaLabel}
-			role={role}>
+		<div className={groupClassName} aria-orientation={orientation} aria-label={ariaLabel} role={role}>
 			{enhancedChildren}
 		</div>
 	);

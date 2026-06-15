@@ -64,7 +64,7 @@ export const ButtonChrome = memo(function ButtonChrome({
 				<ProgressBar color={color} variant={variant} progress={progress} placement={progressPlacement} visual={progressVisual} />
 			)}
 
-			{showCooldownIndicator && isInCooldown && <CooldownIndicator progress={cooldownProgress} />}
+			{showCooldownIndicator && isInCooldown && <CooldownIndicator progress={cooldownProgress} color={color} />}
 
 			{showLongPressIndicator && onLongPress ? (
 				<AnimatePresence>

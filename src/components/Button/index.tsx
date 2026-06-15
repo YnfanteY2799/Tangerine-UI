@@ -118,6 +118,7 @@ function Button(innerProps: ButtonProps): ReactNode {
 		"aria-keyshortcuts": ariaKeyShortcuts,
 		_staggerIndex = 0,
 		_staggerDelay = 0,
+		_staggerItemVariants,
 		type = "button",
 		tabIndex: tabIndexProp,
 		onClickDebounceMs,
@@ -155,7 +156,7 @@ function Button(innerProps: ButtonProps): ReactNode {
 
 	if (process.env.NODE_ENV !== "production" && asChild && Children.count(children) !== 1) {
 		console.warn(
-			"Button: `asChild` expects a single child element (Radix UI Slot merges props onto one child). Use a fragment if you need multiple nodes inside the slotted element.",
+			"Button: `asChild` expects exactly one React element child (Radix UI Slot merges props onto that element). Wrap multiple nodes inside the child element instead of using a fragment with siblings.",
 		);
 	}
 
@@ -199,6 +200,7 @@ function Button(innerProps: ButtonProps): ReactNode {
 		progress: longPressProgress,
 		handlers: longPressHandlers,
 		isPressed: isLongPressing,
+		consumeSuppressClick,
 	} = useLongPress({
 		onLongPress,
 		delay: longPressDelay,
@@ -258,15 +260,48 @@ function Button(innerProps: ButtonProps): ReactNode {
 		(event: PointerEvent<HTMLButtonElement>) => {
 			userOnPointerDown?.(event);
 			if (event.defaultPrevented) return;
+			if (onLongPress) longPressHandlers.onPointerDown(event);
 			if (isEffectivelyDisabled) return;
 			if (!disableRipple && !shouldDisableAnimation) createRipple(event);
 			if (enableHaptic) vibrate("light");
 		},
-		[userOnPointerDown, isEffectivelyDisabled, disableRipple, shouldDisableAnimation, createRipple, enableHaptic, vibrate],
+		[userOnPointerDown, onLongPress, longPressHandlers, isEffectivelyDisabled, disableRipple, shouldDisableAnimation, createRipple, enableHaptic, vibrate],
+	);
+
+	const handlePointerUp = useCallback(
+		(event: PointerEvent<HTMLButtonElement>) => {
+			if (onLongPress) longPressHandlers.onPointerUp(event);
+		},
+		[onLongPress, longPressHandlers],
+	);
+
+	const handlePointerMove = useCallback(
+		(event: PointerEvent<HTMLButtonElement>) => {
+			if (onLongPress) longPressHandlers.onPointerMove(event);
+		},
+		[onLongPress, longPressHandlers],
+	);
+
+	const handlePointerLeave = useCallback(
+		(event: PointerEvent<HTMLButtonElement>) => {
+			if (onLongPress) longPressHandlers.onPointerLeave(event);
+		},
+		[onLongPress, longPressHandlers],
+	);
+
+	const handlePointerCancel = useCallback(
+		(event: PointerEvent<HTMLButtonElement>) => {
+			if (onLongPress) longPressHandlers.onPointerCancel(event);
+		},
+		[onLongPress, longPressHandlers],
 	);
 
 	const handleClick = useCallback(
 		(event: MouseEvent<HTMLButtonElement>) => {
+			if (onLongPress && consumeSuppressClick()) {
+				event.preventDefault();
+				return;
+			}
 			if (isEffectivelyDisabled) {
 				event.preventDefault();
 				return;
@@ -274,7 +309,7 @@ function Button(innerProps: ButtonProps): ReactNode {
 
 			dispatchScheduledClick(event);
 		},
-		[isEffectivelyDisabled, dispatchScheduledClick],
+		[onLongPress, consumeSuppressClick, isEffectivelyDisabled, dispatchScheduledClick],
 	);
 
 	const handleNativeDoubleClick = useCallback(
@@ -370,7 +405,14 @@ function Button(innerProps: ButtonProps): ReactNode {
 			pressAnimation,
 		});
 		const merged = { ...built, ...(userMotionProps ?? {}) } as typeof built & NonNullable<typeof userMotionProps>;
-		return stripLayoutProjectionKeysForPeeledVariant(merged, isPeeledVariant);
+		const stripped = stripLayoutProjectionKeysForPeeledVariant(merged, isPeeledVariant);
+
+		if (_staggerItemVariants) {
+			const { initial: _initial, animate: _animate, exit: _exit, ...rest } = stripped;
+			return { ...rest, variants: _staggerItemVariants };
+		}
+
+		return stripped;
 	}, [
 		applyRootLayout,
 		entranceExitVariant,
@@ -384,6 +426,7 @@ function Button(innerProps: ButtonProps): ReactNode {
 		pressAnimation,
 		userMotionProps,
 		isPeeledVariant,
+		_staggerItemVariants,
 	]);
 
 	const lazyFeatures = useMemo(
@@ -403,10 +446,17 @@ function Button(innerProps: ButtonProps): ReactNode {
 			ref: combinedRef,
 			className: buttonClassName,
 			onPointerDown: handlePointerDown,
+			...(onLongPress
+				? {
+						onPointerUp: handlePointerUp,
+						onPointerMove: handlePointerMove,
+						onPointerLeave: handlePointerLeave,
+						onPointerCancel: handlePointerCancel,
+					}
+				: {}),
 			onClick: handleClick,
 			onKeyDown: handleKeyDownUpdated,
 			...(onDoubleClick ? { onDoubleClick: handleNativeDoubleClick } : {}),
-			...(onLongPress ? longPressHandlers : {}),
 			...accessibilityProps,
 		};
 		if (asChild) {
@@ -425,12 +475,15 @@ function Button(innerProps: ButtonProps): ReactNode {
 		combinedRef,
 		buttonClassName,
 		handlePointerDown,
+		handlePointerUp,
+		handlePointerMove,
+		handlePointerLeave,
+		handlePointerCancel,
 		handleClick,
 		handleKeyDownUpdated,
 		handleNativeDoubleClick,
 		onDoubleClick,
 		onLongPress,
-		longPressHandlers,
 		accessibilityProps,
 		asChild,
 		isEffectivelyDisabled,

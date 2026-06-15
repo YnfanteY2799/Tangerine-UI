@@ -1,14 +1,14 @@
 /**
  * Tangerine UI — default theme tokens (shadcn-style).
  *
- * Import once in your app CSS, after Tailwind directives:
+ * In your global CSS (after `@tailwind` directives, with `@tangerine-ui/core/postcss` in PostCSS):
  *
  *   @tailwind base;
  *   @tailwind components;
  *   @tailwind utilities;
- *   @import "@tangerine-ui/core/styles.css";
+ *   @import "@tangerine-ui/core/styles";
  *
- * Customize by overriding variables in the same file — no React provider:
+ * This file is pulled in by `index.css`. Override variables in your globals — no React provider:
  *
  *   :root {
  *     --tui-primary: 234 88 12;

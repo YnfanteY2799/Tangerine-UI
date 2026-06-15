@@ -5,7 +5,6 @@
  *
  * @example
  * ```tsx
- * import "@tangerine-ui/core/styles.css";
  * import { Button } from "@tangerine-ui/core/button";
  *
  * export function App() {
@@ -14,6 +13,8 @@
  *   );
  * }
  * ```
+ *
+ * Styles: `@import "@tangerine-ui/core/styles";` in your global CSS (see README).
  *
  * Optional: wrap the app in {@link TuiMotionRoot} when many animated components are siblings
  * to share one LazyMotion boundary (see `@tangerine-ui/core/motion`).

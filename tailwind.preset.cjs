@@ -3,7 +3,7 @@ const { tuiThemeExtend } = require("./src/styles/tailwind-theme.cjs");
 
 /**
  * Tailwind preset so class names used inside @tangerine-ui/core are not purged,
- * and `tui-*` color utilities map to CSS variables from `styles.css`.
+ * and `tui-*` color utilities map to CSS variables from `@tangerine-ui/core/styles`.
  *
  * @example
  * // tailwind.config.js

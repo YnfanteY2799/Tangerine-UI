@@ -31,26 +31,58 @@ Components use Tailwind utility classes (`bg-tui-primary`, etc.) backed by **CSS
 
 ### Theme (shadcn-style — CSS only, no React provider)
 
-In `globals.css` (after Tailwind directives):
+In `globals.css` — **Tailwind first**, then the library import:
 
 ```css
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@import "@tangerine-ui/core/styles.css";
+@import "@tangerine-ui/core/styles";
+```
 
-/* Your overrides — same pattern as shadcn */
+CSS does not allow `@import` after other rules, so use one of the helpers below to inline tokens at that position.
+
+**Vite** (recommended — no dev warnings):
+
+```ts
+// vite.config.ts
+import tuiStyles from "@tangerine-ui/core/vite";
+
+export default defineConfig({
+  plugins: [tuiStyles(), /* react(), etc. */],
+});
+```
+
+Keep PostCSS for Tailwind only (`tailwindcss`, `autoprefixer`). Do **not** add a Vite `resolve.alias` for `@tangerine-ui/core/styles` — that makes Vite resolve `@import` natively and triggers order warnings.
+
+**PostCSS** (Next.js, Webpack, etc.):
+
+```js
+// postcss.config.js
+const tuiStyles = require("@tangerine-ui/core/postcss");
+
+module.exports = {
+  plugins: [tuiStyles(), require("tailwindcss"), require("autoprefixer")],
+};
+```
+
+Alternative syntax (no `@import`, same result): `@tui styles;` after `@tailwind`.
+
+Your overrides go **after** the import:
+
+```css
 @layer base {
   :root {
     --tui-primary: 234 88 12;
     --tui-primary-hover: 194 65 12;
     --tui-ring: 234 88 12;
   }
+}
 
-  .dark {
-    --tui-primary: 251 146 60;
-  }
+/* Dark mode: add class="dark" on <html> — do not @apply dark (not a utility) */
+.dark {
+  --tui-primary: 251 146 60;
 }
 ```
 
@@ -121,8 +153,10 @@ The package is built with a `"use client"` banner. Import UI components from Cli
 | `.../button-group`    | `ButtonGroup`                  |
 | `.../input`           | `Input`                        |
 | `.../utils`           | `cn` and hooks                 |
-| `.../styles.css`      | Default theme tokens (`@import`) |
-| `.../theme.example.css` | Customization starter template |
+| `.../styles`          | Default theme tokens (`@import "@tangerine-ui/core/styles"`) |
+| `.../postcss`         | PostCSS plugin — inline `@import` / `@tui styles` after `@tailwind` |
+| `.../vite`            | Vite plugin — inline before Vite resolves `@import` (no dev warnings) |
+| `.../styles.css`      | Alias of `.../styles` (deprecated) |
 | `.../tailwind-preset` | Tailwind v3 preset (see above) |
 
 ## Development (this repo)

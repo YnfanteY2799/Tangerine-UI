@@ -6,7 +6,10 @@
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
-  "sideEffects": false,
+  "sideEffects": [
+    "**/*.css",
+    "./dist/styles/**"
+  ],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -38,21 +41,31 @@
       "import": "./dist/motion/index.mjs",
       "require": "./dist/motion/index.js"
     },
-    "./styles.css": "./src/styles/styles.css",
-    "./theme.example.css": "./src/styles/theme.example.css",
+    "./styles": {
+      "style": "./dist/styles/index.css",
+      "default": "./dist/styles/index.css"
+    },
+    "./styles.css": {
+      "style": "./dist/styles/index.css",
+      "default": "./dist/styles/index.css"
+    },
+    "./theme.example.css": "./dist/styles/theme.example.css",
     "./tailwind-preset": "./tailwind.preset.cjs",
+    "./postcss": "./scripts/postcss-tui-styles.cjs",
+    "./vite": "./scripts/vite-plugin-tui-styles.cjs",
     "./package.json": "./package.json"
   },
   "files": [
     "dist",
-    "src/styles/styles.css",
-    "src/styles/theme.example.css",
+    "scripts/postcss-tui-styles.cjs",
+    "scripts/vite-plugin-tui-styles.cjs",
+    "scripts/tui-styles-inline.cjs",
     "README.md",
     "LICENSE",
     "tailwind.preset.cjs"
   ],
   "scripts": {
-    "build": "tsup",
+    "build": "tsup && node scripts/copy-styles.mjs",
     "dev": "vite --config playground/vite.config.ts",
     "dev:lib": "tsup --watch",
     "playground": "vite --config playground/vite.config.ts",
