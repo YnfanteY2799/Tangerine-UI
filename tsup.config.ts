@@ -53,7 +53,6 @@ export default defineConfig({
 		"motion/react",
 		"@radix-ui/react-slot",
 		"class-variance-authority",
-		"lucide-react",
 		"clsx",
 		"tailwind-merge",
 	],

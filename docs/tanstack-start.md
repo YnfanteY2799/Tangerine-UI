@@ -5,10 +5,10 @@
 ## Install
 
 ```bash
-npm install @tangerine-ui/core @radix-ui/react-slot class-variance-authority motion
+npm install @tangerine-ui/core
 ```
 
-Peers: React 18 or 19, Tailwind CSS 3.4+ (recommended for the bundled preset).
+Requires React 18 or 19 and Tailwind CSS 3.4+ (recommended for the bundled preset).
 
 ## Vite plugin (required)
 

@@ -14,13 +14,7 @@ Lightweight, animated React components built with [Motion](https://motion.dev/),
 npm install @tangerine-ui/core
 ```
 
-Install peer dependencies (adjust versions to match your app):
-
-```bash
-npm install @radix-ui/react-slot class-variance-authority motion react react-dom tailwindcss
-```
-
-`lucide-react` is **optional** (icons). If you do not use icon-related features, you can omit it.
+Your app must already include **React** 18 or 19 and **Tailwind CSS** 3.4+ or 4.x (see setup below). Motion, Radix Slot, and CVA are bundled as library dependencies.
 
 ## Tailwind CSS (required for styles)
 
