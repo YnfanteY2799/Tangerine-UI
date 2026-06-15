@@ -1,5 +1,6 @@
 const path = require("path");
-const { tuiThemeExtend } = require("./src/styles/tailwind-theme.cjs");
+const fs = require("fs");
+const { tuiThemeExtend } = require("./tailwind-theme.cjs");
 
 /**
  * Tailwind preset so class names used inside @tangerine-ui/core are not purged,
@@ -15,7 +16,12 @@ const { tuiThemeExtend } = require("./src/styles/tailwind-theme.cjs");
  * @type {import("tailwindcss").Config}
  */
 module.exports = {
-		content: [path.join(__dirname, "dist", "**/*.{js,mjs}"), path.join(__dirname, "src", "**/*.{js,ts,tsx}")],
+	content: [
+		path.join(__dirname, "dist", "**/*.{js,mjs}"),
+		...(fs.existsSync(path.join(__dirname, "src"))
+			? [path.join(__dirname, "src", "**/*.{js,ts,tsx}")]
+			: []),
+	],
 	theme: {
 		extend: tuiThemeExtend,
 	},

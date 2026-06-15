@@ -1,20 +1,119 @@
 /**
- * Copy into your repo to customize the theme (shadcn-style).
- * Import the package defaults first, then override only what you need.
+ * Tangerine UI — starter theme (copy into your app)
  *
- *   @import "@tangerine-ui/core/styles";
- *   @import "./tangerine-theme.css";   // this file, after editing
+ * 1. Import package defaults first, then this file:
+ *
+ *    Tailwind v3:
+ *    @tailwind base;
+ *    @tailwind components;
+ *    @tailwind utilities;
+ *    @import "@tangerine-ui/core/styles";
+ *    @import "./tui-theme.css";
+ *
+ *    Tailwind v4:
+ *    @import "tailwindcss";
+ *    @import "@tangerine-ui/core/styles";
+ *    @import "./tui-theme.css";
+ *
+ * 2. Use `darkMode: "class"` and add `class="dark"` on <html> for dark tokens.
+ *
+ * Values are RGB channels (not hex) so opacity utilities work:
+ * `bg-tui-primary/10` → rgb(var(--tui-primary) / 0.1)
+ *
+ * Only override what you need — everything else falls back to @tangerine-ui/core/styles.
  */
 @layer base {
 	:root {
-		/* Brand — uncomment and edit */
-		/* --tui-primary: 234 88 12; */
-		/* --tui-primary-hover: 194 65 12; */
-		/* --tui-primary-fg: 255 255 255; */
-		/* --tui-ring: 234 88 12; */
+		/* ── Surfaces (light) ── */
+		--tui-fg: 24 24 27;
+		--tui-fg-muted: 113 113 122;
+		--tui-border: 228 228 231;
+		--tui-border-strong: 161 161 170;
+		--tui-surface: 250 250 250;
+		--tui-surface-hover: 244 244 245;
+		--tui-surface-active: 228 228 231;
+		--tui-ring: 234 88 12;
+
+		/* ── Primary — tangerine orange (#ea580c) ── */
+		--tui-primary: 234 88 12;
+		--tui-primary-fg: 255 255 255;
+		--tui-primary-hover: 194 65 12;
+		--tui-primary-active: 154 52 18;
+		--tui-primary-soft: 255 237 213;
+		--tui-primary-soft-fg: 194 65 12;
+		--tui-primary-soft-hover: 254 215 170;
+		--tui-primary-soft-active: 253 186 116;
+		--tui-primary-subtle: 251 146 60;
+		--tui-primary-muted: 253 186 116;
+		--tui-primary-gradient-from: 251 146 60;
+		--tui-primary-gradient-to: 234 88 12;
+		--tui-primary-gradient-from-hover: 253 186 116;
+		--tui-primary-gradient-to-hover: 194 65 12;
+		--tui-primary-gradient-from-active: 234 88 12;
+		--tui-primary-gradient-to-active: 154 52 18;
+		--tui-primary-spatial-from: 253 186 116;
+		--tui-primary-spatial-to: 234 88 12;
+
+		/* ── Secondary — warm stone (optional accent) ── */
+		--tui-secondary: 87 83 78;
+		--tui-secondary-fg: 255 255 255;
+		--tui-secondary-hover: 68 64 60;
+		--tui-secondary-active: 41 37 36;
+		--tui-secondary-soft: 245 245 244;
+		--tui-secondary-soft-fg: 68 64 60;
+		--tui-secondary-soft-hover: 231 229 228;
+		--tui-secondary-soft-active: 214 211 209;
+		--tui-secondary-subtle: 120 113 108;
+		--tui-secondary-muted: 168 162 158;
+		--tui-secondary-gradient-from: 168 162 158;
+		--tui-secondary-gradient-to: 87 83 78;
+		--tui-secondary-gradient-from-hover: 214 211 209;
+		--tui-secondary-gradient-to-hover: 68 64 60;
+		--tui-secondary-gradient-from-active: 87 83 78;
+		--tui-secondary-gradient-to-active: 41 37 36;
+		--tui-secondary-spatial-from: 214 211 209;
+		--tui-secondary-spatial-to: 120 113 108;
+
+		--tui-ripple: 255 255 255;
+		--tui-progress-default: 255 255 255;
 	}
 
 	.dark {
-		/* --tui-primary: 251 146 60; */
+		--tui-fg: 250 250 250;
+		--tui-fg-muted: 161 161 170;
+		--tui-border: 63 63 70;
+		--tui-border-strong: 113 113 122;
+		--tui-surface: 24 24 27;
+		--tui-surface-hover: 39 39 42;
+		--tui-surface-active: 63 63 70;
+		--tui-ring: 251 146 60;
+
+		/* Primary — brighter orange on dark backgrounds */
+		--tui-primary: 251 146 60;
+		--tui-primary-fg: 24 24 27;
+		--tui-primary-hover: 253 186 116;
+		--tui-primary-active: 254 215 170;
+		--tui-primary-soft: 67 20 7;
+		--tui-primary-soft-fg: 253 186 116;
+		--tui-primary-soft-hover: 124 45 18;
+		--tui-primary-soft-active: 154 52 18;
+		--tui-primary-subtle: 253 186 116;
+		--tui-primary-muted: 251 146 60;
+		--tui-primary-gradient-from: 253 186 116;
+		--tui-primary-gradient-to: 234 88 12;
+		--tui-primary-gradient-from-hover: 254 215 170;
+		--tui-primary-gradient-to-hover: 251 146 60;
+		--tui-primary-gradient-from-active: 251 146 60;
+		--tui-primary-gradient-to-active: 194 65 12;
+		--tui-primary-spatial-from: 253 186 116;
+		--tui-primary-spatial-to: 234 88 12;
+
+		--tui-secondary-soft: 41 37 36;
+		--tui-secondary-soft-fg: 214 211 209;
+		--tui-secondary-soft-hover: 68 64 60;
+		--tui-secondary-soft-active: 87 83 78;
+		--tui-secondary-muted: 168 162 158;
+
+		--tui-progress-default: 228 228 231;
 	}
 }

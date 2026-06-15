@@ -18,3 +18,4 @@ const styles = readFileSync(join(srcStyles, "styles.css"), "utf8");
 writeFileSync(join(out, "index.css"), `${indexHeader.trim()}\n\n${styles.trim()}\n`);
 cpSync(join(srcStyles, "styles.css"), join(out, "styles.css"));
 cpSync(join(srcStyles, "theme.example.css"), join(out, "theme.example.css"));
+cpSync(join(srcStyles, "tailwind-theme.cjs"), join(root, "tailwind-theme.cjs"));
