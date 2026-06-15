@@ -1,0 +1,20 @@
+/**
+ * Copy into your repo to customize the theme (shadcn-style).
+ * Import the package defaults first, then override only what you need.
+ *
+ *   @import "@tangerine-ui/core/styles.css";
+ *   @import "./tangerine-theme.css";   // this file, after editing
+ */
+@layer base {
+	:root {
+		/* Brand — uncomment and edit */
+		/* --tui-primary: 234 88 12; */
+		/* --tui-primary-hover: 194 65 12; */
+		/* --tui-primary-fg: 255 255 255; */
+		/* --tui-ring: 234 88 12; */
+	}
+
+	.dark {
+		/* --tui-primary: 251 146 60; */
+	}
+}

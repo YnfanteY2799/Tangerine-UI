@@ -1,5 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import { ButtonMotionRoot } from "@/components/Button/index";
 import App from "./App";
 import "./index.css";
 
@@ -8,6 +9,8 @@ if (!root) throw new Error("Missing #root");
 
 createRoot(root).render(
 	<StrictMode>
-		<App />
-	</StrictMode>
+		<ButtonMotionRoot tier="anim">
+			<App />
+		</ButtonMotionRoot>
+	</StrictMode>,
 );

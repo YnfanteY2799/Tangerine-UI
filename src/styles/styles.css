@@ -1,0 +1,218 @@
+/**
+ * Tangerine UI — default theme tokens (shadcn-style).
+ *
+ * Import once in your app CSS, after Tailwind directives:
+ *
+ *   @tailwind base;
+ *   @tailwind components;
+ *   @tailwind utilities;
+ *   @import "@tangerine-ui/core/styles.css";
+ *
+ * Customize by overriding variables in the same file — no React provider:
+ *
+ *   :root {
+ *     --tui-primary: 234 88 12;
+ *     --tui-primary-hover: 194 65 12;
+ *   }
+ *
+ *   .dark {
+ *     --tui-primary: 251 146 60;
+ *   }
+ *
+ * Values are space-separated RGB channels (not hex) so Tailwind opacity works:
+ * `bg-tui-primary/10` → rgb(var(--tui-primary) / 0.1)
+ *
+ * Pair with `darkMode: "class"` and `.dark` on `<html>` for dark mode.
+ */
+@layer base {
+	:root {
+		/* ── Semantic surfaces ── */
+		--tui-fg: 24 24 27;
+		--tui-fg-muted: 113 113 122;
+		--tui-border: 212 212 216;
+		--tui-border-strong: 161 161 170;
+		--tui-surface: 244 244 245;
+		--tui-surface-hover: 228 228 231;
+		--tui-surface-active: 212 212 216;
+		--tui-ring: 37 99 235;
+
+		/* ── Default (neutral) ── */
+		--tui-default: 24 24 27;
+		--tui-default-fg: 250 250 250;
+		--tui-default-hover: 39 39 42;
+		--tui-default-active: 9 9 11;
+		--tui-default-soft: 244 244 245;
+		--tui-default-soft-fg: 24 24 27;
+		--tui-default-soft-hover: 228 228 231;
+		--tui-default-soft-active: 212 212 216;
+		--tui-default-gradient-from: 63 63 70;
+		--tui-default-gradient-to: 24 24 27;
+		--tui-default-gradient-from-hover: 82 82 91;
+		--tui-default-gradient-to-hover: 39 39 42;
+		--tui-default-gradient-from-active: 39 39 42;
+		--tui-default-gradient-to-active: 9 9 11;
+		--tui-default-spatial-from: 244 244 245;
+		--tui-default-spatial-to: 228 228 231;
+		--tui-default-spatial-fg: 39 39 42;
+
+		/* ── Primary ── */
+		--tui-primary: 37 99 235;
+		--tui-primary-fg: 255 255 255;
+		--tui-primary-hover: 29 78 216;
+		--tui-primary-active: 30 64 175;
+		--tui-primary-soft: 219 234 254;
+		--tui-primary-soft-fg: 29 78 216;
+		--tui-primary-soft-hover: 191 219 254;
+		--tui-primary-soft-active: 147 197 253;
+		--tui-primary-subtle: 59 130 246;
+		--tui-primary-muted: 96 165 250;
+		--tui-primary-gradient-from: 59 130 246;
+		--tui-primary-gradient-to: 29 78 216;
+		--tui-primary-gradient-from-hover: 96 165 250;
+		--tui-primary-gradient-to-hover: 37 99 235;
+		--tui-primary-gradient-from-active: 37 99 235;
+		--tui-primary-gradient-to-active: 30 64 175;
+		--tui-primary-spatial-from: 59 130 246;
+		--tui-primary-spatial-to: 37 99 235;
+
+		/* ── Secondary ── */
+		--tui-secondary: 124 58 237;
+		--tui-secondary-fg: 255 255 255;
+		--tui-secondary-hover: 109 40 217;
+		--tui-secondary-active: 91 33 182;
+		--tui-secondary-soft: 237 233 254;
+		--tui-secondary-soft-fg: 109 40 217;
+		--tui-secondary-soft-hover: 221 214 254;
+		--tui-secondary-soft-active: 196 181 253;
+		--tui-secondary-subtle: 139 92 246;
+		--tui-secondary-muted: 167 139 250;
+		--tui-secondary-gradient-from: 139 92 246;
+		--tui-secondary-gradient-to: 109 40 217;
+		--tui-secondary-gradient-from-hover: 167 139 250;
+		--tui-secondary-gradient-to-hover: 124 58 237;
+		--tui-secondary-gradient-from-active: 124 58 237;
+		--tui-secondary-gradient-to-active: 91 33 182;
+		--tui-secondary-spatial-from: 139 92 246;
+		--tui-secondary-spatial-to: 124 58 237;
+
+		/* ── Success ── */
+		--tui-success: 5 150 105;
+		--tui-success-fg: 255 255 255;
+		--tui-success-hover: 4 120 87;
+		--tui-success-active: 6 95 70;
+		--tui-success-soft: 209 250 229;
+		--tui-success-soft-fg: 4 120 87;
+		--tui-success-soft-hover: 167 243 208;
+		--tui-success-soft-active: 110 231 183;
+		--tui-success-subtle: 16 185 129;
+		--tui-success-muted: 52 211 153;
+		--tui-success-gradient-from: 16 185 129;
+		--tui-success-gradient-to: 5 120 85;
+		--tui-success-gradient-from-hover: 52 211 153;
+		--tui-success-gradient-to-hover: 16 185 129;
+		--tui-success-gradient-from-active: 5 150 105;
+		--tui-success-gradient-to-active: 6 95 70;
+		--tui-success-spatial-from: 16 185 129;
+		--tui-success-spatial-to: 5 150 105;
+
+		/* ── Warning ── */
+		--tui-warning: 245 158 11;
+		--tui-warning-fg: 255 255 255;
+		--tui-warning-hover: 217 119 6;
+		--tui-warning-active: 180 83 9;
+		--tui-warning-soft: 254 243 199;
+		--tui-warning-soft-fg: 180 83 9;
+		--tui-warning-soft-hover: 253 230 138;
+		--tui-warning-soft-active: 252 211 77;
+		--tui-warning-subtle: 245 158 11;
+		--tui-warning-muted: 251 191 36;
+		--tui-warning-gradient-from: 251 191 36;
+		--tui-warning-gradient-to: 217 119 6;
+		--tui-warning-gradient-from-hover: 252 211 77;
+		--tui-warning-gradient-to-hover: 245 158 11;
+		--tui-warning-gradient-from-active: 245 158 11;
+		--tui-warning-gradient-to-active: 180 83 9;
+		--tui-warning-spatial-from: 251 191 36;
+		--tui-warning-spatial-to: 245 158 11;
+
+		/* ── Danger ── */
+		--tui-danger: 220 38 38;
+		--tui-danger-fg: 255 255 255;
+		--tui-danger-hover: 185 28 28;
+		--tui-danger-active: 153 27 27;
+		--tui-danger-soft: 254 226 226;
+		--tui-danger-soft-fg: 185 28 28;
+		--tui-danger-soft-hover: 254 202 202;
+		--tui-danger-soft-active: 252 165 165;
+		--tui-danger-subtle: 239 68 68;
+		--tui-danger-muted: 248 113 113;
+		--tui-danger-gradient-from: 239 68 68;
+		--tui-danger-gradient-to: 185 28 28;
+		--tui-danger-gradient-from-hover: 248 113 113;
+		--tui-danger-gradient-to-hover: 220 38 38;
+		--tui-danger-gradient-from-active: 220 38 38;
+		--tui-danger-gradient-to-active: 153 27 27;
+		--tui-danger-spatial-from: 239 68 68;
+		--tui-danger-spatial-to: 220 38 38;
+
+		--tui-progress-default: 255 255 255;
+		--tui-ripple: 255 255 255;
+	}
+
+	.dark {
+		--tui-fg: 250 250 250;
+		--tui-fg-muted: 161 161 170;
+		--tui-border: 63 63 70;
+		--tui-border-strong: 113 113 122;
+		--tui-surface: 39 39 42;
+		--tui-surface-hover: 63 63 70;
+		--tui-surface-active: 82 82 91;
+
+		--tui-default: 250 250 250;
+		--tui-default-fg: 24 24 27;
+		--tui-default-hover: 228 228 231;
+		--tui-default-active: 212 212 216;
+		--tui-default-soft: 39 39 42;
+		--tui-default-soft-fg: 250 250 250;
+		--tui-default-soft-hover: 63 63 70;
+		--tui-default-soft-active: 82 82 91;
+		--tui-default-gradient-from: 228 228 231;
+		--tui-default-gradient-to: 161 161 170;
+		--tui-default-gradient-from-hover: 244 244 245;
+		--tui-default-gradient-to-hover: 212 212 216;
+		--tui-default-gradient-from-active: 212 212 216;
+		--tui-default-gradient-to-active: 161 161 170;
+
+		--tui-primary-soft: 30 58 138;
+		--tui-primary-soft-fg: 96 165 250;
+		--tui-primary-soft-hover: 30 64 175;
+		--tui-primary-soft-active: 29 78 216;
+		--tui-primary-muted: 96 165 250;
+
+		--tui-secondary-soft: 76 29 149;
+		--tui-secondary-soft-fg: 167 139 250;
+		--tui-secondary-soft-hover: 91 33 182;
+		--tui-secondary-soft-active: 109 40 217;
+		--tui-secondary-muted: 167 139 250;
+
+		--tui-success-soft: 6 78 59;
+		--tui-success-soft-fg: 52 211 153;
+		--tui-success-soft-hover: 6 95 70;
+		--tui-success-soft-active: 4 120 87;
+		--tui-success-muted: 52 211 153;
+
+		--tui-warning-soft: 120 53 15;
+		--tui-warning-soft-fg: 251 191 36;
+		--tui-warning-soft-hover: 146 64 14;
+		--tui-warning-soft-active: 180 83 9;
+		--tui-warning-muted: 251 191 36;
+
+		--tui-danger-soft: 127 29 29;
+		--tui-danger-soft-fg: 248 113 113;
+		--tui-danger-soft-hover: 153 27 27;
+		--tui-danger-soft-active: 185 28 28;
+		--tui-danger-muted: 248 113 113;
+
+		--tui-progress-default: 228 228 231;
+	}
+}

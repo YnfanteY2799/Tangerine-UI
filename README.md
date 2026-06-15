@@ -24,7 +24,39 @@ npm install @radix-ui/react-slot class-variance-authority motion react react-dom
 
 ## Tailwind CSS (required for styles)
 
-Components ship **no separate CSS file**. Styling comes from class names in the published JS. Your Tailwind setup must **include the library’s compiled files** in `content` / `@source`, or utilities will be purged and components will look unstyled.
+Components use Tailwind utility classes (`bg-tui-primary`, etc.) backed by **CSS variables**. You need both:
+
+1. **Theme CSS** — default tokens (import once in your global CSS)
+2. **Tailwind preset** — so `tui-*` utilities are generated and library classes are not purged
+
+### Theme (shadcn-style — CSS only, no React provider)
+
+In `globals.css` (after Tailwind directives):
+
+```css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import "@tangerine-ui/core/styles.css";
+
+/* Your overrides — same pattern as shadcn */
+@layer base {
+  :root {
+    --tui-primary: 234 88 12;
+    --tui-primary-hover: 194 65 12;
+    --tui-ring: 234 88 12;
+  }
+
+  .dark {
+    --tui-primary: 251 146 60;
+  }
+}
+```
+
+Use `darkMode: "class"` in Tailwind and add `class="dark"` to `<html>` when needed. Copy `theme.example.css` from the package as a starting point.
+
+Values are **RGB channels** (e.g. `234 88 12`, not `#ea580c`) so opacity modifiers work: `bg-tui-primary/10`.
 
 ### Tailwind v3 (`tailwind.config.js`)
 
@@ -89,6 +121,8 @@ The package is built with a `"use client"` banner. Import UI components from Cli
 | `.../button-group`    | `ButtonGroup`                  |
 | `.../input`           | `Input`                        |
 | `.../utils`           | `cn` and hooks                 |
+| `.../styles.css`      | Default theme tokens (`@import`) |
+| `.../theme.example.css` | Customization starter template |
 | `.../tailwind-preset` | Tailwind v3 preset (see above) |
 
 ## Development (this repo)

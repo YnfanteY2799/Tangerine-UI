@@ -30,12 +30,12 @@ const LIGHT_BACKGROUND_VARIANTS = new Set<ButtonVariant>([
 ]);
 
 const COLOR_MAP: ColorConfig = {
-	default: { light: "bg-zinc-800/60", dark: "bg-white/50", backdrop: "bg-zinc-950/5" },
-	danger: { light: "bg-red-600/70", dark: "bg-red-200/60", backdrop: "bg-red-950/10" },
-	primary: { light: "bg-blue-600/70", dark: "bg-blue-200/60", backdrop: "bg-blue-950/10" },
-	warning: { light: "bg-amber-500/70", dark: "bg-amber-200/60", backdrop: "bg-amber-950/10" },
-	secondary: { light: "bg-violet-600/70", dark: "bg-violet-200/60", backdrop: "bg-violet-950/10" },
-	success: { light: "bg-emerald-600/70", dark: "bg-emerald-200/60", backdrop: "bg-emerald-950/10" },
+	default: { light: "bg-tui-default/60", dark: "bg-tui-progress-default/50", backdrop: "bg-tui-fg/5" },
+	danger: { light: "bg-tui-danger/70", dark: "bg-tui-danger-soft/60", backdrop: "bg-tui-danger/10" },
+	primary: { light: "bg-tui-primary/70", dark: "bg-tui-primary-soft/60", backdrop: "bg-tui-primary/10" },
+	warning: { light: "bg-tui-warning/70", dark: "bg-tui-warning-soft/60", backdrop: "bg-tui-warning/10" },
+	secondary: { light: "bg-tui-secondary/70", dark: "bg-tui-secondary-soft/60", backdrop: "bg-tui-secondary/10" },
+	success: { light: "bg-tui-success/70", dark: "bg-tui-success-soft/60", backdrop: "bg-tui-success/10" },
 };
 
 /**
@@ -44,7 +44,7 @@ const COLOR_MAP: ColorConfig = {
  */
 export function getProgressOverlayStyles(color: ButtonColor, variant: ButtonVariant): ProgressOverlayStyles {
 	if (variant === "destructive") {
-		return { background: "bg-red-500/70", backdrop: "bg-red-950/10" };
+		return { background: "bg-tui-danger/70", backdrop: "bg-tui-danger/10" };
 	}
 
 	const isDarkBg = DARK_BACKGROUND_VARIANTS.has(variant);

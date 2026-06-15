@@ -85,8 +85,8 @@ export function useButtonSlotContent({
 				<span
 					className={cn(
 						"relative z-10 w-full h-full flex items-center justify-center gap-2 rounded-lg",
-						"group-hover:bg-zinc-500/30 group-hover:backdrop-blur-sm",
-						"border border-zinc-400/50 transition-[transform,opacity,colors,box-shadow] duration-300"
+						"group-hover:bg-tui-fg/20 group-hover:backdrop-blur-sm",
+						"border border-tui-border/50 transition-[transform,opacity,colors,box-shadow] duration-300"
 					)}>
 					{startContent ? (
 						<>
