@@ -7,7 +7,7 @@ import type { HapticPattern, UseHapticOptions, UseHapticReturn } from "../types/
  * Values are in milliseconds: single number for duration, array for pattern.
  * Pattern arrays alternate: [vibrate, pause, vibrate, pause, ...]
  */
-const hapticPatterns: Record<HapticPattern, number | Array<number>> = {
+const hapticPatterns: Record<HapticPattern, number | number[]> = {
 	light: 10,
 	heavy: 50,
 	medium: 25,
@@ -96,12 +96,12 @@ export default function useHaptic(options: UseHapticOptions = {}): UseHapticRetu
 	}, [isSupported]);
 
 	const vibrate = useCallback(
-		(pattern: HapticPattern | number | Array<number> = "light") => {
+		(pattern: HapticPattern | number | number[] = "light") => {
 			// Early returns for disabled or unsupported cases
 			if (!enabled || !isSupported) return false;
 
 			try {
-				let vibrationPattern: number | Array<number>;
+				let vibrationPattern: number | number[];
 
 				// Handle different input types
 				if (typeof pattern === "string") {

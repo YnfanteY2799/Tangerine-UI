@@ -1,7 +1,7 @@
 "use client";
-import { domAnimation, LazyMotion, m } from "motion/react";
+import { m } from "motion/react";
 import { type ReactNode, memo } from "react";
-import { cn } from "../../utils/functions";
+import { cn } from "@/utils/functions";
 
 import type { ButtonSize } from "./types/variants";
 
@@ -93,7 +93,7 @@ const SCALE_VALUE = 0.8;
  *
  * @remarks
  * - Component is memoized to prevent unnecessary re-renders
- * - Uses LazyMotion with `domMin` for minimal bundle size (~5KB)
+ * - Renders `m.svg` only; must be under a `LazyMotion` ancestor (e.g. `Button` or `ButtonMotionRoot`).
  * - Rotation animation uses CSS `animate-spin` for optimal performance
  * - Entrance/exit uses Framer Motion for smooth fade and scale effects
  * - Inherits text color from parent via `currentColor`
@@ -101,7 +101,7 @@ const SCALE_VALUE = 0.8;
  * - Size matches button size variants for visual consistency
  *
  * @performance
- * - Bundle impact: ~5KB (with LazyMotion domMin)
+ * - No extra `LazyMotion` boundary (parent `Button` already loads Motion features).
  * - Re-render optimized with React.memo
  * - CSS animation for rotation (GPU-accelerated)
  * - Framer Motion only for entrance/exit (not continuous animation)
@@ -115,32 +115,30 @@ const SCALE_VALUE = 0.8;
  */
 export default memo(function Spinner({ size = "md", className, label = "loading" }: SpinnerProps): ReactNode {
 	return (
-		<LazyMotion features={domAnimation} strict>
-			<m.svg
-				className={cn(SIZE_MAP[size], "animate-spin", className)}
-				initial={{ opacity: 0, scale: SCALE_VALUE }}
-				exit={{ opacity: 0, scale: SCALE_VALUE }}
-				transition={{ duration: FADE_DURATION }}
-				animate={{ opacity: 1, scale: 1 }}
-				xmlns="http://www.w3.org/2000/svg"
-				viewBox="0 0 24 24"
-				role="presentation"
-				aria-hidden="true"
-				focusable="false"
-				fill="none">
-				{/* SVG title provides accessible label for screen readers */}
-				{label && <title>{label}</title>}
+		<m.svg
+			className={cn(SIZE_MAP[size], "animate-spin", className)}
+			initial={{ opacity: 0, scale: SCALE_VALUE }}
+			exit={{ opacity: 0, scale: SCALE_VALUE }}
+			transition={{ duration: FADE_DURATION }}
+			animate={{ opacity: 1, scale: 1 }}
+			xmlns="http://www.w3.org/2000/svg"
+			viewBox="0 0 24 24"
+			role="presentation"
+			aria-hidden="true"
+			focusable="false"
+			fill="none">
+			{/* SVG title provides accessible label for screen readers */}
+			{label && <title>{label}</title>}
 
-				{/* Background circle (25% opacity) */}
-				<circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+			{/* Background circle (25% opacity) */}
+			<circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
 
-				{/* Animated arc segment (75% opacity) */}
-				<path
-					d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-					className="opacity-75"
-					fill="currentColor"
-				/>
-			</m.svg>
-		</LazyMotion>
+			{/* Animated arc segment (75% opacity) */}
+			<path
+				d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+				className="opacity-75"
+				fill="currentColor"
+			/>
+		</m.svg>
 	);
 });

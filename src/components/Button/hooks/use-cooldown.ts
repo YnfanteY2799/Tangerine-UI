@@ -54,7 +54,7 @@ export default function useCooldown(options: UseCooldownOptions = {}): UseCooldo
 	const [clickCount, setClickCount] = useState<number>(0);
 
 	// Internal Ref's
-	const progressIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+	const progressFrameRef = useRef<number | null>(null);
 	const cooldownTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 	const onCooldownStartRef = useRef<Function>(onCooldownStart);
 	const onCooldownEndRef = useRef<Function>(onCooldownEnd);
@@ -71,47 +71,56 @@ export default function useCooldown(options: UseCooldownOptions = {}): UseCooldo
 			clearTimeout(cooldownTimerRef.current);
 			cooldownTimerRef.current = null;
 		}
-		if (progressIntervalRef.current) {
-			clearInterval(progressIntervalRef.current);
-			progressIntervalRef.current = null;
+		if (progressFrameRef.current !== null) {
+			cancelAnimationFrame(progressFrameRef.current);
+			progressFrameRef.current = null;
 		}
 	}, []);
+
+	const tickProgress = useCallback(() => {
+		const elapsed = Date.now() - cooldownStartTimeRef.current;
+		const progress = Math.min(elapsed / cooldownMs, 1);
+		setCooldownProgress(progress);
+
+		if (progress < 1) {
+			progressFrameRef.current = requestAnimationFrame(tickProgress);
+		} else {
+			progressFrameRef.current = null;
+		}
+	}, [cooldownMs]);
 
 	const startCooldown = useCallback(() => {
 		if (cooldownMs <= 0) return;
 
-		setIsInCooldown(() => true);
-		setCooldownProgress(() => 0);
+		setIsInCooldown(true);
+		setCooldownProgress(0);
 		cooldownStartTimeRef.current = Date.now();
 		onCooldownStartRef.current?.();
 
-		// Update progress every 16ms (~60fps)
-		progressIntervalRef.current = setInterval(() => {
-			const elapsed = Date.now() - cooldownStartTimeRef.current;
-			const progress = Math.min(elapsed / cooldownMs, 1);
-			setCooldownProgress(() => progress);
-
-			if (progress >= 1 && progressIntervalRef.current) {
-				clearInterval(progressIntervalRef.current);
-				progressIntervalRef.current = null;
-			}
-		}, 16);
+		if (progressFrameRef.current !== null) {
+			cancelAnimationFrame(progressFrameRef.current);
+		}
+		progressFrameRef.current = requestAnimationFrame(tickProgress);
 
 		cooldownTimerRef.current = setTimeout(() => {
-			setIsInCooldown(() => false);
-			setCooldownProgress(() => 0);
-			setClickCount(() => 0);
+			setIsInCooldown(false);
+			setCooldownProgress(0);
+			setClickCount(0);
 			onCooldownEndRef.current?.();
 
-			if (progressIntervalRef.current) {
-				clearInterval(progressIntervalRef.current);
-				progressIntervalRef.current = null;
+			if (progressFrameRef.current !== null) {
+				cancelAnimationFrame(progressFrameRef.current);
+				progressFrameRef.current = null;
 			}
 		}, cooldownMs);
-	}, [cooldownMs, clearTimers]);
+	}, [cooldownMs, tickProgress]);
 
 	const handleClick = useCallback(
 		(callback?: () => void) => {
+			if (cooldownMs <= 0) {
+				callback?.();
+				return true;
+			}
 			if (isInCooldown) return false;
 
 			// Execute the callback first
@@ -127,14 +136,14 @@ export default function useCooldown(options: UseCooldownOptions = {}): UseCooldo
 
 			return true;
 		},
-		[isInCooldown, clicksBeforeCooldown, cooldownMs, startCooldown]
+		[isInCooldown, clicksBeforeCooldown, cooldownMs, startCooldown],
 	);
 
 	const resetCooldown = useCallback(() => {
 		clearTimers();
-		setIsInCooldown(() => false);
-		setCooldownProgress(() => 0);
-		setClickCount(() => 0);
+		setIsInCooldown(false);
+		setCooldownProgress(0);
+		setClickCount(0);
 	}, [clearTimers]);
 
 	const getRemainingTime = useCallback(() => {

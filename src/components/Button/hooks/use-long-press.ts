@@ -1,4 +1,4 @@
-import { type TouchEvent, type MouseEvent, useCallback, useEffect, useRef, useState } from "react";
+import { type TouchEvent, type MouseEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import type { UseLongPressOptions, UseLongPressReturn, LongPressHandlers } from "../types/hooks";
 
@@ -80,6 +80,7 @@ export default function useLongPress(options: UseLongPressOptions = {}): UseLong
 	const [isLongPress, setIsLongPress] = useState<boolean>(false);
 	const [isPressed, setIsPressed] = useState<boolean>(false);
 	const [progress, setProgress] = useState<number>(0);
+	const isLongPressRef = useRef(false);
 
 	// Use refs for callbacks to avoid recreating handlers
 	const onLongPressRef = useRef(onLongPress);
@@ -115,6 +116,7 @@ export default function useLongPress(options: UseLongPressOptions = {}): UseLong
 
 	const reset = useCallback(() => {
 		cleanup();
+		isLongPressRef.current = false;
 		setIsLongPress(false);
 		startTimeRef.current = 0;
 		touchStartPosRef.current = null;
@@ -134,6 +136,7 @@ export default function useLongPress(options: UseLongPressOptions = {}): UseLong
 				touchStartPosRef.current = { x: touch.clientX, y: touch.clientY };
 			}
 
+			isLongPressRef.current = false;
 			setIsLongPress(false);
 			startTimeRef.current = Date.now();
 			setIsPressed(true);
@@ -145,6 +148,7 @@ export default function useLongPress(options: UseLongPressOptions = {}): UseLong
 			animationFrameRef.current = requestAnimationFrame(updateProgress);
 
 			timerRef.current = setTimeout(() => {
+				isLongPressRef.current = true;
 				setIsLongPress(true);
 				setProgress(1);
 				onLongPressRef.current?.();
@@ -157,7 +161,7 @@ export default function useLongPress(options: UseLongPressOptions = {}): UseLong
 		(shouldTriggerClick = true) => {
 			if (disabled) return;
 
-			const wasLongPress = isLongPress;
+			const wasLongPress = isLongPressRef.current;
 
 			cleanup();
 
@@ -168,7 +172,7 @@ export default function useLongPress(options: UseLongPressOptions = {}): UseLong
 
 			reset();
 		},
-		[disabled, isLongPress, cleanup, reset]
+		[disabled, cleanup, reset],
 	);
 
 	const handleTouchMove = useCallback(
@@ -195,15 +199,18 @@ export default function useLongPress(options: UseLongPressOptions = {}): UseLong
 		return () => cleanup();
 	}, [cleanup]);
 
-	const handlers: LongPressHandlers = {
-		onTouchEnd: () => stop(true),
-		onTouchMove: handleTouchMove,
-		onMouseUp: () => stop(true),
-		onTouchCancel: cancel,
-		onMouseLeave: cancel,
-		onTouchStart: start,
-		onMouseDown: start,
-	};
+	const handlers = useMemo<LongPressHandlers>(
+		() => ({
+			onTouchEnd: () => stop(true),
+			onTouchMove: handleTouchMove,
+			onMouseUp: () => stop(true),
+			onTouchCancel: cancel,
+			onMouseLeave: cancel,
+			onTouchStart: start,
+			onMouseDown: start,
+		}),
+		[start, stop, handleTouchMove, cancel]
+	);
 
 	return { handlers, isLongPress, progress, isPressed, cancel };
 }

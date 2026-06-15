@@ -1,4 +1,4 @@
-import type { TouchEvent, MouseEvent } from "react";
+import type { TouchEvent, MouseEvent, PointerEvent } from "react";
 
 /**
  * Configuration options for the useCooldown hook.
@@ -323,7 +323,7 @@ export interface UseRippleReturn {
 	 *   />
 	 * ))}
 	 */
-	ripples: Array<RippleType>;
+	ripples: RippleType[];
 
 	/**
 	 * Creates a new ripple at the event's click/touch position.
@@ -334,7 +334,7 @@ export interface UseRippleReturn {
 	 * @example
 	 * <button onMouseDown={createRipple}>Click me</button>
 	 */
-	createRipple: (event: MouseEvent<HTMLElement> | TouchEvent<HTMLElement>) => void;
+	createRipple: (event: MouseEvent<HTMLElement> | PointerEvent<HTMLElement> | TouchEvent<HTMLElement>) => void;
 
 	/**
 	 * Removes a specific ripple by its key.

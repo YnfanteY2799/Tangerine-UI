@@ -1,4 +1,4 @@
-import { type MouseEvent, type TouchEvent, useCallback, useEffect, useRef, useState } from "react";
+import { type MouseEvent, type PointerEvent, type TouchEvent, useCallback, useEffect, useRef, useState } from "react";
 
 import type { UseRippleOptions, UseRippleReturn, RippleType } from "../types/hooks";
 
@@ -102,16 +102,18 @@ export default function useRipple(options: UseRippleOptions = {}): UseRippleRetu
 	const [ripples, setRipples] = useState<Array<RippleType>>([]);
 
 	const clearRipple = useCallback((key: number) => {
-		setRipples((prev) => prev.filter((ripple) => ripple.key !== key));
+		setRipples((prev) => {
+			// Check if ripple still exists before removing
+			if (!prev.some((r) => r.key === key)) return prev;
+			return prev.filter((ripple) => ripple.key !== key);
+		});
 
-		// Clear associated timeout
 		const timeout = timeoutRefs.current.get(key);
 		if (timeout) {
 			clearTimeout(timeout);
 			timeoutRefs.current.delete(key);
 		}
 	}, []);
-
 	const clearAllRipples = useCallback(() => {
 		setRipples(() => []);
 
@@ -121,7 +123,7 @@ export default function useRipple(options: UseRippleOptions = {}): UseRippleRetu
 	}, []);
 
 	const createRipple = useCallback(
-		(event: MouseEvent<HTMLElement> | TouchEvent<HTMLElement>) => {
+		(event: MouseEvent<HTMLElement> | PointerEvent<HTMLElement> | TouchEvent<HTMLElement>) => {
 			if (disabled) return;
 
 			const element = event.currentTarget;
@@ -136,9 +138,11 @@ export default function useRipple(options: UseRippleOptions = {}): UseRippleRetu
 				if (event.touches.length === 0) return;
 				clientX = event.touches[0].clientX;
 				clientY = event.touches[0].clientY;
-			} else {
+			} else if ("clientX" in event) {
 				clientX = event.clientX;
 				clientY = event.clientY;
+			} else {
+				return;
 			}
 
 			// Calculate position relative to element

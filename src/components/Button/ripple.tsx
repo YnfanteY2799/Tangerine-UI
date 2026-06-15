@@ -1,11 +1,15 @@
 "use client";
 import { m, AnimatePresence, LazyMotion, domAnimation } from "motion/react";
-import { rippleVariants } from "./configs/variants";
 import { memo, type ReactNode } from "react";
-import { cn } from "../../utils/functions";
+import { useButtonMotionAncestorTier } from "./button-motion-ancestry";
+import { rippleVariants } from "./configs/variants";
+import { cn } from "@/utils/functions";
 
 import type { ButtonColor } from "./types/variants";
 import type { RippleType } from "./types/hooks";
+
+/** Ripple palette: button colors plus a field-friendly tint */
+export type RippleColor = ButtonColor | "muted";
 
 /**
  * Props for the RippleContainer component
@@ -29,7 +33,7 @@ interface RippleContainerProps {
 	 * Corresponds to button color variants defined in the design system.
 	 * @default "default"
 	 */
-	color?: ButtonColor;
+	color?: RippleColor;
 
 	/**
 	 * Additional CSS classes to apply to the container element.
@@ -45,7 +49,7 @@ export interface IRippleItemProps {
 	/**
 	 * Callback invoked when this ripple's animation completes.
 	 */
-	onComplete: () => void;
+	onComplete: (key: number) => void;
 
 	/**
 	 * Ripple data containing position, size, and key.
@@ -56,7 +60,7 @@ export interface IRippleItemProps {
 	 * The color scheme for this ripple effect.
 	 * @default "default"
 	 */
-	color?: ButtonColor;
+	color?: RippleColor;
 }
 
 /**
@@ -99,7 +103,7 @@ const RippleItem = memo(function RippleItem({ ripple, color, onComplete }: IRipp
 			initial={{ scale: 0, opacity: RIPPLE_INITIAL_OPACITY }}
 			className={cn(rippleVariants({ color }))}
 			animate={{ scale: 1, opacity: 0 }}
-			onAnimationComplete={onComplete}
+			onAnimationComplete={() => onComplete(ripple.key)}
 			exit={{ opacity: 0 }}
 		/>
 	);
@@ -160,15 +164,23 @@ const RippleItem = memo(function RippleItem({ ripple, color, onComplete }: IRipp
  * @see {@link useRipple} - Hook for managing ripple state
  */
 export default memo(function RippleContainer({ onAnimationComplete, color = "default", className, ripples }: RippleContainerProps): ReactNode {
+	const ancestorTier = useButtonMotionAncestorTier();
+
+	const content = (
+		<span className={cn("pointer-events-none absolute inset-0 overflow-hidden", className)} aria-hidden="true" role="presentation">
+			<AnimatePresence mode="popLayout">
+				{ripples.map((ripple) => (
+					<RippleItem key={ripple.key} ripple={ripple} color={color} onComplete={onAnimationComplete} />
+				))}
+			</AnimatePresence>
+		</span>
+	);
+
+	if (ancestorTier >= 1) return content;
+
 	return (
 		<LazyMotion features={domAnimation} strict>
-			<span className={cn("pointer-events-none absolute inset-0 overflow-hidden", className)} aria-hidden="true" role="presentation">
-				<AnimatePresence mode="popLayout">
-					{ripples.map((ripple) => (
-						<RippleItem key={ripple.key} ripple={ripple} color={color} onComplete={() => onAnimationComplete(ripple.key)} />
-					))}
-				</AnimatePresence>
-			</span>
+			{content}
 		</LazyMotion>
 	);
 });

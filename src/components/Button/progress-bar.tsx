@@ -1,64 +1,60 @@
 "use client";
-import { m, AnimatePresence, LazyMotion, domAnimation } from "motion/react";
+import { m, AnimatePresence } from "motion/react";
 import { progressVariants } from "./configs/variants";
+import { getProgressOverlayStyles } from "./progress-overlay-styles";
 import { memo, type ReactNode } from "react";
-import { cn } from "../../utils/functions";
+import { cn } from "@/utils/functions";
 
-import type { ProgressPlacement, ButtonColor } from "./types/variants";
+import type { ProgressPlacement, ButtonColor, ButtonVariant, ProgressVisual } from "./types/variants";
 
-/**
- * Props for the ProgressBar component
- */
 interface ProgressBarProps {
-	/**
-	 * Determines where and how the progress bar is displayed.
-	 * - `inline`: Thin bar at the bottom of the button
-	 * - `label`: Text showing percentage (e.g., "75%")
-	 * - `overlay`: Full-width overlay from left to right
-	 */
 	placement: ProgressPlacement;
-
-	/**
-	 * The color scheme for the progress indicator.
-	 * Corresponds to button color variants defined in the design system.
-	 * @default "default"
-	 */
 	color?: ButtonColor;
-
-	/**
-	 * Additional CSS classes to apply to the container element.
-	 * Merged with default styles using `cn` utility.
-	 */
+	/** Matches long-press overlay: light vs dark fill depends on variant (solid → lighter fill). */
+	variant?: ButtonVariant;
 	className?: string;
-
-	/**
-	 * Current progress value as a percentage (0-100).
-	 * Values outside this range are automatically clamped.
-	 * @example 0 // Empty/not started
-	 * @example 50 // 50% complete
-	 * @example 100 // Fully complete
-	 */
 	progress: number;
+	visual?: ProgressVisual;
 }
 
-/**
- * Spring animation configuration for smooth, natural-feeling progress transitions.
- * @constant
- */
-const SPRING_CONFIG = { type: "spring" as const, stiffness: 300, damping: 30 };
+const SPRING_CONFIG = { type: "spring" as const, stiffness: 320, damping: 28, mass: 0.85 };
 
-/**
- * Fade animation configuration for label transitions.
- * @constant
- */
+const RAIL_SPRING = { type: "spring" as const, stiffness: 280, damping: 26, mass: 0.9 };
+
 const FADE_CONFIG = { duration: 0.15 };
 
-/**
- * Generates common ARIA attributes for progress bar accessibility.
- *
- * @param progress - Current progress value (0-100)
- * @returns Object containing ARIA attributes
- */
+/** Matches `LongPressIndicator` outer layer entrance. */
+const OVERLAY_FADE_IN = { duration: 0.1 };
+
+/** Diagonal glass stripes; sits inside the growing fill so it tracks progress. */
+const STRIPE_INNER =
+	"pointer-events-none absolute inset-0 z-1 opacity-70 [background:repeating-linear-gradient(-45deg,transparent,transparent_4px,rgba(255,255,255,0.45)_4px_8px)]";
+
+const TRACK_SUBTLE = "bg-black/35 dark:bg-black/45";
+
+const RAIL_TRACK =
+	"absolute inset-0 rounded-full border border-white/10 bg-gradient-to-b from-black/20 via-black/35 to-black/45 shadow-[inset_0_1px_3px_rgba(0,0,0,0.35)] dark:from-black/40 dark:via-black/55 dark:to-black/65";
+
+const RAIL_FILL_SHINE =
+	"after:pointer-events-none after:absolute after:inset-x-0 after:top-0 after:h-[38%] after:rounded-full after:bg-gradient-to-b after:from-white/45 after:to-transparent after:content-['']";
+
+const glowClassForColor = (color: ButtonColor): string => {
+	switch (color) {
+		case "primary":
+			return "shadow-[0_0_16px_rgba(59,130,246,0.55)]";
+		case "secondary":
+			return "shadow-[0_0_16px_rgba(139,92,246,0.5)]";
+		case "success":
+			return "shadow-[0_0_16px_rgba(16,185,129,0.5)]";
+		case "warning":
+			return "shadow-[0_0_16px_rgba(245,158,11,0.5)]";
+		case "danger":
+			return "shadow-[0_0_16px_rgba(239,68,68,0.5)]";
+		default:
+			return "shadow-[0_0_14px_rgba(113,113,122,0.45)]";
+	}
+};
+
 const getProgressAriaProps = (progress: number) => ({
 	"aria-label": `Progress: ${Math.round(progress)}%`,
 	"aria-valuenow": Math.round(progress),
@@ -67,77 +63,95 @@ const getProgressAriaProps = (progress: number) => ({
 	"aria-valuemin": 0,
 });
 
-/**
- * A versatile progress bar component with multiple display modes.
- *
- * This component provides three different ways to display progress:
- * - **inline**: A thin bar at the bottom edge (great for loading states)
- * - **label**: Percentage text with smooth transitions (great for explicit feedback)
- * - **overlay**: Full-width fill from left to right (great for button states)
- *
- * All animations are optimized using LazyMotion with minimal features for optimal bundle size.
- *
- * @component
- * @example
- * ```tsx
- * // Inline progress bar
- * <ProgressBar placement="inline" progress={75} color="primary" />
- *
- * // Percentage label
- * <ProgressBar placement="label" progress={50} />
- *
- * // Overlay (most common for buttons)
- * <ProgressBar placement="overlay" progress={30} color="success" />
- *
- * // Inside a button
- * <button className="relative">
- *   <ProgressBar placement="overlay" progress={progress} color="danger" />
- *   Upload File
- * </button>
- * ```
- *
- * @param {ProgressBarProps} props - Component props
- * @returns {ReactNode} A memoized progress indicator
- *
- * @remarks
- * - Component is memoized to prevent unnecessary re-renders
- * - Progress values are automatically clamped between 0 and 100
- * - Uses spring animations for natural, smooth transitions
- * - Fully accessible with proper ARIA attributes
- * - Overlay and inline placements use `pointer-events-none`
- * - Label placement announces updates to screen readers via `aria-live`
- * - Uses LazyMotion with `domMin` features for minimal bundle size (~5KB)
- *
- * @performance
- * - Bundle impact: ~5KB (with domMin features)
- * - Re-render optimized with React.memo
- * - GPU-accelerated transforms (scaleX, width)
- * - Smooth 60fps spring animations
- *
- * @accessibility
- * - All placements include proper ARIA roles and labels
- * - Label placement announces changes with `aria-live="polite"`
- * - Decorative placements (inline/overlay) marked with `aria-hidden`
- */
-export default memo(function ProgressBar({ progress, placement, color = "default", className }: ProgressBarProps): ReactNode {
-	// Ensure progress stays within valid bounds [0, 100]
+export default memo(function ProgressBar({
+	progress,
+	placement,
+	color = "default",
+	variant = "solid",
+	className,
+	visual = "default",
+}: ProgressBarProps): ReactNode {
 	const clampedProgress = Math.min(Math.max(progress, 0), 100);
+	const fillBase = cn("relative", progressVariants({ color }), visual === "glow" && glowClassForColor(color));
 
-	// Render appropriate variant based on placement
 	const renderContent = () => {
 		switch (placement) {
 			case "inline":
 				return (
 					<div
-						className={cn("absolute inset-x-0 bottom-0 h-1 overflow-hidden", className)}
+						className={cn(
+							"pointer-events-none absolute inset-x-0 bottom-0 z-8 h-1.5 overflow-hidden rounded-sm",
+							className,
+						)}
 						{...getProgressAriaProps(clampedProgress)}
 						aria-hidden="true">
+						<div className={cn("absolute inset-0 rounded-sm", TRACK_SUBTLE)} aria-hidden />
 						<m.div
-							className={cn("h-full origin-left", progressVariants({ color }))}
+							className={cn("relative z-1 h-full w-full origin-left", fillBase)}
 							transition={SPRING_CONFIG}
 							animate={{ scaleX: clampedProgress / 100 }}
 							initial={{ scaleX: 0 }}
-						/>
+							style={{ transformOrigin: "0% 50%" }}>
+							{visual === "striped" ? <div className={STRIPE_INNER} aria-hidden /> : null}
+						</m.div>
+					</div>
+				);
+
+			case "top":
+				return (
+					<div
+						className={cn(
+							"pointer-events-none absolute inset-x-0 top-0 z-8 h-1.5 overflow-hidden rounded-sm",
+							className,
+						)}
+						{...getProgressAriaProps(clampedProgress)}
+						aria-hidden="true">
+						<div className={cn("absolute inset-0 rounded-sm", TRACK_SUBTLE)} aria-hidden />
+						<m.div
+							className={cn("relative z-1 h-full w-full origin-left", fillBase)}
+							transition={SPRING_CONFIG}
+							animate={{ scaleX: clampedProgress / 100 }}
+							initial={{ scaleX: 0 }}
+							style={{ transformOrigin: "0% 50%" }}>
+							{visual === "striped" ? <div className={STRIPE_INNER} aria-hidden /> : null}
+						</m.div>
+					</div>
+				);
+
+			case "rail":
+				return (
+					<div
+						className={cn(
+							"pointer-events-none absolute inset-y-1.5 left-1.5 z-8 w-2.5 overflow-visible rounded-full",
+							className,
+						)}
+						{...getProgressAriaProps(clampedProgress)}
+						aria-hidden="true">
+						<div className={RAIL_TRACK} aria-hidden />
+						<div className="absolute inset-0 overflow-hidden rounded-full" aria-hidden>
+							<m.div
+								className={cn(
+									"absolute inset-x-0 bottom-0 rounded-full",
+									fillBase,
+									RAIL_FILL_SHINE,
+									visual === "glow" && glowClassForColor(color),
+								)}
+								transition={RAIL_SPRING}
+								animate={{ height: `${clampedProgress}%` }}
+								initial={{ height: "0%" }}
+								style={{ boxShadow: "0 0 10px rgba(255,255,255,0.12)" }}>
+								{visual === "striped" ? <div className={STRIPE_INNER} aria-hidden /> : null}
+							</m.div>
+						</div>
+						{clampedProgress > 2 && clampedProgress < 100 ? (
+							<m.div
+								className="absolute inset-x-0 z-2 h-0.5 rounded-full bg-white/70 blur-[0.5px]"
+								aria-hidden
+								transition={RAIL_SPRING}
+								animate={{ bottom: `calc(${clampedProgress}% - 1px)` }}
+								initial={false}
+							/>
+						) : null}
 					</div>
 				);
 
@@ -145,7 +159,11 @@ export default memo(function ProgressBar({ progress, placement, color = "default
 				return (
 					<AnimatePresence mode="wait">
 						<m.span
-							className={cn("font-medium tabular-nums", className)}
+							className={cn(
+								"font-medium tabular-nums",
+								visual === "glow" && color === "primary" && "drop-shadow-[0_0_10px_rgba(59,130,246,0.45)]",
+								className,
+							)}
 							initial={{ opacity: 0, scale: 0.9 }}
 							animate={{ opacity: 1, scale: 1 }}
 							exit={{ opacity: 0, scale: 0.9 }}
@@ -159,27 +177,39 @@ export default memo(function ProgressBar({ progress, placement, color = "default
 					</AnimatePresence>
 				);
 
-			case "overlay":
-			default:
+			case "overlay": {
+				const { backdrop, background } = getProgressOverlayStyles(color, variant);
 				return (
 					<div
-						className={cn("pointer-events-none absolute inset-0 overflow-hidden", className)}
+						className={cn(
+							"pointer-events-none absolute inset-0 z-8 overflow-hidden rounded-[inherit]",
+							className,
+						)}
 						{...getProgressAriaProps(clampedProgress)}
 						aria-hidden="true">
+						{/* Same two-layer model as LongPressIndicator: backdrop + left-growing fill */}
 						<m.div
-							className={cn("absolute inset-y-0 left-0", progressVariants({ color }))}
-							animate={{ width: `${clampedProgress}%` }}
-							transition={SPRING_CONFIG}
-							initial={{ width: "0%" }}
-						/>
+							className={cn("absolute inset-0 overflow-hidden rounded-[inherit] pointer-events-none", backdrop)}
+							initial={{ opacity: 0 }}
+							animate={{ opacity: 1 }}
+							transition={OVERLAY_FADE_IN}>
+							<m.div
+								className={cn(
+									"absolute inset-y-0 left-0",
+									background,
+									visual === "glow" && glowClassForColor(color),
+								)}
+								initial={false}
+								animate={{ width: `${clampedProgress}%` }}
+								transition={SPRING_CONFIG}>
+								{visual === "striped" ? <div className={STRIPE_INNER} aria-hidden /> : null}
+							</m.div>
+						</m.div>
 					</div>
 				);
+			}
 		}
 	};
 
-	return (
-		<LazyMotion features={domAnimation} strict>
-			{renderContent()}
-		</LazyMotion>
-	);
+	return renderContent();
 });

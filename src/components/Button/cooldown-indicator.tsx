@@ -2,7 +2,8 @@
 import { domAnimation, LazyMotion, m } from "motion/react";
 import { progressVariants } from "./configs/variants";
 import { type ReactNode, memo } from "react";
-import { cn } from "../../utils/functions";
+import { useButtonMotionAncestorTier } from "./button-motion-ancestry";
+import { cn } from "@/utils/functions";
 
 import type { CooldownIndicatorProps } from "./types/components";
 
@@ -61,17 +62,24 @@ const FRAME_DURATION = 0.016;
 export default memo(function CooldownIndicator({ progress, color = "default", className }: CooldownIndicatorProps): ReactNode {
 	// Ensure progress stays within valid bounds [0, 1]
 	const clampedProgress = Math.min(Math.max(progress, 0), 1);
+	const ancestorTier = useButtonMotionAncestorTier();
+
+	const content = (
+		<div className={cn("pointer-events-none absolute inset-0 overflow-hidden", className)} aria-hidden="true" role="presentation">
+			<m.div
+				className={cn("absolute inset-y-0 left-0", progressVariants({ color }))}
+				transition={{ duration: FRAME_DURATION, ease: "linear" }}
+				animate={{ width: `${clampedProgress * 100}%` }}
+				initial={{ width: "100%" }}
+			/>
+		</div>
+	);
+
+	if (ancestorTier >= 1) return content;
 
 	return (
 		<LazyMotion features={domAnimation} strict>
-			<div className={cn("pointer-events-none absolute inset-0 overflow-hidden", className)} aria-hidden="true" role="presentation">
-				<m.div
-					className={cn("absolute inset-y-0 left-0", progressVariants({ color }))}
-					transition={{ duration: FRAME_DURATION, ease: "linear" }}
-					animate={{ width: `${clampedProgress * 100}%` }}
-					initial={{ width: "100%" }}
-				/>
-			</div>
+			{content}
 		</LazyMotion>
 	);
 });

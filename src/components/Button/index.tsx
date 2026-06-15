@@ -1,126 +1,115 @@
 "use client";
-import { AnimatePresence, useReducedMotion, type Transition, m, LazyMotion, domMax } from "motion/react";
-import { memo, useId, useRef, useMemo, useEffect, useCallback, ComponentProps } from "react";
+import { useReducedMotion, m, LazyMotion, domMax } from "motion/react";
+import { memo, useId, useMemo, useCallback, useState, useEffect, ComponentProps, Children } from "react";
+import useButtonClickSchedule from "./hooks/use-button-click-schedule";
 import { getEntranceExitVariants } from "./configs/animations/entrance-exit";
-import { buttonVariants, peeledBgVariants } from "./configs/variants";
-import { getPressVariant } from "./configs/animations/press";
-import { getHoverVariant } from "./configs/animations/hover";
-import LongPressIndicator from "./long-press-indicator";
-import CooldownIndicator from "./cooldown-indicator";
+import { buttonVariants } from "./configs/variants";
+import { getPressVariant, pickWhileTap } from "./configs/animations/press";
+import { getHoverVariant, pickWhileHover } from "./configs/animations/hover";
 import useLongPress from "./hooks/use-long-press";
 import useCooldown from "./hooks/use-cooldown";
+import { useButtonAccessibility } from "./hooks/use-button-accessibility";
 import { Slot } from "@radix-ui/react-slot";
 import useHaptic from "./hooks/use-haptic";
 import useRipple from "./hooks/use-ripple";
-import { cn } from "../../utils/functions";
-import ProgressBar from "./progress-bar";
-import RippleContainer from "./ripple";
-import Spinner from "./spinner";
+import { cn } from "@/utils/functions";
+import { buildButtonMotionProps } from "./build-motion-props";
+import { shallowEqualButtonProps } from "./shallow-equal-button-props";
+import { ButtonChrome } from "./button-chrome";
+import { useButtonSlotContent } from "./use-button-slot-content";
+import {
+	resolveButtonLazyFeatures,
+	shouldSkipButtonLazyMotion,
+	stripLayoutProjectionKeysForPeeledVariant,
+} from "./resolve-lazy-motion-features";
+import { ButtonMotionTierProvider, useButtonMotionAncestorTier } from "./button-motion-ancestry";
+import { omitDomMotionPropConflicts } from "./omit-dom-motion-prop-conflicts";
+import { useButtonEntranceInViewRef } from "./hooks/use-button-entrance-in-view-ref";
+import { useStableRestProps } from "./hooks/use-stable-rest-props";
 
-import type { ReactNode, KeyboardEvent, MouseEvent } from "react";
+import type { ReactNode, KeyboardEvent, MouseEvent, PointerEvent } from "react";
+import type { HTMLMotionProps, Variants, Variant } from "motion/react";
 import type { ButtonProps } from "./types/components";
-
-const DOUBLE_CLICK_DELAY = 300;
-const CONTENT_FADE_DURATION = 0.2;
-const SMOOTH_LAYOUT_TRANSITION: Transition = { type: "spring", stiffness: 300, damping: 30, velocity: 1, mass: 1 };
-const SMOOTH_TWEEN_TRANSITION: Transition = { type: "tween", duration: 0.3, ease: [0.25, 0.1, 0.25, 1] };
-const CONTENT_TRANSITION: Transition = { duration: CONTENT_FADE_DURATION, ease: [0.4, 0, 0.2, 1] };
+import type { EntranceExitFragment } from "./types/motion-fragments";
 
 /**
  * A highly customizable animated button component with advanced interaction features.
  *
- * This component provides a comprehensive button solution with:
- * - **Composition**: `asChild` pattern for rendering as any element (Link, a, etc.) WITH animations preserved
- * - **Animations**: Entrance, exit, hover, and press animations
- * - **Loading states**: Built-in spinner with customizable placement
- * - **Progress tracking**: Visual progress indicators (inline, overlay, or label)
- * - **Ripple effects**: Material Design-inspired touch feedback
- * - **Long press**: Configurable long-press detection with visual indicator
- * - **Cooldown**: Prevent spam clicks with cooldown timer
- * - **Haptic feedback**: Optional vibration on interactions
- * - **Accessibility**: Comprehensive ARIA attributes and screen reader support
- * - **Variants**: Multiple visual styles (solid, ghost, peeled, etc.)
+ * **Memoization:** The default export is wrapped in `memo` with shallow prop comparison.
+ * Inline lambdas, new object literals, or unstable references for any prop will re-render
+ * every time — prefer `useCallback` / stable values for hot paths (e.g. large lists).
  *
- * @component
- * @example
- * ```tsx
- * // Basic button
- * <Button>Click me</Button>
+ * **Layout / Motion:** Each instance uses `LazyMotion strict` with `domAnimation` unless root layout
+ * projection or `motionProps` layout/drag APIs are needed (`domMax` adds only layout+drag on top of
+ * `domAnimation`). Bundle choice follows the **effective** root layout flag (heuristic minus
+ * `motionProps.layout === false`) and peeled strips layout projection keys. Wrap the app in
+ * {@link ButtonMotionRoot} with `tier="max"` so many buttons skip redundant `LazyMotion` boundaries.
  *
- * // As Next.js Link WITH animations preserved
- * <Button asChild entranceAnimation="slide" hoverAnimation="lift">
- *   <Link href="/dashboard">Dashboard</Link>
- * </Button>
+ * **Click scheduling:** `onClickDebounceMs` (trailing) and `onClickThrottleMs` (leading) wrap the consumer `onClick`
+ * before cooldown accounting — debounced bursts collapse to one logical fire. Only one mode applies; if both
+ * props are set, throttle wins. Pure helpers `debounceTrailing` / `throttleLeading` are exported from this module.
  *
- * // As download link with features and animations
- * <Button asChild variant="bordered" isLoading={downloading} hoverAnimation="glow">
- *   <a href="/file.pdf" download>Download PDF</a>
- * </Button>
- * ```
+ * **Integration:** `animateOnUnmount` only works if an ancestor wraps the updating tree in Motion’s
+ * `AnimatePresence`. See `README.md` in this folder for a full checklist (exit animations,
+ * `ButtonMotionRoot`, memoization, `layoutResize` cost).
+ *
+ * @see {@link layoutResize} for layout projection cost and when to set `layoutResize={false}` on grids.
  */
-export default memo(function Button(innerProps: ButtonProps): ReactNode {
-	// ============================================================================
-	// Props Destructuring
-	// ============================================================================
-	const {
-		// Composition
-		asChild = false,
 
-		// Identity
+const EMPTY_VARIANTS: Variants = {};
+
+const EMPTY_ENTRANCE: EntranceExitFragment = {
+	initial: {},
+	animate: {},
+	exit: {},
+};
+
+const AS_CHILD_MOTION_STYLE = { display: "inline-block", isolation: "isolate" } as const;
+
+function Button(innerProps: ButtonProps): ReactNode {
+	const {
+		asChild = false,
 		id,
 		ref,
-
-		// Content
 		children,
 		startContent,
 		endContent,
 		spinner,
-
-		// Visual props
-		isIconOnly = false,
+		size = "md",
 		color = "default",
 		variant = "solid",
 		radius = "md",
-		size = "md",
 		className,
-
-		// State
-		isDisabled = false,
+		isIconOnly = false,
 		isLoading = false,
+		isDisabled = false,
+		disabled: nativeDisabled,
 		progress,
-
-		// Animation config
-		entranceAnimation = "fade",
-		pressAnimation = "squeeze",
 		disableAnimation = false,
-		animateOnUnmount = false,
-		hoverAnimation = "scale",
-		animateOnMount = false,
-		exitAnimation = "fade",
 		disableRipple = false,
-
-		// Progress config
+		layoutResize,
+		animateOnMount = false,
+		animateOnUnmount = false,
+		entranceAnimationTriggerType = "mount",
+		entranceAnimation = "fade",
+		exitAnimation = "fade",
+		hoverAnimation = "scale",
+		pressAnimation = "squeeze",
 		progressPlacement = "overlay",
+		progressVisual = "default",
 		showProgressText = false,
-
-		// Loading config
 		spinnerPlacement = "start",
 		loadingText = "Loading, please wait",
-
-		// Interaction features
 		onLongPress,
 		longPressDelay = 500,
 		showLongPressIndicator = false,
-
 		cooldownMs = 0,
 		clicksBeforeCooldown = 1,
+		onCooldownStart,
+		onCooldownEnd,
 		showCooldownIndicator = false,
-
 		onDoubleClick,
-
 		enableHaptic = false,
-
-		// ARIA attributes
 		"aria-label": ariaLabel,
 		"aria-labelledby": ariaLabelledBy,
 		"aria-describedby": ariaDescribedBy,
@@ -130,57 +119,84 @@ export default memo(function Button(innerProps: ButtonProps): ReactNode {
 		"aria-haspopup": ariaHasPopup,
 		"aria-controls": ariaControls,
 		"aria-keyshortcuts": ariaKeyShortcuts,
-
-		// Internal (for staggered lists)
 		_staggerIndex = 0,
 		_staggerDelay = 0,
-
-		// Native button props
 		type = "button",
+		tabIndex: tabIndexProp,
+		onClickDebounceMs,
+		onClickThrottleMs,
 		onClick,
 		onKeyDown,
+		onPointerDown: userOnPointerDown,
+		motionProps: userMotionProps,
 		...props
 	} = innerProps;
 
-	// ============================================================================
-	// Hooks & Refs
-	// ============================================================================
-	const uniqueId = id ?? useId();
+	const stableRestProps = useStableRestProps(props);
+
+	const autoId = useId();
+	const uniqueId = id ?? autoId;
 	const prefersReducedMotion = useReducedMotion();
 
-	const buttonRef = useRef<HTMLButtonElement>(null);
-	const lastClickTimeRef = useRef<number>(0);
-	const doubleClickTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-	// ============================================================================
-	// Computed Values
-	// ============================================================================
 	const staggerDelay = _staggerIndex * _staggerDelay;
 	const loadingAnnouncementId = `${uniqueId}-loading`;
 	const progressAnnouncementId = `${uniqueId}-progress`;
-	const shouldDisableAnimation = disableAnimation || prefersReducedMotion;
+	const shouldDisableAnimation = Boolean(disableAnimation || prefersReducedMotion);
+	const entranceHoldUntilInView = Boolean(animateOnMount) && !shouldDisableAnimation && entranceAnimationTriggerType === "inView";
 	const effectiveIsIconOnly = isIconOnly || size === "icon";
 	const isPeeledVariant = variant === "peeled";
 
-	// ============================================================================
-	// Ref Combining
-	// ============================================================================
-	const combinedRef = useCallback(
-		(node: HTMLButtonElement | null) => {
-			buttonRef.current = node;
-			if (typeof ref === "function") ref(node);
-			else if (ref) ref.current = node;
-		},
-		[ref]
-	);
+	const layoutResizeMode = layoutResize ?? "auto";
+	/** Root `layout: size` heuristic — off for peeled (fixed chrome). */
+	const needsRootLayoutProjection =
+		!isPeeledVariant &&
+		!shouldDisableAnimation &&
+		(layoutResizeMode === true ||
+			(layoutResizeMode !== false && (isLoading || (typeof progress === "number" && progressPlacement === "label" && showProgressText))));
+	/** Heuristic plus user opt-out (`motionProps.layout === false` disables auto root layout). */
+	const applyRootLayout = needsRootLayoutProjection && userMotionProps?.layout !== false;
 
-	// ============================================================================
-	// Custom Hooks
-	// ============================================================================
-	const { ripples, createRipple, clearRipple } = useRipple({
-		disabled: disableRipple || shouldDisableAnimation || isDisabled || isLoading,
-		enableHapticFeedback: enableHaptic,
+	if (process.env.NODE_ENV !== "production" && asChild && Children.count(children) !== 1) {
+		console.warn(
+			"Button: `asChild` expects a single child element (Radix UI Slot merges props onto one child). Use a fragment if you need multiple nodes inside the slotted element.",
+		);
+	}
+
+	const {
+		isInCooldown,
+		cooldownProgress,
+		handleClick: handleCooldownClick,
+	} = useCooldown({
+		cooldownMs,
+		clicksBeforeCooldown,
+		onCooldownStart,
+		onCooldownEnd,
 	});
+
+	const clickSchedule = useMemo(() => {
+		const throttle = onClickThrottleMs && onClickThrottleMs > 0 ? onClickThrottleMs : 0;
+		const debounce = throttle > 0 ? 0 : onClickDebounceMs && onClickDebounceMs > 0 ? onClickDebounceMs : 0;
+		return { debounceMs: debounce, throttleMs: throttle };
+	}, [onClickDebounceMs, onClickThrottleMs]);
+
+	useEffect(() => {
+		if (process.env.NODE_ENV === "production") return;
+		const t = onClickThrottleMs && onClickThrottleMs > 0;
+		const d = onClickDebounceMs && onClickDebounceMs > 0;
+		if (t && d) {
+			console.warn("[Button] onClickThrottleMs and onClickDebounceMs are both set; using throttle only.");
+		}
+	}, [onClickThrottleMs, onClickDebounceMs]);
+
+	const dispatchScheduledClick = useButtonClickSchedule(onClick, handleCooldownClick, clickSchedule);
+
+	const isEffectivelyDisabled = isDisabled || Boolean(nativeDisabled) || isLoading || isInCooldown;
+
+	const { ripples, createRipple, clearRipple } = useRipple({
+		disabled: disableRipple || shouldDisableAnimation || isEffectivelyDisabled,
+	});
+
+	const { vibrate } = useHaptic({ enabled: enableHaptic });
 
 	const {
 		progress: longPressProgress,
@@ -189,102 +205,92 @@ export default memo(function Button(innerProps: ButtonProps): ReactNode {
 	} = useLongPress({
 		onLongPress,
 		delay: longPressDelay,
-		disabled: isDisabled || isLoading || !onLongPress,
+		disabled: isEffectivelyDisabled || !onLongPress,
 	});
 
-	const { vibrate } = useHaptic({ enabled: enableHaptic });
+	const hoverVariant = useMemo(
+		() => (shouldDisableAnimation ? EMPTY_VARIANTS : getHoverVariant(hoverAnimation)),
+		[hoverAnimation, shouldDisableAnimation],
+	);
 
-	const { isInCooldown, cooldownProgress, handleClick: handleCooldownClick } = useCooldown({ cooldownMs, clicksBeforeCooldown });
+	const pressVariant = useMemo(
+		() => (shouldDisableAnimation ? EMPTY_VARIANTS : getPressVariant(pressAnimation)),
+		[pressAnimation, shouldDisableAnimation],
+	);
 
-	// ============================================================================
-	// Memoized Animation Variants
-	// ============================================================================
-	const hoverVariant = useMemo(() => (shouldDisableAnimation ? {} : getHoverVariant(hoverAnimation)), [hoverAnimation, shouldDisableAnimation]);
-
-	const pressVariant = useMemo(() => (shouldDisableAnimation ? {} : getPressVariant(pressAnimation)), [pressAnimation, shouldDisableAnimation]);
-
-	const entranceExitVariant = useMemo(() => {
-		if (shouldDisableAnimation || (!animateOnMount && !animateOnUnmount)) return { initial: {}, animate: {}, exit: {} };
+	const entranceExitVariant = useMemo((): EntranceExitFragment => {
+		if (shouldDisableAnimation || (!animateOnMount && !animateOnUnmount)) return EMPTY_ENTRANCE;
 		return getEntranceExitVariants(animateOnMount ? entranceAnimation : "none", animateOnUnmount ? exitAnimation : "none");
 	}, [animateOnMount, animateOnUnmount, entranceAnimation, exitAnimation, shouldDisableAnimation]);
 
-	// ============================================================================
-	// Event Handlers
-	// ============================================================================
+	const [entranceInView, setEntranceInView] = useState(!entranceHoldUntilInView);
+
+	useEffect(() => {
+		if (!entranceHoldUntilInView) {
+			setEntranceInView(true);
+		}
+	}, [entranceHoldUntilInView]);
+
+	const entranceAnimateSegment = useMemo((): Variant => {
+		if (!entranceHoldUntilInView || entranceInView) {
+			return entranceExitVariant.animate;
+		}
+		return entranceExitVariant.initial;
+	}, [entranceHoldUntilInView, entranceInView, entranceExitVariant]);
+
+	const handleEntranceInView = useCallback(() => {
+		setEntranceInView(true);
+	}, []);
+
+	const combinedRef = useButtonEntranceInViewRef(entranceHoldUntilInView, ref, handleEntranceInView);
+
 	const handleKeyDownUpdated = useCallback(
 		(event: KeyboardEvent<HTMLButtonElement>) => {
 			if (event.key === "Enter" || event.key === " ") {
-				if (isDisabled || isLoading || isInCooldown) {
+				if (isEffectivelyDisabled) {
 					event.preventDefault();
 					return;
 				}
 			}
 			onKeyDown?.(event);
 		},
-		[isDisabled, isLoading, isInCooldown, onKeyDown]
+		[isEffectivelyDisabled, onKeyDown],
+	);
+
+	const handlePointerDown = useCallback(
+		(event: PointerEvent<HTMLButtonElement>) => {
+			userOnPointerDown?.(event);
+			if (event.defaultPrevented) return;
+			if (isEffectivelyDisabled) return;
+			if (!disableRipple && !shouldDisableAnimation) createRipple(event);
+			if (enableHaptic) vibrate("light");
+		},
+		[userOnPointerDown, isEffectivelyDisabled, disableRipple, shouldDisableAnimation, createRipple, enableHaptic, vibrate],
 	);
 
 	const handleClick = useCallback(
 		(event: MouseEvent<HTMLButtonElement>) => {
-			if (isDisabled || isLoading || isInCooldown) {
+			if (isEffectivelyDisabled) {
 				event.preventDefault();
 				return;
 			}
 
-			if (!disableRipple && !shouldDisableAnimation) createRipple(event);
-
-			if (enableHaptic) vibrate("light");
-
-			const now = Date.now();
-			if (onDoubleClick && now - lastClickTimeRef.current < DOUBLE_CLICK_DELAY) {
-				if (doubleClickTimeoutRef.current) {
-					clearTimeout(doubleClickTimeoutRef.current);
-				}
-				onDoubleClick();
-				lastClickTimeRef.current = 0;
-				return;
-			}
-			lastClickTimeRef.current = now;
-
-			handleCooldownClick(() => {
-				if (onDoubleClick) {
-					doubleClickTimeoutRef.current = setTimeout(() => onClick?.(event), DOUBLE_CLICK_DELAY);
-				} else {
-					onClick?.(event);
-				}
-			});
+			dispatchScheduledClick(event);
 		},
-		[
-			isDisabled,
-			isLoading,
-			isInCooldown,
-			disableRipple,
-			shouldDisableAnimation,
-			enableHaptic,
-			onDoubleClick,
-			handleCooldownClick,
-			onClick,
-			createRipple,
-			vibrate,
-		]
+		[isEffectivelyDisabled, dispatchScheduledClick],
 	);
 
-	useEffect(() => {
-		return () => {
-			if (doubleClickTimeoutRef.current) {
-				clearTimeout(doubleClickTimeoutRef.current);
+	const handleNativeDoubleClick = useCallback(
+		(event: MouseEvent<HTMLButtonElement>) => {
+			if (isEffectivelyDisabled) {
+				event.preventDefault();
+				return;
 			}
-		};
-	}, []);
+			onDoubleClick?.();
+		},
+		[isEffectivelyDisabled, onDoubleClick],
+	);
 
-	// ============================================================================
-	// Computed State
-	// ============================================================================
-	const isEffectivelyDisabled = isDisabled || isLoading || isInCooldown;
-
-	// ============================================================================
-	// Memoized Class Names
-	// ============================================================================
 	const buttonClassName = useMemo(
 		() =>
 			cn(
@@ -296,281 +302,157 @@ export default memo(function Button(innerProps: ButtonProps): ReactNode {
 					radius: isPeeledVariant ? "lg" : radius,
 					isIconOnly: effectiveIsIconOnly || isPeeledVariant,
 				}),
-				"focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
 				isPeeledVariant && "group h-12 w-12 overflow-visible",
-				className
+				applyRootLayout && "overflow-visible",
+				typeof progress === "number" && progressPlacement === "rail" && "pl-6",
+				className,
 			),
-		[variant, color, size, radius, isEffectivelyDisabled, effectiveIsIconOnly, className, isPeeledVariant]
+		[variant, color, size, radius, isEffectivelyDisabled, effectiveIsIconOnly, className, isPeeledVariant, applyRootLayout, progress, progressPlacement],
 	);
 
-	// ============================================================================
-	// Accessibility Props
-	// ============================================================================
-	const accessibilityProps = useMemo(() => {
-		const attrs: Record<string, unknown> = {
-			"aria-disabled": isEffectivelyDisabled,
-			"aria-busy": isLoading,
-		};
-
-		if (typeof progress === "number") {
-			attrs["aria-valuemin"] = 0;
-			attrs["aria-valuemax"] = 100;
-			attrs["aria-valuenow"] = Math.round(progress);
-			attrs["aria-valuetext"] = `${Math.round(progress)}% complete`;
-		}
-
-		if (ariaLive) attrs["aria-live"] = ariaLive;
-		if (ariaLabel) attrs["aria-label"] = ariaLabel;
-		if (ariaHasPopup) attrs["aria-haspopup"] = ariaHasPopup;
-		if (ariaControls) attrs["aria-controls"] = ariaControls;
-		if (ariaLabelledBy) attrs["aria-labelledby"] = ariaLabelledBy;
-		if (ariaDescribedBy) attrs["aria-describedby"] = ariaDescribedBy;
-		if (ariaPressed !== undefined) attrs["aria-pressed"] = ariaPressed;
-		if (ariaKeyShortcuts) attrs["aria-keyshortcuts"] = ariaKeyShortcuts;
-		if (ariaExpanded !== undefined) attrs["aria-expanded"] = ariaExpanded;
-
-		return attrs;
-	}, [
-		isEffectivelyDisabled,
-		ariaKeyShortcuts,
+	const { accessibilityProps } = useButtonAccessibility({
 		ariaDescribedBy,
-		ariaLabelledBy,
-		ariaControls,
-		ariaExpanded,
-		ariaHasPopup,
-		ariaPressed,
 		isLoading,
-		ariaLabel,
 		progress,
+		loadingAnnouncementId,
+		progressAnnouncementId,
+		asChild,
+		isEffectivelyDisabled,
 		ariaLive,
-	]);
+		ariaLabel,
+		ariaHasPopup,
+		ariaControls,
+		ariaLabelledBy,
+		ariaPressed,
+		ariaKeyShortcuts,
+		ariaExpanded,
+	});
 
-	// ============================================================================
-	// Render Helpers
-	// ============================================================================
-	const renderSpinner = useMemo(() => {
-		if (!isLoading) return null;
-		return spinner || <Spinner size={size} />;
-	}, [isLoading, spinner, size]);
-
-	const renderPeeledContent = useMemo(() => {
-		return (
-			<>
-				<span
-					className={cn(
-						"absolute inset-0 rounded-lg transition-transform duration-300 ease-out origin-bottom z-0 group-hover:rotate-35",
-						peeledBgVariants({ color })
-					)}
-					aria-hidden="true"
-				/>
-				<span
-					className={cn(
-						"relative z-10 w-full h-full flex items-center justify-center rounded-lg",
-						"group-hover:bg-zinc-500/30 group-hover:backdrop-blur-sm",
-						"border border-zinc-400/50 transition-all duration-300"
-					)}>
-					{(startContent || children) as ReactNode}
-				</span>
-			</>
-		);
-	}, [startContent, children, color]);
-
-	const renderContent = useMemo(() => {
-		if (isPeeledVariant) return renderPeeledContent;
-
-		const hasProgress = typeof progress === "number";
-		const showProgressAsLabel = hasProgress && progressPlacement === "label";
-
-		if (effectiveIsIconOnly) {
-			return (
-				<AnimatePresence mode="wait">
-					{isLoading ? (
-						<m.span
-							key="spinner-icon"
-							aria-hidden="true"
-							exit={{ opacity: 0, scale: 0.9 }}
-							animate={{ opacity: 1, scale: 1 }}
-							initial={{ opacity: 0, scale: 0.9 }}
-							transition={CONTENT_TRANSITION}
-							className="inline-flex items-center justify-center">
-							{renderSpinner}
-						</m.span>
-					) : (
-						<m.span
-							key="icon-content"
-							exit={{ opacity: 0, scale: 0.95 }}
-							initial={{ opacity: 0, scale: 0.95 }}
-							animate={{ opacity: 1, scale: 1 }}
-							transition={CONTENT_TRANSITION}
-							className="inline-flex items-center justify-center">
-							{children}
-						</m.span>
-					)}
-				</AnimatePresence>
-			);
-		}
-
-		return (
-			<>
-				<AnimatePresence mode="wait">
-					{isLoading && spinnerPlacement === "start" ? (
-						<m.span
-							animate={{ opacity: 1, scale: 1, width: "auto" }}
-							initial={{ opacity: 0, scale: 0.9, width: 0 }}
-							exit={{ opacity: 0, scale: 0.9, width: 0 }}
-							transition={CONTENT_TRANSITION}
-							key="spinner-start"
-							aria-hidden="true"
-							style={{ overflow: "hidden" }}>
-							{renderSpinner}
-						</m.span>
-					) : startContent ? (
-						<m.span
-							animate={{ opacity: 1, width: "auto", scale: 1 }}
-							initial={{ opacity: 0, width: 0, scale: 0.95 }}
-							exit={{ opacity: 0, width: 0, scale: 0.95 }}
-							className="inline-flex shrink-0"
-							transition={CONTENT_TRANSITION}
-							key="start-content"
-							aria-hidden="true"
-							style={{ overflow: "hidden" }}>
-							{startContent}
-						</m.span>
-					) : null}
-				</AnimatePresence>
-
-				<AnimatePresence mode="wait">
-					{showProgressAsLabel && showProgressText ? (
-						<ProgressBar key="progress-label" progress={progress!} placement="label" color={color} />
-					) : (
-						<m.span
-							key="children"
-							className="truncate"
-							transition={CONTENT_TRANSITION}
-							animate={{ opacity: isLoading ? 0.7 : 1 }}
-							initial={isLoading ? { opacity: 0.7 } : { opacity: 1 }}>
-							{children}
-						</m.span>
-					)}
-				</AnimatePresence>
-
-				<AnimatePresence mode="wait">
-					{isLoading && spinnerPlacement === "end" ? (
-						<m.span
-							key="spinner-end"
-							aria-hidden="true"
-							transition={CONTENT_TRANSITION}
-							style={{ overflow: "hidden" }}
-							exit={{ opacity: 0, scale: 0.9, width: 0 }}
-							initial={{ opacity: 0, scale: 0.9, width: 0 }}
-							animate={{ opacity: 1, scale: 1, width: "auto" }}>
-							{renderSpinner}
-						</m.span>
-					) : endContent ? (
-						<m.span
-							key="end-content"
-							aria-hidden="true"
-							transition={CONTENT_TRANSITION}
-							style={{ overflow: "hidden" }}
-							className="inline-flex shrink-0"
-							exit={{ opacity: 0, width: 0, scale: 0.95 }}
-							initial={{ opacity: 0, width: 0, scale: 0.95 }}
-							animate={{ opacity: 1, width: "auto", scale: 1 }}>
-							{endContent}
-						</m.span>
-					) : null}
-				</AnimatePresence>
-			</>
-		);
-	}, [
-		effectiveIsIconOnly,
-		renderPeeledContent,
-		progressPlacement,
-		spinnerPlacement,
-		showProgressText,
+	const labelRow = useButtonSlotContent({
 		isPeeledVariant,
-		renderSpinner,
+		effectiveIsIconOnly,
+		applyRootLayoutProjection: applyRootLayout,
+		isLoading,
+		spinnerPlacement,
 		startContent,
 		endContent,
-		isLoading,
 		children,
 		progress,
+		progressPlacement,
+		progressVisual,
+		showProgressText,
 		color,
+		variant,
+		size,
+		spinner,
+	});
+
+	const motionProps = useMemo(() => {
+		const built = buildButtonMotionProps({
+			applyRootLayoutProjection: applyRootLayout,
+			entranceExitVariant,
+			entranceAnimateSegment,
+			shouldDisableAnimation: Boolean(shouldDisableAnimation),
+			isEffectivelyDisabled,
+			pressTap: pickWhileTap(pressVariant),
+			hoverHover: pickWhileHover(hoverVariant),
+			hoverAnimation,
+			staggerDelay,
+			pressAnimation,
+		});
+		const merged = { ...built, ...(userMotionProps ?? {}) } as typeof built & NonNullable<typeof userMotionProps>;
+		return stripLayoutProjectionKeysForPeeledVariant(merged, isPeeledVariant);
+	}, [
+		applyRootLayout,
+		entranceExitVariant,
+		entranceAnimateSegment,
+		shouldDisableAnimation,
+		isEffectivelyDisabled,
+		pressVariant,
+		hoverVariant,
+		hoverAnimation,
+		staggerDelay,
+		pressAnimation,
+		userMotionProps,
+		isPeeledVariant,
 	]);
 
-	// ============================================================================
-	// Motion Props (for both motion.button and motion wrapper)
-	// ============================================================================
-	const motionProps = useMemo(
-		() => ({
-			layoutRoot: true,
-			transition: SMOOTH_TWEEN_TRANSITION,
-			exit: entranceExitVariant.exit as never,
-			initial: entranceExitVariant.initial as never,
-			style: { willChange: "transform, width, height" },
-			whileTap: (isEffectivelyDisabled ? {} : pressVariant.tap) as never,
-			whileHover: (isEffectivelyDisabled ? {} : hoverVariant.hover) as never,
-			animate: { ...entranceExitVariant.animate, transition: { delay: staggerDelay, ...SMOOTH_TWEEN_TRANSITION } },
-		}),
-		[entranceExitVariant, isEffectivelyDisabled, pressVariant, hoverVariant, staggerDelay]
+	const ancestorMotionTier = useButtonMotionAncestorTier();
+	const lazyFeatures = useMemo(
+		() =>
+			resolveButtonLazyFeatures({
+				applyRootLayoutProjection: applyRootLayout,
+				motionProps: userMotionProps,
+				isPeeledVariant,
+			}),
+		[applyRootLayout, userMotionProps, isPeeledVariant],
 	);
+	const skipOwnLazyMotion = useMemo(() => shouldSkipButtonLazyMotion(ancestorMotionTier, lazyFeatures), [ancestorMotionTier, lazyFeatures]);
 
-	// ============================================================================
-	// HTML Props (shared between motion.button and Slot)
-	// ============================================================================
-	const htmlProps = useMemo(
-		() => ({
+	const htmlProps = useMemo(() => {
+		const shared = {
+			...omitDomMotionPropConflicts(stableRestProps),
+			...(id !== undefined && id !== "" ? { id } : {}),
 			ref: combinedRef,
 			className: buttonClassName,
-			disabled: isEffectivelyDisabled,
+			onPointerDown: handlePointerDown,
 			onClick: handleClick,
 			onKeyDown: handleKeyDownUpdated,
+			...(onDoubleClick ? { onDoubleClick: handleNativeDoubleClick } : {}),
 			...(onLongPress ? longPressHandlers : {}),
 			...accessibilityProps,
-			...props,
-		}),
-		[
-			combinedRef,
-			buttonClassName,
-			isEffectivelyDisabled,
-			handleClick,
-			handleKeyDownUpdated,
-			onLongPress,
-			longPressHandlers,
-			accessibilityProps,
-			props,
-		]
-	);
+		};
+		if (asChild) {
+			return {
+				...shared,
+				tabIndex: isEffectivelyDisabled ? -1 : tabIndexProp,
+			};
+		}
+		return {
+			...shared,
+			disabled: isEffectivelyDisabled,
+		};
+	}, [
+		stableRestProps,
+		id,
+		combinedRef,
+		buttonClassName,
+		handlePointerDown,
+		handleClick,
+		handleKeyDownUpdated,
+		handleNativeDoubleClick,
+		onDoubleClick,
+		onLongPress,
+		longPressHandlers,
+		accessibilityProps,
+		asChild,
+		isEffectivelyDisabled,
+		tabIndexProp,
+	]);
 
-	// ============================================================================
-	// Button Wrapper Content (shared between both rendering paths)
-	// ============================================================================
 	const buttonContent = useMemo(
 		() => (
-			<>
-				{!disableRipple && !shouldDisableAnimation && <RippleContainer ripples={ripples} color={color} onAnimationComplete={clearRipple} />}
-
-				{typeof progress === "number" && progressPlacement !== "label" && (
-					<ProgressBar color={color} progress={progress} placement={progressPlacement} />
-				)}
-
-				{showCooldownIndicator && isInCooldown && <CooldownIndicator progress={cooldownProgress} />}
-
-				<AnimatePresence>
-					{showLongPressIndicator && isLongPressing && onLongPress && (
-						<LongPressIndicator progress={longPressProgress} color={color} variant={variant} duration={longPressDelay} />
-					)}
-				</AnimatePresence>
-
-				<m.span
-					transition={SMOOTH_LAYOUT_TRANSITION}
-					className={cn(
-						"relative z-10 inline-flex items-center justify-center gap-2 will-change-transform",
-						isPeeledVariant && "w-full h-full"
-					)}>
-					{renderContent}
-				</m.span>
-			</>
+			<ButtonChrome
+				disableRipple={disableRipple}
+				shouldDisableAnimation={shouldDisableAnimation}
+				ripples={ripples}
+				color={color}
+				onRippleComplete={clearRipple}
+				progress={progress}
+				progressPlacement={progressPlacement}
+				progressVisual={progressVisual}
+				showCooldownIndicator={showCooldownIndicator}
+				isInCooldown={isInCooldown}
+				cooldownProgress={cooldownProgress}
+				showLongPressIndicator={showLongPressIndicator}
+				isLongPressing={isLongPressing}
+				onLongPress={onLongPress}
+				longPressProgress={longPressProgress}
+				variant={variant}
+				longPressDelay={longPressDelay}
+				isPeeledVariant={isPeeledVariant}
+				labelRow={labelRow}
+			/>
 		),
 		[
 			disableRipple,
@@ -580,6 +462,7 @@ export default memo(function Button(innerProps: ButtonProps): ReactNode {
 			clearRipple,
 			progress,
 			progressPlacement,
+			progressVisual,
 			showCooldownIndicator,
 			isInCooldown,
 			cooldownProgress,
@@ -590,41 +473,68 @@ export default memo(function Button(innerProps: ButtonProps): ReactNode {
 			variant,
 			longPressDelay,
 			isPeeledVariant,
-			renderContent,
-		]
+			labelRow,
+		],
 	);
 
-	// ============================================================================
-	// Main Render with asChild Support + Motion Preservation
-	// ============================================================================
-	return (
-		<LazyMotion strict features={domMax}>
-			{asChild ? (
-				// SOLUTION: Wrap Slot with motion to preserve animations when asChild is used
-				<m.span {...motionProps} style={{ display: "inline-block", isolation: "isolate", ...motionProps.style }}>
-					<Slot {...(htmlProps as ComponentProps<"button">)} data-button-wrapper="true">
+	const interactiveTree = useMemo(
+		() => (
+			<>
+				{asChild ? (
+					<m.span
+						data-slot="button"
+						{...motionProps}
+						style={{ ...AS_CHILD_MOTION_STYLE, ...motionProps.style }}>
+						<Slot {...(htmlProps as ComponentProps<"button">)} data-button-wrapper="true">
+							{buttonContent}
+						</Slot>
+					</m.span>
+				) : (
+					<m.button data-slot="button" type={type} {...motionProps} {...htmlProps}>
 						{buttonContent}
-					</Slot>
-				</m.span>
-			) : (
-				// Original motion.button rendering
-				<m.button type={type} {...motionProps} {...htmlProps}>
-					{buttonContent}
-				</m.button>
-			)}
+					</m.button>
+				)}
 
-			{/* Screen reader announcements */}
-			{isLoading && (
-				<span id={loadingAnnouncementId} role="status" aria-live="polite" aria-atomic="true" className="sr-only">
-					{loadingText}
-				</span>
-			)}
+				{isLoading && (
+					<span id={loadingAnnouncementId} role="status" aria-live="polite" aria-atomic="true" className="sr-only">
+						{loadingText}
+					</span>
+				)}
 
-			{typeof progress === "number" && (
-				<span id={progressAnnouncementId} role="status" aria-live="polite" aria-atomic="true" className="sr-only">
-					{`Progress: ${Math.round(progress)}%`}
-				</span>
-			)}
-		</LazyMotion>
+				{typeof progress === "number" && (
+					<span id={progressAnnouncementId} role="status" aria-live="polite" aria-atomic="true" className="sr-only">
+						{`Progress: ${Math.round(progress)}%`}
+					</span>
+				)}
+			</>
+		),
+		[asChild, motionProps, htmlProps, buttonContent, type, isLoading, loadingText, loadingAnnouncementId, progress, progressAnnouncementId],
 	);
-});
+
+	if (skipOwnLazyMotion) {
+		return interactiveTree;
+	}
+
+	const motionTier = lazyFeatures === domMax ? "max" : "anim";
+
+	return (
+		<ButtonMotionTierProvider tier={motionTier}>
+			<LazyMotion strict features={lazyFeatures}>
+				{interactiveTree}
+			</LazyMotion>
+		</ButtonMotionTierProvider>
+	);
+}
+
+Button.displayName = "Button";
+
+export { ButtonMotionRoot, ButtonMotionTierProvider, useButtonMotionAncestorTier } from "./button-motion-ancestry";
+
+export type { ButtonProps, ButtonRestProps, EntranceAnimationTriggerType } from "./types/components";
+export type { EntranceExitFragment } from "./types/motion-fragments";
+export type { ButtonAccessibilityAttributes } from "./hooks/use-button-accessibility";
+
+export { debounceTrailing, throttleLeading } from "./utils/click-schedule";
+export { default as useButtonClickSchedule } from "./hooks/use-button-click-schedule";
+
+export default memo(Button, shallowEqualButtonProps);

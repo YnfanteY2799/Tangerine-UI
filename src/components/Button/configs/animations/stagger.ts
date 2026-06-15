@@ -1,5 +1,5 @@
-import type { StaggerAnimation } from "../../types/variants";
 import type { Variants } from "motion/react";
+import type { StaggerAnimation } from "../../types/variants";
 
 export const staggerAnimations: Record<StaggerAnimation, Variants> = {
 	fade: {

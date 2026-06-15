@@ -15,11 +15,12 @@ export const peeledBgVariants = cva("", {
 });
 
 export const buttonVariants = cva(
-	// Base styles
+	// Base stylesz
 	[
 		"focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
-		"relative inline-flex items-center justify-center",
-		"transition-all duration-200 ease-out",
+		"relative inline-flex items-center justify-center touch-manipulation",
+		// Exclude width/height/transform from CSS transitions — Motion `layout` handles size changes.
+		"transition-[color,background-color,border-color,box-shadow,opacity,filter,backdrop-filter] duration-200 ease-out",
 		"font-medium whitespace-nowrap",
 		"disabled:pointer-events-none",
 		"select-none overflow-hidden",
@@ -28,7 +29,7 @@ export const buttonVariants = cva(
 		variants: {
 			variant: {
 				link: "bg-transparent p-0 h-auto min-w-0 font-normal hover:no-underline focus-visible:ring-0 focus-visible:ring-offset-0",
-				destructive: "border-2 transition-all duration-300",
+				destructive: "border-2 transition-[color,background-color,border-color,box-shadow,opacity] duration-300 ease-out",
 				subtle: "bg-transparent border border-transparent",
 				ghost: "bg-transparent border border-transparent",
 				light: "bg-transparent backdrop-blur-sm",
@@ -675,19 +676,19 @@ export const buttonVariants = cva(
 			isDisabled: false,
 			isIconOnly: false,
 		},
-	}
+	},
 );
 
-// Progress bar color variants
-export const progressVariants = cva("", {
+// Progress fill — high-opacity tints so bars read on saturated `solid` / bordered chrome (track is separate, darker layer).
+export const progressVariants = cva("shadow-[inset_0_1px_0_rgba(255,255,255,0.4),0_1px_2px_rgba(0,0,0,0.08)] ring-1 ring-inset ring-white/20", {
 	variants: {
 		color: {
-			default: "bg-zinc-50/30 dark:bg-zinc-900/30",
-			primary: "bg-blue-400/30",
-			secondary: "bg-violet-400/30",
-			success: "bg-emerald-400/30",
-			warning: "bg-amber-400/30",
-			danger: "bg-red-400/30",
+			default: "bg-white/92 dark:bg-zinc-200/50",
+			primary: "bg-sky-200/95",
+			secondary: "bg-violet-200/95",
+			success: "bg-emerald-300/95",
+			warning: "bg-amber-300/95",
+			danger: "bg-red-300/95",
 		},
 	},
 	defaultVariants: { color: "default" },
@@ -698,11 +699,13 @@ export const rippleVariants = cva("absolute rounded-full pointer-events-none", {
 	variants: {
 		color: {
 			default: "bg-zinc-50/40 dark:bg-zinc-900/40",
-			primary: "bg-white/40",
 			secondary: "bg-white/40",
+			primary: "bg-white/40",
 			success: "bg-white/40",
 			warning: "bg-white/40",
 			danger: "bg-white/40",
+			/** Softer touch target for text fields */
+			muted: "bg-primary/18 dark:bg-primary/28",
 		},
 	},
 	defaultVariants: { color: "default" },

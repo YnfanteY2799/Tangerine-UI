@@ -1,5 +1,6 @@
-import type { EntranceExitAnimation } from "../../types/variants";
 import type { Variants, Transition } from "motion/react";
+import type { EntranceExitFragment } from "../../types/motion-fragments";
+import type { EntranceExitAnimation } from "../../types/variants";
 
 const premiumSpring: Transition = { type: "spring", stiffness: 400, damping: 30, mass: 0.8 };
 
@@ -85,6 +86,46 @@ export const entranceAnimations: Record<EntranceExitAnimation, Variants> = {
 		exit: { opacity: 0, scale: 0.5, rotate: 10, transition: smoothExit },
 		animate: { opacity: 1, scale: 1, rotate: 0, transition: elasticSpring },
 	},
+	zoom: {
+		initial: { opacity: 0, scale: 0.45 },
+		animate: {
+			opacity: 1,
+			scale: 1,
+			transition: { type: "spring", stiffness: 340, damping: 24, mass: 0.75 },
+		},
+		exit: { opacity: 0, scale: 0.88, transition: { duration: 0.22, ease: [0.4, 0, 1, 1] } },
+	},
+	glide: {
+		initial: { opacity: 0, x: -36, filter: "blur(8px)" },
+		animate: {
+			opacity: 1,
+			x: 0,
+			filter: "blur(0px)",
+			transition: { ...premiumSpring, opacity: { duration: 0.32, ease: "easeOut" }, filter: { duration: 0.35 } },
+		},
+		exit: { opacity: 0, x: 28, filter: "blur(6px)", transition: smoothExit },
+	},
+	skew: {
+		initial: { opacity: 0, skewX: -10, scale: 0.94, x: -8 },
+		animate: {
+			opacity: 1,
+			skewX: 0,
+			scale: 1,
+			x: 0,
+			transition: { type: "spring", stiffness: 380, damping: 28, mass: 0.65 },
+		},
+		exit: { opacity: 0, skewX: 8, scale: 0.96, x: 6, transition: smoothExit },
+	},
+	reveal: {
+		initial: { opacity: 0, clipPath: "inset(0 0 100% 0)", y: 4 },
+		animate: {
+			opacity: 1,
+			clipPath: "inset(0 0 0% 0)",
+			y: 0,
+			transition: { ...premiumSpring, opacity: { duration: 0.28, ease: "easeOut" } },
+		},
+		exit: { opacity: 0, clipPath: "inset(100% 0 0 0)", y: -4, transition: smoothExit },
+	},
 	none: { initial: {}, animate: {}, exit: {} },
 };
 
@@ -92,8 +133,11 @@ export function getEntranceVariant(animation: EntranceExitAnimation): Variants {
 	return entranceAnimations[animation] || entranceAnimations.none;
 }
 
-// Utility to combine entrance with different exit
-export function getEntranceExitVariants(entrance: EntranceExitAnimation, exit: EntranceExitAnimation): Variants {
+/** Combines entrance preset with a possibly different exit preset. */
+export function getEntranceExitVariants(
+	entrance: EntranceExitAnimation,
+	exit: EntranceExitAnimation,
+): EntranceExitFragment {
 	const entranceVariant = entranceAnimations[entrance] || entranceAnimations.none;
 	const exitVariant = entranceAnimations[exit] || entranceAnimations.none;
 	return { initial: entranceVariant.initial, animate: entranceVariant.animate, exit: exitVariant.exit };
