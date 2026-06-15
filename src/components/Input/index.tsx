@@ -1378,7 +1378,7 @@ export function InputInner(InnerProps: InputProps): ReactNode {
 	);
 }
 
-export default memo(function AnimatedInput(props: InputProps): ReactNode {
+const MemoizedInput = memo(function AnimatedInput(props: InputProps): ReactNode {
 	return (
 		<AnimatedInputErrorBoundary
 			fallbackInputProps={{
@@ -1393,3 +1393,7 @@ export default memo(function AnimatedInput(props: InputProps): ReactNode {
 		</AnimatedInputErrorBoundary>
 	);
 });
+MemoizedInput.displayName = "Input";
+
+export { MemoizedInput as Input };
+export default MemoizedInput;

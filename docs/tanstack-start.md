@@ -87,13 +87,26 @@ The PostCSS plugin is a fallback when the Vite plugin is not used; with TanStack
 
 ```css
 @import "tailwindcss";
+@config "./tailwind.config.ts";
 
 @source "../node_modules/@tangerine-ui/core/dist";
 
 @import "@tangerine-ui/core/styles";
 ```
 
-Theme **tokens** (`--tui-*`) work via the Vite plugin. Generated utilities like `bg-tui-primary` still rely on the v3 preset today — for full v4 utility support, use Tailwind v3 + preset or map colors in `@theme` yourself.
+`tailwind.config.ts`:
+
+```ts
+import type { Config } from "tailwindcss";
+
+export default {
+  presets: [require("@tangerine-ui/core/tailwind-preset")],
+  content: ["./src/**/*.{js,ts,jsx,tsx}"],
+  darkMode: "class",
+} satisfies Config;
+```
+
+Add **`tuiStyles()` before `tailwindcss()`** in `vite.config.ts` (see Vite plugin above). Theme tokens ship in `@tangerine-ui/core/styles`; the preset provides `bg-tui-*` utilities.
 
 ## Wire CSS in `__root.tsx`
 

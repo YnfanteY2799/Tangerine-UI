@@ -24,7 +24,7 @@ function getStaggerOrder(index: number, totalCount: number, direction: StaggerDi
 	}
 }
 
-export default memo(function ButtonGroup(props: ButtonGroupProps): ReactNode {
+const MemoizedButtonGroup = memo(function ButtonGroup(props: ButtonGroupProps): ReactNode {
 	const {
 		children,
 		className,
@@ -117,3 +117,7 @@ export default memo(function ButtonGroup(props: ButtonGroupProps): ReactNode {
 
 	return <TuiMotionBoundary features={domAnimation}>{group}</TuiMotionBoundary>;
 });
+MemoizedButtonGroup.displayName = "ButtonGroup";
+
+export { MemoizedButtonGroup as ButtonGroup };
+export default MemoizedButtonGroup;

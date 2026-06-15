@@ -573,6 +573,9 @@ function Button(innerProps: ButtonProps): ReactNode {
 
 Button.displayName = "Button";
 
+const MemoizedButton = memo(Button, shallowEqualButtonProps);
+MemoizedButton.displayName = "Button";
+
 export {
 	ButtonMotionRoot,
 	ButtonMotionTierProvider,
@@ -589,4 +592,5 @@ export type { ButtonAccessibilityAttributes } from "./hooks/use-button-accessibi
 export { debounceTrailing, throttleLeading } from "./utils/click-schedule";
 export { default as useButtonClickSchedule } from "./hooks/use-button-click-schedule";
 
-export default memo(Button, shallowEqualButtonProps);
+export { MemoizedButton as Button };
+export default MemoizedButton;
