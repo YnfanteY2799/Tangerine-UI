@@ -10,7 +10,7 @@ import { Button } from "@tangerine-ui/core/button";
 <Button variant="solid" color="primary">Save</Button>
 ```
 
-In `globals.css`: `@import "@tangerine-ui/core/styles";` (see root README for Tailwind preset).
+In `globals.css`: `@import "@tangerine-ui/core/styles";` after Tailwind directives (see [root README](../README.md) for the Vite/PostCSS plugins and Tailwind preset).
 
 No `TuiMotionRoot` is required — each Button loads Motion on first mount via an internal boundary.
 

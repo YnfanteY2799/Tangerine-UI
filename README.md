@@ -144,6 +144,18 @@ import { Button, Input, cn } from "@tangerine-ui/core";
 
 The package is built with a `"use client"` banner. Import UI components from Client Components, or from files that already use `"use client"`.
 
+### TanStack Start
+
+TanStack Start is Vite-based — use `@tangerine-ui/core/vite`, link global CSS in `__root.tsx`, and the Tailwind v3 preset. Full walkthrough: **[docs/tanstack-start.md](./docs/tanstack-start.md)**.
+
+## Documentation
+
+| Guide | Description |
+| ----- | ----------- |
+| [docs/button.md](./docs/button.md) | Button advanced features (motion, memo, layout, long press) |
+| [docs/tanstack-start.md](./docs/tanstack-start.md) | TanStack Start integration |
+| [docs/README.md](./docs/README.md) | Documentation index |
+
 ## Package exports
 
 | Subpath               | Description                    |

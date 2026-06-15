@@ -67,7 +67,7 @@ export type ButtonNativeAttributes = Omit<ComponentPropsWithRef<"button">, "colo
  * tree-shaken types stay readable.
  *
  * @remarks
- * **Before shipping advanced features**, read `README.md` in this folder. In short:
+ * **Before shipping advanced features**, read `docs/button.md` in the repository. In short:
  *
  * - **`animateOnUnmount`** — Requires an ancestor **`AnimatePresence`**; otherwise exit animations never run.
  *   For multiple buttons unmounting together, prefer **`mode="sync"`** on `AnimatePresence`.

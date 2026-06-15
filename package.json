@@ -57,6 +57,7 @@
   },
   "files": [
     "dist",
+    "docs",
     "scripts/postcss-tui-styles.cjs",
     "scripts/vite-plugin-tui-styles.cjs",
     "scripts/tui-styles-inline.cjs",

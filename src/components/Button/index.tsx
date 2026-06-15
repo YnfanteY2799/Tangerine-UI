@@ -47,7 +47,7 @@ import type { ButtonProps } from "./types/components";
  * props are set, throttle wins. Pure helpers `debounceTrailing` / `throttleLeading` are exported from this module.
  *
  * **Integration:** `animateOnUnmount` only works if an ancestor wraps the updating tree in Motion’s
- * `AnimatePresence`. See `README.md` in this folder for a full checklist (exit animations,
+ * `AnimatePresence`. See `docs/button.md` in the repository for a full checklist (exit animations,
  * optional `TuiMotionRoot`, memoization, `layoutResize` cost).
  *
  * @see {@link layoutResize} for layout projection cost and when to set `layoutResize={false}` on grids.
