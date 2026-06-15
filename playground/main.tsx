@@ -1,16 +1,13 @@
-import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
-import { ButtonMotionRoot } from "@/components/Button/index";
-import App from "./App";
-import "./index.css";
-
-const root = document.getElementById("root");
-if (!root) throw new Error("Missing #root");
-
-createRoot(root).render(
-	<StrictMode>
-		<ButtonMotionRoot tier="anim">
-			<App />
-		</ButtonMotionRoot>
-	</StrictMode>,
-);
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import App from "./App";
+import "./index.css";
+
+const root = document.getElementById("root");
+if (!root) throw new Error("Missing #root");
+
+createRoot(root).render(
+	<StrictMode>
+		<App />
+	</StrictMode>,
+);

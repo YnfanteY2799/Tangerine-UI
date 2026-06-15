@@ -1,36 +1,35 @@
 "use client";
-import { useReducedMotion, m, LazyMotion, domMax } from "motion/react";
 import { memo, useId, useMemo, useCallback, useState, useEffect, ComponentProps, Children } from "react";
-import useButtonClickSchedule from "./hooks/use-button-click-schedule";
-import { getEntranceExitVariants } from "./configs/animations/entrance-exit";
-import { buttonVariants } from "./configs/variants";
-import { getPressVariant, pickWhileTap } from "./configs/animations/press";
 import { getHoverVariant, pickWhileHover } from "./configs/animations/hover";
+import { getEntranceExitVariants } from "./configs/animations/entrance-exit";
+import { getPressVariant, pickWhileTap } from "./configs/animations/press";
+import { useButtonAccessibility } from "./hooks/use-button-accessibility";
+import { useReducedMotion, m } from "motion/react";
+import { TuiMotionBoundary } from "@/motion/motion-boundary";
+import useButtonClickSchedule from "./hooks/use-button-click-schedule";
+import { shallowEqualButtonProps } from "./shallow-equal-button-props";
+import { useButtonSlotContent } from "./use-button-slot-content";
+import { buildButtonMotionProps } from "./build-motion-props";
+import { buttonVariants } from "./configs/variants";
 import useLongPress from "./hooks/use-long-press";
 import useCooldown from "./hooks/use-cooldown";
-import { useButtonAccessibility } from "./hooks/use-button-accessibility";
+import { ButtonChrome } from "./button-chrome";
 import { Slot } from "@radix-ui/react-slot";
 import useHaptic from "./hooks/use-haptic";
 import useRipple from "./hooks/use-ripple";
 import { cn } from "@/utils/functions";
-import { buildButtonMotionProps } from "./build-motion-props";
-import { shallowEqualButtonProps } from "./shallow-equal-button-props";
-import { ButtonChrome } from "./button-chrome";
-import { useButtonSlotContent } from "./use-button-slot-content";
 import {
 	resolveButtonLazyFeatures,
-	shouldSkipButtonLazyMotion,
 	stripLayoutProjectionKeysForPeeledVariant,
 } from "./resolve-lazy-motion-features";
-import { ButtonMotionTierProvider, useButtonMotionAncestorTier } from "./button-motion-ancestry";
 import { omitDomMotionPropConflicts } from "./omit-dom-motion-prop-conflicts";
 import { useButtonEntranceInViewRef } from "./hooks/use-button-entrance-in-view-ref";
 import { useStableRestProps } from "./hooks/use-stable-rest-props";
 
 import type { ReactNode, KeyboardEvent, MouseEvent, PointerEvent } from "react";
-import type { HTMLMotionProps, Variants, Variant } from "motion/react";
-import type { ButtonProps } from "./types/components";
 import type { EntranceExitFragment } from "./types/motion-fragments";
+import type { Variants, Variant } from "motion/react";
+import type { ButtonProps } from "./types/components";
 
 /**
  * A highly customizable animated button component with advanced interaction features.
@@ -39,11 +38,9 @@ import type { EntranceExitFragment } from "./types/motion-fragments";
  * Inline lambdas, new object literals, or unstable references for any prop will re-render
  * every time — prefer `useCallback` / stable values for hot paths (e.g. large lists).
  *
- * **Layout / Motion:** Each instance uses `LazyMotion strict` with `domAnimation` unless root layout
- * projection or `motionProps` layout/drag APIs are needed (`domMax` adds only layout+drag on top of
- * `domAnimation`). Bundle choice follows the **effective** root layout flag (heuristic minus
- * `motionProps.layout === false`) and peeled strips layout projection keys. Wrap the app in
- * {@link ButtonMotionRoot} with `tier="max"` so many buttons skip redundant `LazyMotion` boundaries.
+ * **Layout / Motion:** Motion loads lazily on first mount via an internal boundary (`domAnimation` by default;
+ * `domMax` when layout projection or drag `motionProps` apply). Optional {@link TuiMotionRoot} at app level
+ * dedupes boundaries when many animated components are siblings.
  *
  * **Click scheduling:** `onClickDebounceMs` (trailing) and `onClickThrottleMs` (leading) wrap the consumer `onClick`
  * before cooldown accounting — debounced bursts collapse to one logical fire. Only one mode applies; if both
@@ -51,7 +48,7 @@ import type { EntranceExitFragment } from "./types/motion-fragments";
  *
  * **Integration:** `animateOnUnmount` only works if an ancestor wraps the updating tree in Motion’s
  * `AnimatePresence`. See `README.md` in this folder for a full checklist (exit animations,
- * `ButtonMotionRoot`, memoization, `layoutResize` cost).
+ * optional `TuiMotionRoot`, memoization, `layoutResize` cost).
  *
  * @see {@link layoutResize} for layout projection cost and when to set `layoutResize={false}` on grids.
  */
@@ -307,7 +304,19 @@ function Button(innerProps: ButtonProps): ReactNode {
 				typeof progress === "number" && progressPlacement === "rail" && "pl-6",
 				className,
 			),
-		[variant, color, size, radius, isEffectivelyDisabled, effectiveIsIconOnly, className, isPeeledVariant, applyRootLayout, progress, progressPlacement],
+		[
+			variant,
+			color,
+			size,
+			radius,
+			isEffectivelyDisabled,
+			effectiveIsIconOnly,
+			className,
+			isPeeledVariant,
+			applyRootLayout,
+			progress,
+			progressPlacement,
+		],
 	);
 
 	const { accessibilityProps } = useButtonAccessibility({
@@ -377,7 +386,6 @@ function Button(innerProps: ButtonProps): ReactNode {
 		isPeeledVariant,
 	]);
 
-	const ancestorMotionTier = useButtonMotionAncestorTier();
 	const lazyFeatures = useMemo(
 		() =>
 			resolveButtonLazyFeatures({
@@ -387,7 +395,6 @@ function Button(innerProps: ButtonProps): ReactNode {
 			}),
 		[applyRootLayout, userMotionProps, isPeeledVariant],
 	);
-	const skipOwnLazyMotion = useMemo(() => shouldSkipButtonLazyMotion(ancestorMotionTier, lazyFeatures), [ancestorMotionTier, lazyFeatures]);
 
 	const htmlProps = useMemo(() => {
 		const shared = {
@@ -481,10 +488,7 @@ function Button(innerProps: ButtonProps): ReactNode {
 		() => (
 			<>
 				{asChild ? (
-					<m.span
-						data-slot="button"
-						{...motionProps}
-						style={{ ...AS_CHILD_MOTION_STYLE, ...motionProps.style }}>
+					<m.span data-slot="button" {...motionProps} style={{ ...AS_CHILD_MOTION_STYLE, ...motionProps.style }}>
 						<Slot {...(htmlProps as ComponentProps<"button">)} data-button-wrapper="true">
 							{buttonContent}
 						</Slot>
@@ -511,24 +515,19 @@ function Button(innerProps: ButtonProps): ReactNode {
 		[asChild, motionProps, htmlProps, buttonContent, type, isLoading, loadingText, loadingAnnouncementId, progress, progressAnnouncementId],
 	);
 
-	if (skipOwnLazyMotion) {
-		return interactiveTree;
-	}
-
-	const motionTier = lazyFeatures === domMax ? "max" : "anim";
-
-	return (
-		<ButtonMotionTierProvider tier={motionTier}>
-			<LazyMotion strict features={lazyFeatures}>
-				{interactiveTree}
-			</LazyMotion>
-		</ButtonMotionTierProvider>
-	);
+	return <TuiMotionBoundary features={lazyFeatures}>{interactiveTree}</TuiMotionBoundary>;
 }
 
 Button.displayName = "Button";
 
-export { ButtonMotionRoot, ButtonMotionTierProvider, useButtonMotionAncestorTier } from "./button-motion-ancestry";
+export {
+	ButtonMotionRoot,
+	ButtonMotionTierProvider,
+	useButtonMotionAncestorTier,
+	TuiMotionRoot,
+	TuiMotionTierProvider,
+	useTuiMotionAncestorLevel,
+} from "@/motion/motion-root";
 
 export type { ButtonProps, ButtonRestProps, EntranceAnimationTriggerType } from "./types/components";
 export type { EntranceExitFragment } from "./types/motion-fragments";

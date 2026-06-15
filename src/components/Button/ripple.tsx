@@ -1,7 +1,6 @@
 "use client";
-import { m, AnimatePresence, LazyMotion, domAnimation } from "motion/react";
+import { m, AnimatePresence } from "motion/react";
 import { memo, type ReactNode } from "react";
-import { useButtonMotionAncestorTier } from "./button-motion-ancestry";
 import { rippleVariants } from "./configs/variants";
 import { cn } from "@/utils/functions";
 
@@ -164,9 +163,7 @@ const RippleItem = memo(function RippleItem({ ripple, color, onComplete }: IRipp
  * @see {@link useRipple} - Hook for managing ripple state
  */
 export default memo(function RippleContainer({ onAnimationComplete, color = "default", className, ripples }: RippleContainerProps): ReactNode {
-	const ancestorTier = useButtonMotionAncestorTier();
-
-	const content = (
+	return (
 		<span className={cn("pointer-events-none absolute inset-0 overflow-hidden", className)} aria-hidden="true" role="presentation">
 			<AnimatePresence mode="popLayout">
 				{ripples.map((ripple) => (
@@ -174,13 +171,5 @@ export default memo(function RippleContainer({ onAnimationComplete, color = "def
 				))}
 			</AnimatePresence>
 		</span>
-	);
-
-	if (ancestorTier >= 1) return content;
-
-	return (
-		<LazyMotion features={domAnimation} strict>
-			{content}
-		</LazyMotion>
 	);
 });

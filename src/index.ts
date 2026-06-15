@@ -6,16 +6,17 @@
  * @example
  * ```tsx
  * import "@tangerine-ui/core/styles.css";
- * import { Button, ButtonMotionRoot } from "@tangerine-ui/core/button";
+ * import { Button } from "@tangerine-ui/core/button";
  *
  * export function App() {
  *   return (
- *     <ButtonMotionRoot tier="anim">
- *       <Button variant="solid" color="primary">Click me</Button>
- *     </ButtonMotionRoot>
+ *     <Button variant="solid" color="primary">Click me</Button>
  *   );
  * }
  * ```
+ *
+ * Optional: wrap the app in {@link TuiMotionRoot} when many animated components are siblings
+ * to share one LazyMotion boundary (see `@tangerine-ui/core/motion`).
  */
 
 // =============================================================================
@@ -23,16 +24,27 @@
 // =============================================================================
 
 export { default as Button } from "./components/Button/index";
-export {
-	ButtonMotionRoot,
-	ButtonMotionTierProvider,
-	useButtonMotionAncestorTier,
-	debounceTrailing,
-	throttleLeading,
-} from "./components/Button/index";
+export { debounceTrailing, throttleLeading } from "./components/Button/index";
 export { default as useButtonClickSchedule } from "./components/Button/hooks/use-button-click-schedule";
 
 export { default as ButtonGroup } from "./components/Button/button-group";
+
+// =============================================================================
+// MOTION (optional app-level boundary; components self-host by default)
+// =============================================================================
+
+export {
+	TuiMotionRoot,
+	TuiMotionBoundary,
+	TuiMotionShell,
+	TuiMotionTierProvider,
+	useTuiMotionAncestorLevel,
+	ButtonMotionRoot,
+	ButtonMotionTierProvider,
+	useButtonMotionAncestorTier,
+} from "./motion/index";
+
+export type { TuiMotionTier, MotionAncestorLevel, TuiMotionBoundaryProps, TuiMotionShellProps } from "./motion/index";
 
 // =============================================================================
 // INPUT COMPONENTS

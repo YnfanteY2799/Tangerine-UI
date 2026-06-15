@@ -15,6 +15,9 @@ export default defineConfig({
 
 		// Utilities subpath
 		"utils/index": "src/utils/index.ts",
+
+		// Shared Motion root
+		"motion/index": "src/motion/index.ts",
 	},
 
 	// Output formats

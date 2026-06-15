@@ -1,7 +1,8 @@
 "use client";
 import { formatPhone, formatCreditCard, formatDate, formatCurrency, calculatePasswordStrength, detectAndFormat } from "./utils";
 import { useRef, useId, useReducer, useCallback, useEffect, useMemo, useImperativeHandle, memo, lazy, Suspense } from "react";
-import { m, LazyMotion, domAnimation, domMin, MotionConfig, useReducedMotion } from "motion/react";
+import { m, domAnimation, domMin, useReducedMotion } from "motion/react";
+import { TuiMotionShell } from "@/motion/motion-shell";
 import { useShakeAnimation, useAsyncValidation, useLongPress, useRipple } from "./hooks";
 import { inputReducer, createInitialState } from "./reducers";
 import { AnimatedInputErrorBoundary } from "./error-boundary";
@@ -1014,8 +1015,7 @@ export function InputInner(InnerProps: InputProps): ReactNode {
 	// ========================================================================
 	if (multiline) {
 		return (
-			<MotionConfig reducedMotion="user">
-				<LazyMotion features={animationFeatures} strict>
+			<TuiMotionShell features={animationFeatures}>
 					<div ref={containerRef} className={cn("w-full", className)}>
 						{label && (
 							<OutsideTopLabel
@@ -1071,8 +1071,7 @@ export function InputInner(InnerProps: InputProps): ReactNode {
 						</div>
 						{bottomSection}
 					</div>
-				</LazyMotion>
-			</MotionConfig>
+			</TuiMotionShell>
 		);
 	}
 
@@ -1081,8 +1080,7 @@ export function InputInner(InnerProps: InputProps): ReactNode {
 	// ========================================================================
 	if (labelPosition === "outside-top") {
 		return (
-			<MotionConfig reducedMotion="user">
-				<LazyMotion features={animationFeatures} strict>
+			<TuiMotionShell features={animationFeatures}>
 					<div ref={containerRef} className={cn("w-full", className)}>
 						{label && (
 							<OutsideTopLabel
@@ -1098,8 +1096,7 @@ export function InputInner(InnerProps: InputProps): ReactNode {
 						</div>
 						{bottomSection}
 					</div>
-				</LazyMotion>
-			</MotionConfig>
+			</TuiMotionShell>
 		);
 	}
 
@@ -1108,8 +1105,7 @@ export function InputInner(InnerProps: InputProps): ReactNode {
 	// ========================================================================
 	if (labelPosition === "outside" || labelPosition === "outside-border") {
 		return (
-			<MotionConfig reducedMotion="user">
-				<LazyMotion features={animationFeatures} strict>
+			<TuiMotionShell features={animationFeatures}>
 					<div ref={containerRef} className={cn("w-full", className)}>
 						<div className={cn(containerClasses, "relative mt-7")} onClick={handleContainerClick} {...(onLongPress ? longPressHandlers : {})}>
 							<RippleContainer ripples={ripples} onComplete={removeRipple} />
@@ -1167,8 +1163,7 @@ export function InputInner(InnerProps: InputProps): ReactNode {
 						</div>
 						{bottomSection}
 					</div>
-				</LazyMotion>
-			</MotionConfig>
+			</TuiMotionShell>
 		);
 	}
 
@@ -1177,8 +1172,7 @@ export function InputInner(InnerProps: InputProps): ReactNode {
 	// ========================================================================
 	if (labelPosition === "outside-left") {
 		return (
-			<MotionConfig reducedMotion="user">
-				<LazyMotion features={animationFeatures} strict>
+			<TuiMotionShell features={animationFeatures}>
 					<div ref={containerRef} className={cn("w-full", className)}>
 						<div className="flex items-center gap-3">
 							{label && <OutsideLeftLabel label={label} htmlFor={inputId} isFocused={state.isFocused} colorClass={getLabelColor()} />}
@@ -1188,8 +1182,7 @@ export function InputInner(InnerProps: InputProps): ReactNode {
 						</div>
 						{bottomSection}
 					</div>
-				</LazyMotion>
-			</MotionConfig>
+			</TuiMotionShell>
 		);
 	}
 
@@ -1198,8 +1191,7 @@ export function InputInner(InnerProps: InputProps): ReactNode {
 	// ========================================================================
 	if (labelPosition === "stacked") {
 		return (
-			<MotionConfig reducedMotion="user">
-				<LazyMotion features={animationFeatures} strict>
+			<TuiMotionShell features={animationFeatures}>
 					<div ref={containerRef} className={cn("w-full", className)}>
 						<div
 							className={cn(containerClasses, "h-auto py-2.5 flex-col items-stretch")}
@@ -1254,8 +1246,7 @@ export function InputInner(InnerProps: InputProps): ReactNode {
 						</div>
 						{bottomSection}
 					</div>
-				</LazyMotion>
-			</MotionConfig>
+			</TuiMotionShell>
 		);
 	}
 
@@ -1264,8 +1255,7 @@ export function InputInner(InnerProps: InputProps): ReactNode {
 	// ========================================================================
 	if (labelPosition === "left") {
 		return (
-			<MotionConfig reducedMotion="user">
-				<LazyMotion features={animationFeatures} strict>
+			<TuiMotionShell features={animationFeatures}>
 					<div ref={containerRef} className={cn("w-full", className)}>
 						<div className="flex items-center">
 							{label && (
@@ -1321,8 +1311,7 @@ export function InputInner(InnerProps: InputProps): ReactNode {
 						</div>
 						{bottomSection}
 					</div>
-				</LazyMotion>
-			</MotionConfig>
+			</TuiMotionShell>
 		);
 	}
 
@@ -1330,8 +1319,7 @@ export function InputInner(InnerProps: InputProps): ReactNode {
 	// INSIDE LABEL (Default)
 	// ========================================================================
 	return (
-		<MotionConfig reducedMotion="user">
-			<LazyMotion features={animationFeatures} strict>
+		<TuiMotionShell features={animationFeatures}>
 				<div ref={containerRef} className={cn("w-full", className)}>
 					<div className={cn(containerClasses, label && "pt-7 pb-3")} onClick={handleContainerClick} {...(onLongPress ? longPressHandlers : {})}>
 						<RippleContainer ripples={ripples} onComplete={removeRipple} />
@@ -1386,8 +1374,7 @@ export function InputInner(InnerProps: InputProps): ReactNode {
 					</div>
 					{bottomSection}
 				</div>
-			</LazyMotion>
-		</MotionConfig>
+		</TuiMotionShell>
 	);
 }
 

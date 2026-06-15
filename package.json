@@ -33,6 +33,11 @@
       "import": "./dist/utils/index.mjs",
       "require": "./dist/utils/index.js"
     },
+    "./motion": {
+      "types": "./dist/motion/index.d.ts",
+      "import": "./dist/motion/index.mjs",
+      "require": "./dist/motion/index.js"
+    },
     "./styles.css": "./src/styles/styles.css",
     "./theme.example.css": "./src/styles/theme.example.css",
     "./tailwind-preset": "./tailwind.preset.cjs",

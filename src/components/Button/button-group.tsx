@@ -1,7 +1,8 @@
 "use client";
 import { Children, cloneElement, Fragment, isValidElement, memo, useMemo } from "react";
 import { getStaggerVariant } from "./configs/animations/stagger";
-import { LazyMotion, domAnimation, m } from "motion/react";
+import { domAnimation, m } from "motion/react";
+import { TuiMotionBoundary } from "@/motion/motion-boundary";
 import { cn } from "@/utils/functions";
 
 import type { ButtonGroupProps, InternalButtonProps } from "./types/components";
@@ -93,25 +94,44 @@ export default memo(function ButtonGroup(props: ButtonGroupProps): ReactNode {
 		});
 	}, [childArray, totalCount, staggerAnimation, staggerDelay, staggerDirection, spacing, orientation, itemVariants]);
 
-	return (
-		<LazyMotion strict features={domAnimation}>
-			<m.div
-				className={cn(
-					"inline-flex",
-					spacingClasses[spacing],
-					orientation === "vertical" ? "flex-col" : "flex-row",
-					spacing === "none" && orientation === "horizontal" && "[&>*:not(:first-child)]:-ml-px",
-					spacing === "none" && orientation === "vertical" && "[&>*:not(:first-child)]:-mt-px",
-					className
-				)}
-				variants={staggerAnimation ? containerVariants : undefined}
-				animate={staggerAnimation ? "visible" : undefined}
-				initial={staggerAnimation ? "hidden" : undefined}
-				aria-orientation={orientation}
-				aria-label={ariaLabel}
-				role={role}>
-				{enhancedChildren}
-			</m.div>
-		</LazyMotion>
+	const group = staggerAnimation ? (
+		<m.div
+			className={cn(
+				"inline-flex",
+				spacingClasses[spacing],
+				orientation === "vertical" ? "flex-col" : "flex-row",
+				spacing === "none" && orientation === "horizontal" && "[&>*:not(:first-child)]:-ml-px",
+				spacing === "none" && orientation === "vertical" && "[&>*:not(:first-child)]:-mt-px",
+				className
+			)}
+			variants={containerVariants}
+			animate="visible"
+			initial="hidden"
+			aria-orientation={orientation}
+			aria-label={ariaLabel}
+			role={role}>
+			{enhancedChildren}
+		</m.div>
+	) : (
+		<div
+			className={cn(
+				"inline-flex",
+				spacingClasses[spacing],
+				orientation === "vertical" ? "flex-col" : "flex-row",
+				spacing === "none" && orientation === "horizontal" && "[&>*:not(:first-child)]:-ml-px",
+				spacing === "none" && orientation === "vertical" && "[&>*:not(:first-child)]:-mt-px",
+				className
+			)}
+			aria-orientation={orientation}
+			aria-label={ariaLabel}
+			role={role}>
+			{enhancedChildren}
+		</div>
 	);
+
+	if (!staggerAnimation) {
+		return group;
+	}
+
+	return <TuiMotionBoundary features={domAnimation}>{group}</TuiMotionBoundary>;
 });
